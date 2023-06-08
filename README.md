@@ -7,14 +7,16 @@ This project uses Atomic Design for it's Components. Here are several resources 
 - [Atomic Design by Brad Frost](https://bradfrost.com/blog/post/atomic-web-design/)
 - [Atomic Design - How To Make Web and UI Design Easier](https://www.youtube.com/watch?v=W3A33dmp17E)
 
+
+## UI Component Library
+- [Radix Ui](https://www.radix-ui.com/docs/primitives/overview/getting-started)
+
 ## 🖥️ Local development
 
 To install the application:
 
 ```shell
-npm run prepare
-
-npm install
+npm ci
 ```
 
 To start a local copy of the app on port `3000`:
