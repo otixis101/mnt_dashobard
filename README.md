@@ -25,7 +25,31 @@ To start a local copy of the app on port `3000`:
 npm run dev
 ```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 🎨 Code linting
+
+To check the code and styles quality, use the following command:
+
+```shell
+npm run lint
+```
+
+This will also display during development, but not break on errors.
+
+To fix the linting errors, use the following command:
+
+```shell
+npm run format
+```
+
+### 🚀 Production deployment
+
+A production deployment is a complete build of the project, including the build of the static assets.
+
+```shell
+npm run build
+```
+
+
 
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
@@ -42,8 +66,3 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
