@@ -1,18 +1,27 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## 🔬 Atomic Design
 
-First, run the development server:
+This project uses Atomic Design for it's Components. Here are several resources for Atomic Design if you are unfamiliar:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+- [Atomic Design by Brad Frost](https://bradfrost.com/blog/post/atomic-web-design/)
+- [Atomic Design - How To Make Web and UI Design Easier](https://www.youtube.com/watch?v=W3A33dmp17E)
+
+## 🖥️ Local development
+
+To install the application:
+
+```shell
+npm run prepare
+
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To start a local copy of the app on port `3000`:
+
+```shell
+npm run dev
+```
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
