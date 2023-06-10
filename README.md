@@ -25,6 +25,16 @@ To start a local copy of the app on port `3000`:
 npm run dev
 ```
 
+## 📙 Storybook
+
+This Project uses [storybook](https://storybook.js.org/) to test and document Ui components
+
+### Run it locally
+
+```bash
+npm run storybook
+```
+
 ### 🎨 Code linting
 
 To check the code and styles quality, use the following command:
