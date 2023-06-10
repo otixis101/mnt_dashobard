@@ -13,7 +13,7 @@
     "lint": "next lint",
     "format": "next lint -- --fix --dir .",
     "storybook": "storybook dev -p 6006 -s public",
-    "build-storybook": "storybook build -s public",
+    "build-storybook": "build-storybook",
     "serve-storybook": "serve storybook-static"
   },
   "dependencies": {
