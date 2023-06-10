@@ -1,0 +1,9 @@
+# `components/organisms`
+
+- pages' sections equivalent
+- components that are used only once should be nested in its parents folder
+- components used more than once should be extracted into the `/atoms` folder
+
+# example
+
+- `/MainHero`
