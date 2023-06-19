@@ -60,6 +60,12 @@
           "some": ["nesting", "id"]
         }
       }
+    ],
+    "import/no-unresolved": [
+      2,
+      {
+        "ignore": ["^public/"]
+      }
     ]
   },
   "parserOptions": {

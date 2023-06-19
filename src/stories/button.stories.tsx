@@ -1,10 +1,49 @@
 import Button from "@/components/atoms/Button";
-import { Meta, StoryFn } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 
-// This is a dummy component to demonstrate how to use Storybook.
-const meta: Meta = {
-  title: "Button",
+export default {
+  title: "UI/Button",
+  component: Button,
+  argTypes: {
+    roundedFull: {
+      type: "boolean",
+    },
+    disabled: {
+      type: "boolean",
+    },
+    loading: {
+      type: "boolean",
+    },
+    showIcon: {
+      type: "boolean",
+    },
+    children: {
+      type: "string",
+    },
+    icon: {
+      type: "function",
+    },
+  },
+} as Meta<typeof Button>;
+
+const ButtonTemplate: StoryFn<typeof Button> = (args) => (
+  <Button {...args}>{args.children ?? "Button"}</Button>
+);
+
+export const Primary = ButtonTemplate.bind({});
+
+Primary.args = {
+  intent: "primary",
 };
-export default meta;
 
-export const ButtonStory: StoryFn<typeof Button> = () => <Button></Button>;
+export const Outline = ButtonTemplate.bind({});
+
+Outline.args = {
+  intent: "outline",
+};
+
+export const IconButton = ButtonTemplate.bind({});
+
+IconButton.args = {
+  showIcon: true,
+};
