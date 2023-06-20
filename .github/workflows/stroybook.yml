@@ -2,6 +2,8 @@ name: Publish stories if changed
 
 on:
   push:
+    branches:
+      - beta
     paths:
       - ./src/stories/**
       - ./src/components/**
