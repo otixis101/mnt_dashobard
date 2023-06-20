@@ -3,8 +3,8 @@ name: Publish stories if changed
 on:
   push:
     paths:
-      - src/stories/**
-      - src/components/**
+      - ./src/stories/**
+      - ./src/components/**
   workflow_call:
   workflow_dispatch:
 
