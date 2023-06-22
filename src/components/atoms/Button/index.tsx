@@ -10,7 +10,7 @@ import ButtonOrLink, {
 
 const buttonStyles = cva(
   /* using max-w so it can scale down if it needs more width */
-  "flex items-center w-full max-w-[250px] h-14 justify-center p-4 rounded-lg font-medium text-sm md:text-lg md:max-w-[343px] gap-2",
+  "flex items-center w-full max-w-[250px] md:h-14 justify-center p-4 rounded-lg font-medium text-sm md:text-lg md:max-w-[343px] gap-2",
   {
     variants: {
       intent: {
