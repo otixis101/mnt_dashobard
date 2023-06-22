@@ -19,3 +19,25 @@
     opacity: 0;
   }
 }
+
+.mnt {
+  --border-color: #000;
+}
+
+.mnt:focus-within {
+  --border-color: hsla(255, 83%, 53%, 1);
+}
+
+.mnt .PhoneInputCountry {
+  border: 2px solid var(--border-color);
+  color: #000;
+  padding-inline: 10px;
+  border-radius: 8px;
+}
+
+.mnt .PhoneInputInput {
+  padding: 16px 24px;
+  outline: transparent;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+}

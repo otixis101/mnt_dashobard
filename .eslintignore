@@ -3,5 +3,4 @@
 *.md
 *.d.ts
 src/stories
-tailwind.config.js
-next.config.js
+*.config.js

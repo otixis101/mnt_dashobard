@@ -20,6 +20,10 @@ module.exports = {
           purple: "hsla(249, 27%, 61%, 1)",
           orange: "hsla(30, 100%, 71%, 1)",
           yellow: "hsla(53, 75%, 94%, 1)",
+          black: "hsla(0, 0%, 37%, 1)",
+        },
+        danger: {
+          1: "hsla(349, 86%, 47%, 1)",
         },
       },
       container: {
