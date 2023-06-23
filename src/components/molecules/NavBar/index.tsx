@@ -11,7 +11,7 @@ const navLinks = [
 ];
 
 const NavBar = () => (
-  <header className="relative flex h-[100px] items-center justify-between gap-2 px-10 py-6">
+  <header className="container fixed left-0 right-0 top-0 z-10 mx-auto flex h-[100px] items-center justify-between  gap-2 py-6 max-md:px-4">
     <button
       type="button"
       className="mr-auto sm:hidden"

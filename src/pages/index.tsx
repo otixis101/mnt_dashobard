@@ -1,12 +1,10 @@
-import { Inter } from "next/font/google";
 import HeroSection from "@/components/organisms/LandingPageHeroSection";
-
-const inter = Inter({ subsets: ["latin"] });
+import LandingLayout from "@/components/Layouts/LandingLayout";
 
 const Home = () => (
-  <main className={inter.className}>
+  <LandingLayout type="website">
     <HeroSection />
-  </main>
+  </LandingLayout>
 );
 
 export default Home;
