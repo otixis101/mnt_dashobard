@@ -1,3 +1,4 @@
+import Footer from "@/components/molecules/Footer";
 import NavBar from "@/components/molecules/NavBar";
 import React from "react";
 import SEO from "./SEO";
@@ -16,7 +17,7 @@ const LandingLayout = ({ children, seo, type }: RootLayoutProps) => (
 
     <main className="bg-white">{children}</main>
 
-    {/* Footer shoould be here */}
+    <Footer />
   </div>
 );
 
