@@ -47,3 +47,30 @@ body {
   border: 2px solid var(--border-color);
   border-radius: 8px;
 }
+
+.testimonial .swiper-button-next,
+.testimonial .swiper-button-prev {
+  background-color: hsla(255, 83%, 53%, 1);
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.testimonial .swiper-button-next::after,
+.testimonial .swiper-button-prev::after {
+  font-size: 10px;
+}
+
+.testimonial .swiper-button-prev {
+  left: -0%;
+}
+.testimonial .swiper-button-next {
+  right: -0%;
+}
+
+.testimonial .swiper,
+.testimonial .swiper-container {
+  position: unset;
+}
