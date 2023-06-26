@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("./fonts.css");
+
+body {
+  font-family: "Supreme", sans-serif;
+}
+
 .hero-image {
   background-image: url("/assets/spiral-1.png");
   animation: toggleImage 1.5s infinite ease-in-out;

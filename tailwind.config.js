@@ -28,6 +28,9 @@ module.exports = {
         danger: {
           1: "hsla(349, 86%, 47%, 1)",
         },
+        custom: {
+          black: "hsla(0, 0%, 20%, 1)",
+        },
       },
       keyframes: {
         slideDown: {
