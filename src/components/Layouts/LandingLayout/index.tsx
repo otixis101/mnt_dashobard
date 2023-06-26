@@ -14,7 +14,7 @@ const LandingLayout = ({ children, seo, type }: RootLayoutProps) => (
 
     <NavBar />
 
-    <main>{children}</main>
+    <main className="bg-white">{children}</main>
 
     {/* Footer shoould be here */}
   </div>

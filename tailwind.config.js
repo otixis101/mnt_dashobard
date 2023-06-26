@@ -22,9 +22,26 @@ module.exports = {
           yellow: "hsla(53, 75%, 94%, 1)",
           black: "hsla(0, 0%, 37%, 1)",
         },
+        gray: {
+          500: "hsla(224, 8%, 46%, 1)",
+        },
         danger: {
           1: "hsla(349, 86%, 47%, 1)",
         },
+      },
+      keyframes: {
+        slideDown: {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        slideUp: {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        slideDown: "slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)",
+        slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
       },
 
       backgroundImage: {
