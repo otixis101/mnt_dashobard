@@ -34,6 +34,9 @@ module.exports = {
           black: "hsla(0, 0%, 20%, 1)",
         },
       },
+      container: {
+        center: true,
+      },
       keyframes: {
         slideDown: {
           from: { height: 0 },
