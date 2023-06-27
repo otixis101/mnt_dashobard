@@ -1,10 +1,9 @@
 import Button from "@/components/atoms/Button";
 
 const LandingPageHeroSection = () => (
-  <section className="relative h-[450px] overflow-hidden bg-[url(/assets/sm-hero_bg.jpg)] bg-cover bg-center bg-no-repeat text-white lg:h-screen lg:bg-[url(/assets/hero_bg.jpg)] lg:bg-fixed">
+  <section className="relative h-[450px] overflow-hidden bg-[url(/assets/sm-hero_bg.jpg)] bg-cover bg-center bg-no-repeat text-white lg:h-screen lg:bg-[url(/assets/hero_bg.jpg)]">
     <div className="hidden lg:block">
-      <div className="hero-image-alt absolute inset-0 translate-y-[5%] bg-cover bg-center bg-no-repeat" />
-      <div className="hero-image absolute inset-0 translate-y-[5%] bg-cover bg-center bg-no-repeat" />
+      <div className="hero-image absolute inset-0 translate-y-[3%] bg-contain bg-center bg-no-repeat" />
     </div>
     <div className="relative grid h-full place-content-center px-4 text-center">
       <div className="z-[1] space-y-5 max-sm:mb-10 max-sm:mt-28 sm:mt-10">

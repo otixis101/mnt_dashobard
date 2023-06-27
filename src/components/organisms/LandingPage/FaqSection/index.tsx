@@ -5,20 +5,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/molecules/Accordion";
+import { AboutSectionHeading } from "@/components/atoms/About/Primitives";
 import faqs from "./faqData";
 
 const FaqSection = () => (
-  <section className="container mx-auto py-20 max-sm:px-4">
-    <div className="flex flex-col gap-6 md:flex-row md:items-center md:gap-16">
-      <div className="space-y-3 text-center md:w-2/4 md:text-left">
-        <h2 className="text-3xl font-bold text-primary md:text-5xl">
+  <section className="container mx-auto my-28 max-sm:px-4 md:py-10">
+    <div className="flex flex-col gap-6 md:items-center md:justify-center md:gap-8 lg:flex-row lg:gap-16">
+      <div className="w-full space-y-5 text-center lg:max-w-md lg:text-left">
+        <AboutSectionHeading className="max-lg:mx-auto">
           Frequently Asked Questions and Answers
-        </h2>
+        </AboutSectionHeading>
         <p className="text-slate-900 md:text-lg">
           Get answers to pressing questions from users just like you.
         </p>
       </div>
-      <div className="h-max w-full overflow-hidden rounded-lg border">
+      <div className="h-max w-full max-w-[750px] overflow-hidden rounded-lg border md:min-w-[500px]">
         <Accordion defaultValue="one" className="" type="single" collapsible>
           {faqs.map(({ id, qst, ans }) => (
             <AccordionItem className="" key={id} value={id}>

@@ -1,5 +1,5 @@
 import React from "react";
-import BrandLogo from "public/logo.svg";
+import BrandLogo from "public/logo.webp";
 import Image from "next/image";
 import Link from "next/link";
 import Facebook from "public/assets/icon/facebook--ff.svg";
@@ -25,7 +25,13 @@ const Footer = () => (
   <footer className="bg-[hsla(0,_0%,_8%,_1)] px-5 py-10 md:py-20">
     <div className="mx-auto w-full max-w-sm space-y-8">
       <Link className="mx-auto block w-fit" href="/">
-        <Image src={BrandLogo} alt="" />
+        <Image
+          height={47}
+          width={157}
+          priority
+          src={BrandLogo}
+          alt="My Native Tree"
+        />
       </Link>
       <div className="flex items-center justify-between gap-4 text-sm text-white">
         {links.map(({ url, name }) => (

@@ -9,7 +9,7 @@ import {
 const AboutQuickInfo = () => (
   <section className="pb-16 md:pb-20">
     <div className="bg-pale-yellow pb-32 pt-20 text-custom-black max-md:px-4 sm:pb-20">
-      <div className="container mx-auto space-y-10 sm:space-y-14">
+      <div className="container mx-auto space-y-10 sm:space-y-14 md:px-5 lg:px-0">
         <AboutSectionHeading
           as="h2"
           className="mx-auto max-w-[25ch] text-center text-2xl text-custom-black sm:max-w-[30ch]"
@@ -19,7 +19,7 @@ const AboutQuickInfo = () => (
         </AboutSectionHeading>
         <div className="grid gap-10 sm:grid-cols-2">
           <div className="flex items-center justify-center max-sm:order-2">
-            <div className="w-full max-w-[500px] space-y-3 text-center max-sm:mx-auto sm:text-left md:space-y-10">
+            <div className="w-full max-w-[500px] space-y-3 text-center max-sm:mx-auto sm:text-left md:space-y-5 lg:space-y-10">
               <AboutSectionHeading className="max-sm:mx-auto max-sm:max-w-[15ch]">
                 Preserve your family history
               </AboutSectionHeading>
@@ -34,7 +34,7 @@ const AboutQuickInfo = () => (
         </div>
       </div>
     </div>
-    <div className="container mx-auto -mt-20">
+    <div className="container mx-auto -mt-20 md:px-5 lg:px-0">
       <div className="grid gap-10 max-sm:items-center sm:grid-cols-2">
         <div className="mx-auto text-custom-black max-sm:max-w-xs">
           <Image
@@ -44,8 +44,8 @@ const AboutQuickInfo = () => (
           />
         </div>
         <div className="flex items-center">
-          <div className="w-full space-y-3 md:space-y-10">
-            <AboutSectionHeading className="max-w-[15ch] text-center max-sm:mx-auto sm:mt-20 sm:text-left lg:mt-8">
+          <div className="w-full space-y-3 md:space-y-5 lg:space-y-10">
+            <AboutSectionHeading className="max-w-[15ch] text-center max-sm:mx-auto sm:mt-20 sm:text-left md:mt-16 lg:mt-8">
               Learn about your ancestors
             </AboutSectionHeading>
             <AboutSectionText className="max-w-[30ch] max-sm:mx-auto max-sm:text-center sm:max-w-[28ch]">

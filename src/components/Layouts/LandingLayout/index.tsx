@@ -10,12 +10,12 @@ interface RootLayoutProps {
 }
 
 const LandingLayout = ({ children, seo, type }: RootLayoutProps) => (
-  <div>
+  <div className="bg-white text-black">
     <SEO {...seo} ogType={type} />
 
     <NavBar />
 
-    <main className="bg-white">{children}</main>
+    <main>{children}</main>
 
     <Footer />
   </div>

@@ -13,16 +13,12 @@ body {
   animation: toggleImage 1.5s infinite ease-in-out;
 }
 
-.hero-image-alt {
-  background-image: url("/assets/spiral-2.png");
-}
-
 @keyframes toggleImage {
   0% {
-    opacity: 1;
+    background-image: url("/assets/spiral-1.png");
   }
   100% {
-    opacity: 0;
+    background-image: url("/assets/spiral-2.png");
   }
 }
 
