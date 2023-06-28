@@ -3,16 +3,16 @@ import Button from "@/components/atoms/Button";
 import React from "react";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { cn } from "@/base/utils";
-
 import { GiRoundStar } from "react-icons/gi";
 // eslint-disable-next-line import/no-cycle
 import PLANS from "./data";
 
 export interface PriceCardProps {
   plan: "free" | "premium";
-  // duration: "monthly" | "annually";
+  showYearPrice?: boolean;
 }
-const PriceCard = ({ plan }: PriceCardProps) => (
+
+const PriceCard = ({ plan, showYearPrice }: PriceCardProps) => (
   <div
     className={cn(
       "flex h-max flex-col items-center gap-10 rounded-lg p-6",
@@ -29,7 +29,16 @@ const PriceCard = ({ plan }: PriceCardProps) => (
         <h2 className="text-center text-2xl font-semibold">Premium</h2>
         <div className="mt-2 flex items-center gap-2 text-midpup">
           <GiRoundStar className="text-3xl" />
-          <span className="text-3xl font-semibold">$15/mo</span>
+          <span className="text-3xl font-semibold">
+            {showYearPrice ? "$12/mo" : "$15/mo"}
+          </span>
+        </div>
+        <div className="mt-2 h-5">
+          {showYearPrice && (
+            <div className="text-center text-sm font-bold text-midpup">
+              $144 Billed Yearly
+            </div>
+          )}
         </div>
       </div>
     )}

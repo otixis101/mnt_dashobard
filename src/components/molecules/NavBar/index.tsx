@@ -1,4 +1,5 @@
 /* eslint-disable consistent-return */
+/* eslint-disable consistent-return */
 import Button from "@/components/atoms/Button";
 import { navLinks } from "@/components/constants";
 import Image from "next/image";
@@ -15,7 +16,7 @@ const NavBar = () => {
 
     const header = ref.current;
 
-    const CLASS_LIST = ["bg-black/[0.9]", "backdrop-blur-md"];
+    const CLASS_LIST = ["bg-black/[0.75]", "backdrop-blur-[2px]"];
 
     const handleScrollNavigation = () => {
       const SCROLL_HEIGHT = window.scrollY;
@@ -23,10 +24,10 @@ const NavBar = () => {
       if (SCROLL_HEIGHT >= 30) {
         header.classList.add(...CLASS_LIST);
         /** adds this for the notch, common issue with iphones */
-        document.body.classList.add("bg-black/[0.9]", "text-white");
+        document.body.classList.add("bg-black/[0.45]", "text-white");
       } else {
         header.classList.remove(...CLASS_LIST);
-        document.body.classList.remove("bg-black/[0.9]", "text-white");
+        document.body.classList.remove("bg-black/[0.45]", "text-white");
       }
     };
 
