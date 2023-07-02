@@ -8,14 +8,19 @@ import Logo from "public/logo.webp";
 import Button from "@/components/atoms/Button";
 import { HiMenu } from "react-icons/hi";
 
-const MobileMenu = () => {
+interface Props {
+  hideButton?: true;
+  menu?: typeof navLinks;
+}
+
+const MobileMenu = ({ hideButton, menu = navLinks }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => setIsOpen(false);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Trigger className="text-white">
+      <Dialog.Trigger>
         <span className="sr-only">Toggle Menu</span>
         <HiMenu size={32} />
       </Dialog.Trigger>
@@ -69,21 +74,23 @@ const MobileMenu = () => {
                   </div>
 
                   <ul className="text- mt-10 space-y-8 font-bold">
-                    {navLinks.map(({ name, url }) => (
+                    {menu.map(({ name, url }) => (
                       <li className="capitalize" key={name}>
                         <Link onClick={closeModal} href={url}>
                           {name}
                         </Link>
                       </li>
                     ))}
-                    <li>
-                      <Button
-                        intent="outline"
-                        className="max-w-[108px] border-white py-3 text-white"
-                      >
-                        Login
-                      </Button>
-                    </li>
+                    {!hideButton && (
+                      <li>
+                        <Button
+                          intent="outline"
+                          className="max-w-[108px] border-white py-3 text-white"
+                        >
+                          Login
+                        </Button>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </motion.div>
