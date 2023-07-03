@@ -70,6 +70,7 @@ const MobileMenu = ({ hideButton, menu = navLinks }: Props) => {
                       src={Logo}
                       className="ml-auto max-h-[50px] w-full max-w-[150px]"
                       alt="My Native Tree"
+                      priority
                     />
                   </div>
 

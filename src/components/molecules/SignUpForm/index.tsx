@@ -4,11 +4,11 @@ import { Formik } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
 import AppleLogo from "public/assets/icon/apple.svg";
-import PasswordInput from "@/components/atoms/PasswordInput";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
+import PasswordInput from "@/components/atoms/PasswordInput";
 
-const LoginForm = () => {
-  const handleLogin = (values: unknown) => {
+const SignUpForm = () => {
+  const handleSignIn = (values: unknown) => {
     console.log(values);
   };
 
@@ -16,13 +16,13 @@ const LoginForm = () => {
     <>
       <div>
         <h2 className="mb-2 text-[32px] font-extrabold text-gray-900">
-          Log In
+          Sign up
         </h2>
-        <p>To continue to My Native Tree </p>
+        <p>Sign up to my native tree for free</p>
       </div>
       <Formik
         initialValues={{ email: "", password: "" }}
-        onSubmit={handleLogin}
+        onSubmit={handleSignIn}
       >
         {({ handleSubmit, handleChange, values, handleBlur }) => (
           <form
@@ -53,20 +53,18 @@ const LoginForm = () => {
                 placeholder="Password"
               />
               <p className="mt-2 text-sm text-gray-500">
-                Forgot Password ?{" "}
-                <Link href="/" className="text-primary">
-                  Reset
-                </Link>
+                Password must contain at least 6 characters 1 uppercase 1
+                lowercase and 1 number
               </p>
             </fieldset>
             <p className="text-sm text-gray-500">
-              Don&apos;t have an account yet ?{" "}
-              <Link href="/auth/signup" className="text-primary">
-                Sign Up
+              Already have an account ?{" "}
+              <Link href="/auth/signin" className="text-primary">
+                Login
               </Link>
             </p>
             <Button type="submit" className="max-w-full md:max-w-full">
-              Login
+              Sign up
             </Button>
 
             <div className="space-y-3">
@@ -85,4 +83,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;
