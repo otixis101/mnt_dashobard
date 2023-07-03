@@ -23,6 +23,7 @@
         "varsIgnorePattern": "^_"
       }
     ],
+    "@typescript-eslint/ban-ts-comment": "off",
     "react/require-default-props": "off",
     "no-param-reassign": [2, { "props": false }],
     "react/jsx-props-no-spreading": "off",

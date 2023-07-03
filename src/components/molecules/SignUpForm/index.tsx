@@ -6,9 +6,10 @@ import GoogleLogo from "public/assets/icon/google.svg";
 import AppleLogo from "public/assets/icon/apple.svg";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
 import PasswordInput from "@/components/atoms/PasswordInput";
+import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
 
 const SignUpForm = () => {
-  const handleSignIn = (values: unknown) => {
+  const handleSignIn = (values: Logincredentials) => {
     console.log(values);
   };
 

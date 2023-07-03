@@ -6,10 +6,28 @@ import GoogleLogo from "public/assets/icon/google.svg";
 import AppleLogo from "public/assets/icon/apple.svg";
 import PasswordInput from "@/components/atoms/PasswordInput";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
+import { signIn } from "next-auth/react";
+import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
+import { useRouter } from "next/router";
 
 const LoginForm = () => {
-  const handleLogin = (values: unknown) => {
-    console.log(values);
+  const router = useRouter();
+  const handleLogin = async (values: Logincredentials) => {
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+      });
+
+      if (res && res.status === 200) {
+        router.push("/dashboard");
+      } else {
+        console.log(res?.error);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
