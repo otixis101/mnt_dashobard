@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
 
+
+## Figma Design Link
+- [my-native-tree figma design](https://www.figma.com/file/lT2Dg4cV30YRkCGb9HgoCI/MNT-APP?type=design&node-id=0%3A1&mode=design&t=SsZt2CBTO8XpkdQx-1)
+
 ## 🔬 Atomic Design
 
 This project uses Atomic Design for it's Components. Here are several resources for Atomic Design if you are unfamiliar:
