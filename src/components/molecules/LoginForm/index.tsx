@@ -1,6 +1,6 @@
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
 import AppleLogo from "public/assets/icon/apple.svg";
@@ -9,15 +9,24 @@ import CustomAuthButton from "@/components/atoms/CustomAuthButton";
 import { signIn } from "next-auth/react";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { AuthSchema } from "@/base/helpers/FormValidationSchemas";
 
 const LoginForm = () => {
   const router = useRouter();
-  const handleLogin = async (values: Logincredentials) => {
+  const { token, email } = router.query;
+  const [isLoading, setIsLoading] = useState(false);
+  const handleLogin = async (
+    values: Logincredentials,
+    { resetForm }: FormikHelpers<Logincredentials>
+  ) => {
+    const { email: userEmail, password } = values;
+    setIsLoading(true);
     try {
       const res = await signIn("credentials", {
         redirect: false,
-        email: values.email,
-        password: values.password,
+        email: userEmail.trim(),
+        password: password.trim(),
       });
 
       if (res && res.status === 200) {
@@ -25,10 +34,39 @@ const LoginForm = () => {
       } else {
         console.log(res?.error);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      resetForm();
     }
   };
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify-email`,
+          {
+            method: "POST",
+            body: JSON.stringify({ code: token, email }),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if (res && res.ok) {
+          /**
+           * TODO show user success message
+           */
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (token && email) {
+      verifyUser();
+    }
+  }, []);
 
   return (
     <>
@@ -41,14 +79,24 @@ const LoginForm = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={handleLogin}
+        validationSchema={AuthSchema}
       >
-        {({ handleSubmit, handleChange, values, handleBlur }) => (
+        {({
+          handleSubmit,
+          handleChange,
+          values,
+          handleBlur,
+          errors,
+          touched,
+        }) => (
           <form
             onSubmit={handleSubmit}
             className="mt-4 flex flex-col gap-4 space-y-1"
           >
             <fieldset>
               <Input
+                hint={touched.email && errors.email ? errors.email : ""}
+                isError={!!(touched.email && errors.email)}
                 required
                 name="email"
                 type="email"
@@ -61,6 +109,9 @@ const LoginForm = () => {
             </fieldset>
             <fieldset>
               <PasswordInput
+                hint={
+                  touched.password && errors.password ? errors.password : ""
+                }
                 required
                 name="password"
                 type="password"
@@ -83,7 +134,11 @@ const LoginForm = () => {
                 Sign Up
               </Link>
             </p>
-            <Button type="submit" className="max-w-full md:max-w-full">
+            <Button
+              loading={isLoading}
+              type="submit"
+              className="max-w-full md:max-w-full"
+            >
               Login
             </Button>
 

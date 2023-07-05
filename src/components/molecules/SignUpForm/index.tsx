@@ -1,16 +1,52 @@
+import { useState } from "react";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import { Formik } from "formik";
+import { Formik, FormikHelpers } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
 import AppleLogo from "public/assets/icon/apple.svg";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
 import PasswordInput from "@/components/atoms/PasswordInput";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
+import { useRouter } from "next/router";
+import { AuthSchema } from "@/base/helpers/FormValidationSchemas";
 
 const SignUpForm = () => {
-  const handleSignIn = (values: Logincredentials) => {
-    console.log(values);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const handleSignIn = async (
+    values: Logincredentials,
+    { resetForm }: FormikHelpers<Logincredentials>
+  ) => {
+    const { email, password } = values;
+    setIsLoading(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: email.trim(),
+            password: password.trim(),
+          }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (res && res.ok) {
+        /**
+         * TODO route users to the verify email page
+         */
+        router.push(`/auth/verify?email=${email}`);
+      }
+    } catch (error) {
+      /**
+       * TODO toast error message for users feedback
+       */
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+      resetForm();
+    }
   };
 
   return (
@@ -24,6 +60,7 @@ const SignUpForm = () => {
       <Formik
         initialValues={{ email: "", password: "" }}
         onSubmit={handleSignIn}
+        validationSchema={AuthSchema}
       >
         {({ handleSubmit, handleChange, values, handleBlur }) => (
           <form
@@ -64,7 +101,11 @@ const SignUpForm = () => {
                 Login
               </Link>
             </p>
-            <Button type="submit" className="max-w-full md:max-w-full">
+            <Button
+              loading={isLoading}
+              type="submit"
+              className="max-w-full md:max-w-full"
+            >
               Sign up
             </Button>
 

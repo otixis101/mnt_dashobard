@@ -6,7 +6,12 @@ export type Logincredentials = {
   email: string;
   password: string;
 };
-
+type UserResponse = {
+  email: string;
+  role: string;
+  id: string;
+  accessToken: string;
+};
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -18,34 +23,34 @@ export const authOptions: NextAuthOptions = {
       // @ts-ignore
       authorize: async (
         credentials: Logincredentials
-      ): Promise<Logincredentials | null> => {
-        /**
-         * This is where we would validate the user against our backend database
-         *TODO: Implement api validation for user
-         */
+      ): Promise<UserResponse | null> => {
+        const { email, password } = credentials;
 
-        const uservalidation = () => {
-          if (
-            credentials.email === "sunday@gmail.com" &&
-            credentials.password === "sunday"
-          ) {
-            return { isValid: true };
+        const res = await fetch(
+          `https://my-native-tree.onrender.com/api/auth/login`,
+          {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: {
+              "Content-Type": "application/json",
+            },
           }
-          return { isValid: false };
-        };
+        );
 
-        if (uservalidation().isValid) {
+        const { data, message } = await res.json();
+        if (res.ok) {
           const user = {
-            ...credentials,
-            id: "1",
-            role: "admin",
-            accessToken: "helloworld",
+            role: data.role,
+            email: data.email,
+            id: data.id,
+            accessToken: data.accessToken,
           };
           return user;
         }
-        throw new Error("Invalid login");
+        throw new Error(message);
       },
     }),
+    // GoogleProvider({}),
   ],
   pages: {
     signIn: "/auth/signin",
