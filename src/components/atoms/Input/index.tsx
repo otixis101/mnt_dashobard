@@ -17,6 +17,7 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   hintIcon?: React.ReactNode | true;
   labelClass?: string;
   hintClass?: string;
+  parentClass?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
@@ -30,12 +31,15 @@ const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
     className,
     labelClass,
     hintIcon,
+    parentClass,
     hintClass,
   } = props;
 
   return (
-    <div className="space-y-2">
-      <label className={cn("grid gap-2 text-sm text-black", labelClass)}>
+    <div className={cn("space-y-2", parentClass)}>
+      <label
+        className={cn("grid grid-cols-1 gap-2 text-sm text-black", labelClass)}
+      >
         <span className="font-medium">{label}</span>
         <input
           {...props}

@@ -46,7 +46,7 @@ const AppNavBar = (props: AppNavBarProps) => {
   return (
     <header
       ref={ref}
-      className="sticky top-0 h-[100px] duration-300 ease-in-out"
+      className="sticky top-0 z-50 h-[100px] duration-300 ease-in-out"
     >
       <div className="container mx-auto flex  h-full items-center justify-between gap-2  px-3 py-6 max-md:px-4">
         <div

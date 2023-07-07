@@ -7,3 +7,7 @@ interface SEOobject {
   readonly ogType: TemplateType;
 }
 type TemplateType = "website" | "article";
+
+declare type E164Number = string & {
+  __tag?: "E164Number" | undefined;
+};

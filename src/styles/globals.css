@@ -70,3 +70,17 @@ body {
 .testimonial .swiper-container {
   position: unset;
 }
+
+.remove-outline,
+.remove-outline:focus-visible {
+  outline: none;
+}
+
+/*add support for outline color https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast */
+@media (prefers-contrast: more) {
+  .remove-outline,
+  .remove-outline:focus-visible {
+    outline: auto;
+    outline-color: transparent;
+  }
+}

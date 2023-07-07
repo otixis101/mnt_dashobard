@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import { cn } from "@/base/utils";
-import React, { ComponentPropsWithoutRef, ComponentRef } from "react";
+import React, { ComponentProps, ComponentRef } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
-import PhoneNumberInput from "react-phone-number-input";
+import PhoneNumberInput, {
+  type Props as PhoneInputProps,
+} from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
-interface Props extends ComponentPropsWithoutRef<typeof PhoneNumberInput> {
+interface Props extends PhoneInputProps<ComponentProps<"input">> {
   label: string;
   labelClass?: string;
   wrapperClass?: string;
@@ -16,6 +18,7 @@ interface Props extends ComponentPropsWithoutRef<typeof PhoneNumberInput> {
   hint?: string;
 }
 
+/** @see https://catamphetamine.gitlab.io/react-phone-number-input/ */
 const PhoneInput = React.forwardRef<
   ComponentRef<typeof PhoneNumberInput>,
   Props
@@ -33,7 +36,9 @@ const PhoneInput = React.forwardRef<
   } = props;
 
   return (
-    <div className={cn("grid gap-2 text-sm text-black", wrapperClass)}>
+    <div
+      className={cn("grid grid-cols-1 gap-2 text-sm text-black", wrapperClass)}
+    >
       {/* check tailwind config for extra styles */}
       <div className={cn("mnt", "space-y-2")}>
         <label className={cn("grid gap-2 text-sm text-black", labelClass)}>
