@@ -10,7 +10,7 @@ import { FiLogOut } from "react-icons/fi";
 import ToggleBtn from "@/components/atoms/ToggleBtn";
 
 const UserProfileBody = () => {
-  const [mode, setMode] = useState<boolean>(true);
+  const [mode, setMode] = useState<boolean>(false);
 
   const onChangeMode = () => setMode((prevMode) => !prevMode);
 
