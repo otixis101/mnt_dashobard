@@ -85,6 +85,7 @@ const MobileMenu = ({ hideButton, menu = navLinks }: Props) => {
                     {!hideButton && (
                       <li>
                         <Button
+                          href="/auth/signin"
                           intent="outline"
                           className="max-w-[108px] border-white py-3 text-white"
                         >

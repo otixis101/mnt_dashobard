@@ -15,7 +15,10 @@ const LandingPageHeroSection = () => (
           history
         </p>
         <div className="pt-3 xl:pt-5">
-          <Button className="mx-auto block max-md:max-w-[200px] max-sm:max-w-[180px]">
+          <Button
+            href="/auth/signin"
+            className="mx-auto block max-md:max-w-[200px] max-sm:max-w-[180px]"
+          >
             Create your family tree
           </Button>
         </div>

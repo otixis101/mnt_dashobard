@@ -77,7 +77,7 @@ const SignUpForm = () => {
           },
         });
 
-        router.push("/dashboard");
+        router.push(`/auth/verify?email=${session?.user.email}`);
       }
     } catch (error) {
       toast.error("Something went wrong");
