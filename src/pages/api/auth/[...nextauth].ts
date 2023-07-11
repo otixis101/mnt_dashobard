@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { JWT } from "next-auth/jwt";
 
 export type Logincredentials = {
@@ -50,27 +51,59 @@ export const authOptions: NextAuthOptions = {
         throw new Error(message);
       },
     }),
-    // GoogleProvider({}),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+    }),
   ],
   pages: {
     signIn: "/auth/signin",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, trigger, session }) {
+      if (trigger === "update") {
+        token.accessToken = session.user.accessToken;
+        token.id = session.user.id;
+        token.firstName = session.user.firstName;
+        token.lastName = session.user.lastName;
+        token.email = session.user.email;
+        token.role = session.user.role;
+      }
       if (user) {
-        token.id = user.id;
-        token.email = user.email;
-        token.accessToken = user.accessToken;
-        token.role = user.role;
+        if (account && account.provider === "google") {
+          token.accessToken = account.access_token as string;
+          token.refreshToken = account.refresh_token as string;
+          token.channel = "google";
+          token.id = user.id;
+        } else {
+          token.id = user.id;
+          token.email = user.email;
+          token.accessToken = user.accessToken;
+          token.role = user.role;
+          token.channel = "credentials";
+        }
       }
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
-      if (session) {
+      if (session && token.channel === "credentials") {
         session.user.id = token.id;
         session.user.role = token.role;
         session.user.email = token.email;
         session.user.accessToken = token.accessToken;
+      } else {
+        session.user.channel = token.channel;
+        session.user.accessToken = token.accessToken;
+        session.user.refreshToken = token.refreshToken;
+        session.user.id = token.id;
+        session.user.idToken = token.idToken;
       }
 
       return session;

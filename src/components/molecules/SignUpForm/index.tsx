@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import { Formik, FormikHelpers } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
-import AppleLogo from "public/assets/icon/apple.svg";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
 import PasswordInput from "@/components/atoms/PasswordInput";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
 import { useRouter } from "next/router";
 import { AuthSchema } from "@/base/helpers/FormValidationSchemas";
+import { toast } from "react-toastify";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const { data: session, status, update } = useSession();
   const router = useRouter();
-  const handleSignIn = async (
+
+  const handleSignUp = async (
     values: Logincredentials,
     { resetForm }: FormikHelpers<Logincredentials>
   ) => {
@@ -33,6 +37,7 @@ const SignUpForm = () => {
         }
       );
       if (res && res.ok) {
+        toast.success("Sign up successful");
         /**
          * TODO route users to the verify email page
          */
@@ -42,13 +47,56 @@ const SignUpForm = () => {
       /**
        * TODO toast error message for users feedback
        */
-      console.log(error);
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
       resetForm();
     }
   };
 
+  const handleGoogleSignIn = async (authToken: string) => {
+    setIsGoogleLoading(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`,
+        {
+          method: "POST",
+          body: JSON.stringify({ token: authToken }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (res && res.ok) {
+        toast.success("Login successful");
+        const { data: user } = await res.json();
+
+        update({
+          ...session,
+          user: {
+            ...session?.user,
+            ...user,
+          },
+        });
+
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+      signOut();
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      session &&
+      session.user.channel === "google" &&
+      status === "authenticated"
+    ) {
+      const googleAuthToken = session.user.accessToken;
+      handleGoogleSignIn(googleAuthToken);
+    }
+  }, [status]);
   return (
     <>
       <div>
@@ -59,7 +107,7 @@ const SignUpForm = () => {
       </div>
       <Formik
         initialValues={{ email: "", password: "" }}
-        onSubmit={handleSignIn}
+        onSubmit={handleSignUp}
         validationSchema={AuthSchema}
       >
         {({ handleSubmit, handleChange, values, handleBlur }) => (
@@ -115,8 +163,12 @@ const SignUpForm = () => {
                 <p className="-mt-1 w-fit text-gray-500">or</p>
                 <span className="h-[1px] w-full bg-gray-500" />
               </div>
-              <CustomAuthButton icon={GoogleLogo} name="Continue with Google" />
-              <CustomAuthButton icon={AppleLogo} name="Continue with Apple" />
+              <CustomAuthButton
+                onClick={() => signIn("google")}
+                loading={isGoogleLoading}
+                icon={GoogleLogo}
+                name="Continue with Google"
+              />
             </div>
           </form>
         )}

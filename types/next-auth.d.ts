@@ -6,6 +6,11 @@ declare module "next-auth" {
     role: string;
     email: string;
     accessToken: string;
+    refreshToken: string;
+    channel: "credentials" | "google";
+    idToken: string;
+    firstName: string;
+    lastName: string;
   }
   interface Session {
     user: User;
@@ -17,6 +22,11 @@ declare module "next-auth/jwt" {
     id: string;
     role: string;
     email: string;
+    firstName: string;
+    lastName: string;
     accessToken: string;
+    refreshToken: string;
+    idToken: string;
+    channel: "credentials" | "google";
   }
 }

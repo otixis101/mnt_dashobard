@@ -7,3 +7,10 @@ export const AuthSchema = Yup.object().shape({
     .min(6, "min password length is 6 chars.")
     .required("password is required"),
 });
+
+export const CreateUserSchema = Yup.object().shape({
+  firstName: Yup.string().required("Required"),
+  lastName: Yup.string().required("Required"),
+  mothersName: Yup.string().required("Required"),
+  homeTown: Yup.string().required("Required"),
+});

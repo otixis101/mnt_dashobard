@@ -23,7 +23,7 @@ const useMenuOnScroll = (props?: Props) => {
       if (SCROLL_HEIGHT >= 30) {
         header.classList.add(...CLASS_LIST);
         /** adds this for the notch, common issue with iphones */
-        document.body.classList.add("bg-black/[0.45]", "text-white");
+        document.body.classList.add("bg-black/[0.45]");
         props?.effect?.();
       } else {
         header.classList.remove(...CLASS_LIST);

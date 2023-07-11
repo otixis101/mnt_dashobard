@@ -5,11 +5,13 @@ import { cn } from "@/base/utils";
 
 interface Props {
   label: string;
+  onSelect: (value: string) => void;
+  defaultValue?: string;
   data?: DataProps[];
   parentClass?: string;
 }
 
-interface DataProps {
+export interface DataProps {
   name: string;
   value: string;
 }
@@ -52,8 +54,13 @@ const ComboBox: FC<Props> = ({
   label = "select country of origin",
   parentClass,
   data = SampleData,
+  onSelect,
+  defaultValue,
 }) => (
-  <Select.Root>
+  <Select.Root
+    defaultValue={defaultValue}
+    onValueChange={(value) => onSelect(value)}
+  >
     <div className={cn("grid gap-2 text-sm text-black", parentClass)}>
       <span className="font-medium">{label}</span>
       <Select.Trigger

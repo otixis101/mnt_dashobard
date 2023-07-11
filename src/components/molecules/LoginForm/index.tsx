@@ -3,19 +3,23 @@ import Input from "@/components/atoms/Input";
 import { Formik, FormikHelpers } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
-import AppleLogo from "public/assets/icon/apple.svg";
 import PasswordInput from "@/components/atoms/PasswordInput";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
-import { signIn } from "next-auth/react";
+import { getSession, signIn, signOut, useSession } from "next-auth/react";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AuthSchema } from "@/base/helpers/FormValidationSchemas";
+import { toast } from "react-toastify";
+import { GetServerSidePropsContext } from "next";
 
 const LoginForm = () => {
   const router = useRouter();
   const { token, email } = router.query;
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const { data: session, status, update } = useSession();
+
   const handleLogin = async (
     values: Logincredentials,
     { resetForm }: FormikHelpers<Logincredentials>
@@ -30,17 +34,63 @@ const LoginForm = () => {
       });
 
       if (res && res.status === 200) {
-        router.push("/dashboard");
+        toast.success("Login successful");
+        router.push("/moreinfo");
       } else {
-        console.log(res?.error);
+        toast.error(res?.error);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
       resetForm();
     }
   };
+
+  const handleGoogleSignIn = async (authToken: string) => {
+    setIsGoogleLoading(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`,
+        {
+          method: "POST",
+          body: JSON.stringify({ token: authToken }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (res && res.ok) {
+        const { data: user } = await res.json();
+        setIsGoogleLoading(true);
+        update({
+          ...session,
+          user: {
+            ...session?.user,
+            ...user,
+          },
+        });
+        setIsGoogleLoading(false);
+        toast.success("Login successful");
+
+        router.push("/moreinfo");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+      signOut();
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      session &&
+      session.user.channel === "google" &&
+      status === "authenticated"
+    ) {
+      const googleAuthToken = session.user.accessToken;
+      handleGoogleSignIn(googleAuthToken);
+    }
+  }, [status]);
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -54,6 +104,7 @@ const LoginForm = () => {
           }
         );
         if (res && res.ok) {
+          toast.success("Email verified successfully");
           /**
            * TODO show user success message
            */
@@ -66,7 +117,7 @@ const LoginForm = () => {
     if (token && email) {
       verifyUser();
     }
-  }, []);
+  }, [email, token]);
 
   return (
     <>
@@ -148,8 +199,12 @@ const LoginForm = () => {
                 <p className="-mt-1 w-fit text-gray-500">or</p>
                 <span className="h-[1px] w-full bg-gray-500" />
               </div>
-              <CustomAuthButton icon={GoogleLogo} name="Continue with Google" />
-              <CustomAuthButton icon={AppleLogo} name="Continue with Apple" />
+              <CustomAuthButton
+                onClick={async () => signIn("google", { redirect: false })}
+                icon={GoogleLogo}
+                loading={isGoogleLoading}
+                name="Continue with Google"
+              />
             </div>
           </form>
         )}
@@ -159,3 +214,21 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/moreinfo",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
