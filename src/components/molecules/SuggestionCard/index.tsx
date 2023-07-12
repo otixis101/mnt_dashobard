@@ -4,8 +4,10 @@ import Image from "next/image";
 interface Props {
   addedBy: {
     name: string;
+    /** accepts an absolute url */
     image: string;
   };
+  /** accepts an absolute url */
   profileImage: string;
   name: string;
   state: string;

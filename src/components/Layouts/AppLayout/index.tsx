@@ -25,7 +25,7 @@ const AppLayout = (props: Props) => {
         {children}
       </main>
       {!hideSpirals && (
-        <div className="absolute bottom-0 left-0 right-0 hidden h-36 w-full bg-white bg-[url(/assets/footer-spirals.svg)] bg-cover bg-center bg-no-repeat md:block" />
+        <div className="absolute bottom-0 left-0 right-0 hidden h-[180px] w-full bg-white bg-[url(/assets/footer-spirals.svg)] bg-cover bg-center bg-no-repeat md:block" />
       )}
     </div>
   );

@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -62,5 +65,17 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-radix")()],
+  plugins: [
+    require("tailwindcss-radix")(),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ".h-app": {
+          height: "calc(100vh - 100px)",
+        },
+        ".min-h-app": {
+          minHeight: "calc(100vh - 100px)",
+        },
+      });
+    }),
+  ],
 };

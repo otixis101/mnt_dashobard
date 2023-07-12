@@ -33,6 +33,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
     hintIcon,
     parentClass,
     hintClass,
+    ...prop
   } = props;
 
   return (
@@ -42,7 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
       >
         <span className="font-medium">{label}</span>
         <input
-          {...props}
+          {...prop}
           ref={ref}
           type={type}
           name={name}

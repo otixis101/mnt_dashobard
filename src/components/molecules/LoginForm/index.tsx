@@ -35,7 +35,7 @@ const LoginForm = () => {
 
       if (res && res.status === 200) {
         toast.success("Login successful");
-        router.push("/moreinfo");
+        router.push("/user/profile/update?step=moreinfo");
       } else {
         toast.error(res?.error);
       }
@@ -71,7 +71,7 @@ const LoginForm = () => {
         setIsGoogleLoading(false);
         toast.success("Login successful");
 
-        router.push("/moreinfo");
+        router.push("/user/profile/update?step=moreinfo");
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -220,7 +220,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (session) {
     return {
       redirect: {
-        destination: "/moreinfo",
+        destination: "/user/profile/update?step=moreinfo",
         permanent: false,
       },
     };

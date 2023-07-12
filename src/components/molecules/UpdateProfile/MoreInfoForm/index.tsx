@@ -4,13 +4,11 @@ import ComboBox, { DataProps } from "@/components/atoms/ComboBox";
 import PhoneInput from "@/components/atoms/PhoneInput";
 import Button from "@/components/atoms/Button";
 import { countryArrray } from "@/components/constants";
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/atoms/Popover";
-
 import { format } from "date-fns";
 import { Formik, FormikHelpers } from "formik";
 import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
@@ -52,7 +50,7 @@ const fields = [
     placeholder: "Mother's maiden name ",
     Component: Input,
   },
-];
+] as const;
 
 const MoreInfoForm: FC = () => {
   const { data: session } = useSession();
@@ -113,7 +111,7 @@ const MoreInfoForm: FC = () => {
       const person = await res.json();
       console.log(person);
     } catch (error) {
-      toast.error("An error occured");
+      toast.error("An error occurred");
       console.log(error);
     } finally {
       resetForm();
@@ -165,12 +163,9 @@ const MoreInfoForm: FC = () => {
                   label={label}
                   onChange={handleChange}
                   parentClass="w-full"
-                  // @ts-ignore
                   value={values[name]}
                   onBlur={handleBlur}
-                  // @ts-ignore
                   isError={!!(touched[name] && errors[name])}
-                  // @ts-ignore
                   hint={touched[name] && errors[name] ? errors[name] : ""}
                 />
               </fieldset>
@@ -184,13 +179,14 @@ const MoreInfoForm: FC = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="text-light-slate-9 flex items-center gap-4 text-base"
+                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
                   >
                     <Input
                       disabled
                       placeholder="Date of birth"
                       value={date ? `${format(date, "PPP")}` : ""}
                       label=""
+                      parentClass="w-full"
                     />
                   </button>
                 </PopoverTrigger>
