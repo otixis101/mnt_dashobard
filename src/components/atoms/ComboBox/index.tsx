@@ -76,7 +76,7 @@ const ComboBox: FC<Props> = ({
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className="z-[2] overflow-hidden rounded-md bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
+        <Select.Content className="z-[2] mt-14 overflow-hidden rounded-md bg-white shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]">
           <Select.Viewport className="bg-white p-[5px]">
             <Select.Group className="">
               {data.map(({ name, value }) => (
