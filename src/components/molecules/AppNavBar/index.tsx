@@ -8,8 +8,8 @@ import LogoWhite from "public/logo.webp";
 import MobileMenu from "../MobileMenu";
 
 const navLinks = [
-  { name: "FAQ", url: "#" },
-  { name: "About", url: "About" },
+  { name: "FAQ", url: "/faq" },
+  { name: "About", url: "/about" },
 ];
 
 interface User {

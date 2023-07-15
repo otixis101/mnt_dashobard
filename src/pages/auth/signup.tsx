@@ -5,7 +5,7 @@ import BgImage from "public/assets/signup-bg.png";
 
 const SignInPage = () => (
   <AuthLayout type="website" hideLogo>
-    <div className="snap-y snap-start scroll-py-20 px-3 max-lg:overflow-y-scroll max-sm:h-screen">
+    <div className="snap-y snap-start scroll-py-20 px-3 max-lg:overflow-y-scroll max-sm:h-screen max-sm:pt-8">
       <section className="container">
         <div className="">
           <div className="grid w-full items-center gap-2 sm:h-[calc(100vh-100px)] lg:grid-cols-2">

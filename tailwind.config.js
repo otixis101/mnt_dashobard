@@ -75,6 +75,18 @@ module.exports = {
         ".min-h-app": {
           minHeight: "calc(100vh - 100px)",
         },
+        /** for gradient borders: https://gist.github.com/stereokai/36dc0095b9d24ce93b045e2ddc60d7a0
+         * ```tsx
+         * <Component className="border gradient-borders--v1 rounded-md"/>
+         * ```
+         */
+        ".gradient-borders--v1": {
+          borderColor: "transparent",
+          backgroundImage:
+            "linear-gradient(#fff, #fff), linear-gradient(84.77deg, #5724eb 17.18%, #620b63 44.94%, #ffb66d 66.36%, #e4601f 93.32%), radial-gradient(circle at top left, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15))",
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
+        },
       });
     }),
   ],

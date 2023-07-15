@@ -8,7 +8,7 @@ const SuggestionsPage = () => (
         image: "/assets/hero_bg.jpg",
       }}
       profileImage="/assets/family-legacy.png"
-      name="Added By"
+      name="Ugona Ezeh"
       state="Kogi"
     />
   </div>

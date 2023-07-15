@@ -14,3 +14,15 @@ export const CreateUserSchema = Yup.object().shape({
   mothersName: Yup.string().required("Required"),
   homeTown: Yup.string().required("Required"),
 });
+
+export const NumberSchema = Yup.number().typeError(
+  "Only numbers are accepted as a valid format"
+);
+
+export const StringSchema = Yup.string().typeError(
+  "Only strings are accepted as a valid format"
+);
+
+export const EmailSchema = Yup.string()
+  .email()
+  .typeError("Please pass in a valid email");

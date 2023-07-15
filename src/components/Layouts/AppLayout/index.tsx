@@ -21,7 +21,7 @@ const AppLayout = (props: Props) => {
     <div className="relative bg-white">
       <SEO {...seo} ogType={type} />
       <AppNavBar {...navbarProps} />
-      <main className="relative z-[1] snap-y snap-start scroll-py-20 px-3 max-lg:min-h-screen max-lg:overflow-y-scroll">
+      <main className="relative z-[1] snap-y snap-start scroll-py-20 px-3 max-lg:overflow-y-scroll max-lg:min-h-app">
         {children}
       </main>
       {!hideSpirals && (

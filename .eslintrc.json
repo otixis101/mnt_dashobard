@@ -64,11 +64,13 @@
     "import/no-unresolved": [
       2,
       {
-        "ignore": ["^public/"]
+        "ignore": ["^public/", "^~/"]
       }
     ],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "@typescript-eslint/ban-types": ["error", { "types": { "{}": false } }],
+    "react/jsx-fragments": "off"
   },
   "parserOptions": {
     "project": "./tsconfig.json"
