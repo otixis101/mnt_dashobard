@@ -24,7 +24,7 @@ const PricingSection = () => {
   const [checked, setChecked] = useState(false);
 
   return (
-    <section className="container my-28 px-4">
+    <section id="pricing" className="container my-28 px-4">
       <div className="mx-auto w-full max-w-[840px]">
         <AboutSectionHeading className="mx-auto text-center" as="h1">
           Pricing

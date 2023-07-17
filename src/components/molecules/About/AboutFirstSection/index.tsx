@@ -3,7 +3,7 @@ import Image from "next/image";
 import GroupedPeople from "public/assets/about-people-group.png";
 
 const AboutFirstSection = () => (
-  <section className="container mx-auto">
+  <section id="about" className="container mx-auto">
     <div className="grid items-center gap-8 py-11 sm:grid-cols-2 md:px-5  lg:justify-between lg:px-0">
       <div className="flex items-center justify-center">
         <AboutIconGroup />

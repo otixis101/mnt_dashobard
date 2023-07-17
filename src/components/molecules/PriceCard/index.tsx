@@ -30,7 +30,7 @@ const PriceCard = ({ plan, showYearPrice }: PriceCardProps) => (
         <div className="mt-2 flex items-center gap-2 text-midpup">
           <GiRoundStar className="text-3xl" />
           <span className="text-3xl font-semibold">
-            {showYearPrice ? "$12/mo" : "$15/mo"}
+            {showYearPrice ? "$99/yr" : "$9.99/mo"}
           </span>
         </div>
         <div className="mt-2 h-5">

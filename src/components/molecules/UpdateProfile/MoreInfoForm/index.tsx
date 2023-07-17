@@ -167,6 +167,7 @@ const MoreInfoForm: FC = () => {
                   onBlur={handleBlur}
                   isError={!!(touched[name] && errors[name])}
                   hint={touched[name] && errors[name] ? errors[name] : ""}
+                  id={name}
                 />
               </fieldset>
             ))}

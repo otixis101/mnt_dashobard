@@ -9,7 +9,7 @@ import { AboutSectionHeading } from "@/components/atoms/About/Primitives";
 import faqs from "./faqData";
 
 const FaqSection = () => (
-  <section className="container mx-auto my-28 max-sm:px-4 md:py-10">
+  <section id="faqs" className="container mx-auto my-28 max-sm:px-4 md:py-10">
     <div className="flex flex-col gap-6 md:items-center md:justify-center md:gap-8 lg:flex-row lg:gap-16">
       <div className="w-full space-y-5 text-center lg:max-w-md lg:text-left">
         <AboutSectionHeading className="max-lg:mx-auto">

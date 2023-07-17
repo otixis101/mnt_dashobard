@@ -1,9 +1,7 @@
 /* eslint-disable default-case */
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import AppLayout from "@/components/Layouts/AppLayout";
 import MoreInfoPage from "@/components/organisms/UpdateProfile/MoreInfoPage";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import { toast } from "react-toastify";
 import MoreInfoHeader from "@/components/molecules/UpdateProfile/MoreInfoHeader";
 import { useRouter } from "next/router";
 import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
@@ -14,9 +12,6 @@ const AllSteps = ["moreinfo", "suggestions", "about"] as const;
 
 type Steps = (typeof AllSteps)[number];
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type GetProps = GetServerSideProps<{ step: Steps | (string & {}) }>; // ? {} allows string to be passed, see type definition for input type
-
 const PageHeader: Record<Steps, string> = {
   moreinfo: "Welcome, we need some more information about you",
   suggestions:
@@ -24,43 +19,23 @@ const PageHeader: Record<Steps, string> = {
   about: "Almost there!",
 };
 
-export const getServerSideProps: GetProps = async (ctx) => {
-  const { query } = ctx;
-
-  if ("step" in query) {
-    if (AllSteps.includes(String(query.step) as Steps)) {
-      return {
-        props: {
-          step: query.step as unknown as Steps,
-        },
-      };
-    }
-
-    return {
-      props: {
-        step: String(query.step),
-      },
-    };
-  }
-
-  return {
-    props: {
-      step: "moreinfo",
-    },
-  };
-};
-
-type Props = InferGetServerSidePropsType<typeof getServerSideProps>;
-
-const UserProfile = ({ step }: Props) => {
-  const notValidStep = useMemo(() => !AllSteps.includes(step as Steps), [step]);
+const UserProfile = () => {
   const router = useRouter();
 
-  useEffect(() => {
-    if (notValidStep) {
-      toast.error(`Expected ${AllSteps.join(", ")}, but received ${step}`);
-    }
-  }, [notValidStep, step]);
+  const { query } = router;
+
+  const { step = "moreinfo" } = query;
+
+  const notValidStep = useMemo(() => !AllSteps.includes(step as Steps), [step]);
+
+  if (!step)
+    return (
+      <AppLayout>
+        <section className="container h-app">
+          <div />
+        </section>
+      </AppLayout>
+    );
 
   if (notValidStep)
     return (

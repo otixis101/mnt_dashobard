@@ -7,13 +7,13 @@ const LandingPageHeroSection = () => (
     </div>
     <div className="relative grid h-full place-content-center px-4 text-center">
       <div className="z-[1] space-y-5 max-sm:mb-10 max-sm:mt-28 sm:mt-10">
-        <h1 className="mx-auto max-w-[15ch] text-3xl font-extrabold leading-[1.1] max-md:capitalize sm:max-w-[20ch] md:text-4xl lg:text-[50px] lg:leading-[55px] xl:text-[64px] xl:leading-[68px]">
-          You&apos;re not alone, connect with your roots here
+        <h1 className="mx-auto max-w-[20ch] text-3xl font-extrabold leading-[1.1] max-md:capitalize sm:max-w-[26ch] md:text-4xl lg:text-[50px] lg:leading-[55px] xl:text-[64px] xl:leading-[68px]">
+          Cultivating heritage, uniting families, preserving legacies
         </h1>
-        <p className="mx-auto max-w-[40ch] text-sm leading-tight md:text-lg lg:text-2xl lg:leading-[38px] xl:max-w-[50ch] xl:text-[32px]">
+        {/* <p className="mx-auto max-w-[40ch] text-sm leading-tight md:text-lg lg:text-2xl lg:leading-[38px] xl:max-w-[50ch] xl:text-[32px]">
           My Native Tree helps you create, preserve, and share your family
           history
-        </p>
+        </p> */}
         <div className="pt-3 xl:pt-5">
           <Button
             href="/auth/signin"

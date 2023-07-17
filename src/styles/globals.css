@@ -4,6 +4,10 @@
 
 @import url("./fonts.css");
 
+html {
+  scroll-padding-top: 150px;
+}
+
 body {
   font-family: "Supreme", sans-serif;
 }
