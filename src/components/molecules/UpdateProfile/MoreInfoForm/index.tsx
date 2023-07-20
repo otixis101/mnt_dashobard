@@ -14,6 +14,8 @@ import { Formik, FormikHelpers } from "formik";
 import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
+import useStore from "@/base/store/";
+import { useRouter } from "next/router";
 import { Calendar } from "../../Calendar";
 
 interface FormUserInfo {
@@ -54,6 +56,7 @@ const fields = [
 
 const MoreInfoForm: FC = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
   const [date, setDate] = useState<Date | undefined>();
   const [loading, setLoading] = useState(false);
@@ -64,6 +67,8 @@ const MoreInfoForm: FC = () => {
     name: country,
     value: country,
   }));
+
+  const { setSuggestions } = useStore();
 
   const handleFormSubmit = async (
     values: FormUserInfo,
@@ -80,7 +85,7 @@ const MoreInfoForm: FC = () => {
       firstName,
       lastName,
       middleName: "Sunnex",
-      dateOfBirth: date ? format(date, "PPPP") : "",
+      dateOfBirth: date,
       mothersMaidenName: mothersName,
       homeTown,
       phoneNumber,
@@ -103,9 +108,11 @@ const MoreInfoForm: FC = () => {
           body: JSON.stringify(personPayload),
         }
       );
-      if (res.status === 200) {
+      if (res.status === 201) {
         toast.success("Profile created successfully");
+        setSuggestions(["Thanks", "Yous", "Sunnex"]);
         const person = await res.json();
+        router.push(`/user/profile/update?step=suggestions`);
         console.log(person);
       }
       const person = await res.json();

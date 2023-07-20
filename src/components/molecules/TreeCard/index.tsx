@@ -7,26 +7,20 @@ interface TreeCardProps {
 }
 
 const TreeCard = ({ imageSrc, personName, identity }: TreeCardProps) => (
-  <div
-    className="flex h-[30%] w-[40%] cursor-pointer flex-col items-center justify-center rounded-[3rem] 
-         border-[10px] bg-slate-500
-     p-[2rem] hover:border-green-500"
-  >
+  <div className="relative flex h-28 w-24 cursor-pointer flex-col items-center justify-end overflow-hidden rounded-lg bg-slate-500 p-2 ">
     <Image
+      style={{ objectFit: "cover" }}
       src={imageSrc}
-      width={500}
-      height={500}
       alt="woman image"
-      className="p-8"
+      fill
+      className=""
     />
-    <div className=" absolute bottom-[6rem] rounded-[1rem] bg-blue-100 bg-opacity-20  text-black drop-shadow-lg backdrop-blur-lg">
-      <h3 className=" px-[2rem] py-[1rem] text-center text-[3rem] font-semibold">
-        {personName}
-      </h3>
+    <div className="relative w-full rounded-md bg-blue-100 bg-opacity-20 text-black drop-shadow-md backdrop-blur-md">
+      <h3 className="text-center text-base font-semibold">{personName}</h3>
     </div>
-    <div className="absolute bottom-0 z-10 mb-[65px] mt-[10px]  rounded-full bg-stone-300">
-      <div className="absolute mx-3 mt-[1.2rem] h-[1.3rem] w-[1.3rem] rounded-full border bg-green-500" />
-      <h2 className="px-[3rem] py-[0.25rem] text-[2rem]">{identity}</h2>
+    <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
+      <div className="h-2 w-2 rounded-full border bg-green-500 " />
+      <p className="text-[8px]">{identity}</p>
     </div>
   </div>
 );
