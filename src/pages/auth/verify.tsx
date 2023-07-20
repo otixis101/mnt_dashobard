@@ -42,6 +42,7 @@ const Verify = () => {
 
     return () => clearInterval(interval);
   }, [countDown]);
+
   return (
     <AuthLayout type="website">
       <div className="container px-4 max-sm:h-app">
