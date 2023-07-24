@@ -10,19 +10,20 @@ import {
   PopoverTrigger,
 } from "@/components/atoms/Popover";
 import { format } from "date-fns";
-import { Formik, FormikHelpers } from "formik";
+import { Formik } from "formik";
 import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import useStore from "@/base/store/";
 import { useRouter } from "next/router";
-import { Calendar } from "../../Calendar";
+import { DayPickerCalendar } from "../../Calendar/CalendarDayPicker";
 
 interface FormUserInfo {
   firstName: string;
   lastName: string;
   mothersName: string;
   homeTown: string;
+  middleName: string;
 }
 
 const fields = [
@@ -38,7 +39,13 @@ const fields = [
     placeholder: "Last Name",
     Component: Input,
   },
-
+  {
+    label: "Enter your Middle name",
+    name: "middleName",
+    placeholder: "Middle Name",
+    className: "sm:col-span-2",
+    Component: Input,
+  },
   {
     label: "Enter your Home Town",
     name: "homeTown",
@@ -58,7 +65,7 @@ const MoreInfoForm: FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
-  const [date, setDate] = useState<Date | undefined>();
+  const [date, setDate] = useState<Date>();
   const [loading, setLoading] = useState(false);
   const [selectedCountry, setSelctedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -68,15 +75,11 @@ const MoreInfoForm: FC = () => {
     value: country,
   }));
 
-  const { setSuggestions } = useStore();
+  const { setSignUpData } = useStore();
 
-  const handleFormSubmit = async (
-    values: FormUserInfo,
-    { resetForm }: FormikHelpers<FormUserInfo>
-  ) => {
-    const { firstName, lastName, mothersName, homeTown } = values;
+  const handleFormSubmit = async (values: FormUserInfo) => {
+    const { firstName, lastName, mothersName, homeTown, middleName } = values;
     if (!phoneNumber || !selectedCountry || !selectedState) {
-      console.log("errors");
       toast.error("Please fill all fields");
       return;
     }
@@ -84,7 +87,7 @@ const MoreInfoForm: FC = () => {
     const personPayload = {
       firstName,
       lastName,
-      middleName: "Sunnex",
+      middleName,
       dateOfBirth: date,
       mothersMaidenName: mothersName,
       homeTown,
@@ -110,18 +113,20 @@ const MoreInfoForm: FC = () => {
       );
       if (res.status === 201) {
         toast.success("Profile created successfully");
-        setSuggestions(["Thanks", "Yous", "Sunnex"]);
-        const person = await res.json();
+        const person: APIResponse<DbCreatePerson> = await res.json();
         router.push(`/user/profile/update?step=suggestions`);
-        console.log(person);
+
+        setSignUpData(person.data);
+
+        if (person.data.hasSugestion) {
+          router.push({ query: { step: "suggestions" } });
+        } else {
+          router.push({ query: { step: "about" } });
+        }
       }
-      const person = await res.json();
-      console.log(person);
     } catch (error) {
       toast.error("An error occurred");
-      console.log(error);
     } finally {
-      resetForm();
       setLoading(false);
     }
   };
@@ -148,6 +153,7 @@ const MoreInfoForm: FC = () => {
         lastName: "",
         mothersName: "",
         homeTown: "",
+        middleName: "",
       }}
       validationSchema={CreateUserSchema}
       onSubmit={handleFormSubmit}
@@ -161,9 +167,9 @@ const MoreInfoForm: FC = () => {
         touched,
       }) => (
         <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 gap-7 sm:grid-cols-2">
-            {fields.map(({ Component, name, label, placeholder }) => (
-              <fieldset key={label}>
+          <div className="grid grid-cols-1 gap-5 bg-white sm:grid-cols-2">
+            {fields.map(({ Component, name, label, placeholder, ...rest }) => (
+              <fieldset {...rest} key={label}>
                 <Component
                   name={name}
                   placeholder={placeholder}
@@ -183,6 +189,8 @@ const MoreInfoForm: FC = () => {
               <p className="grid grid-cols-1 gap-2 text-sm text-black">
                 Enter your date of birth
               </p>
+              {/* <DayPickerCalendar /> */}
+
               <Popover>
                 <PopoverTrigger asChild>
                   <button
@@ -199,7 +207,7 @@ const MoreInfoForm: FC = () => {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent align="start" className="w-auto bg-white p-0">
-                  <Calendar
+                  <DayPickerCalendar
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"

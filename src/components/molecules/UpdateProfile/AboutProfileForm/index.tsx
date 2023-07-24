@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Input from "@/components/atoms/Input";
 import Button from "@/components/atoms/Button";
 import { Formik } from "formik";
-import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
+import { UpdateUserAboutSchema } from "@/base/helpers/FormValidationSchemas";
 import Radio from "@/components/atoms/Input/Radio";
+import { useSession } from "next-auth/react";
+import SeparatorInput from "@/components/atoms/Input/SeparatorInput";
+import Axios from "@/base/axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import useStore from "@/base/store";
 
 const fields = [
   {
@@ -13,13 +19,6 @@ const fields = [
     Component: Input,
   },
   {
-    label: "Add interesting facts, Separate with comma.",
-    name: "about",
-    placeholder: "Add interesting facts about you",
-    Component: Input,
-  },
-
-  {
     label: "Enter place of residence",
     name: "address",
     placeholder: "Place of residence (City, State, Country)",
@@ -27,44 +26,137 @@ const fields = [
   },
 ] as const;
 
+const SpecialInput = {
+  label: "Add interesting facts, Separate with comma.",
+  name: "facts",
+  placeholder: "Add interesting facts about you",
+};
+
 const checkboxFields = [
   {
     label: "Choose Gender",
     name: "gender",
     placeholder: "Mother's maiden name ",
     Component: Radio,
-    options: ["Male", "Female", "Others"],
+    options: [
+      { label: "Male", value: "m" },
+      { label: "Female", value: "f" },
+      { label: "Others", value: "o" },
+    ],
   },
   {
     label: "Marital Status",
     name: "maritalStatus",
     placeholder: "Mother's maiden name ",
     Component: Radio,
-    options: ["Single", "Married", "Divorced"],
+    options: [
+      { label: "Single", value: "single" },
+      { label: "Married", value: "married" },
+      { label: "Divorced", value: "divorced" },
+    ],
   },
 ] as const;
 
-type FieldsKeys =
-  | (typeof fields)[number]["name"]
-  | (typeof checkboxFields)[number]["name"];
+type FieldsKeys = (typeof fields)[number]["name"];
 
 type FormUserInfo = Record<FieldsKeys, string>;
 
+type RadioFields = (typeof checkboxFields)[number]["name"];
+
+const getToastMessage = (arg: unknown, msg: string) => {
+  if (!arg) {
+    toast.error(msg);
+    return true;
+  }
+
+  return false;
+};
+
 const AboutProfileForm = () => {
+  const { data: session } = useSession();
+  const { signUpData } = useStore();
+  const router = useRouter();
+  const [facts, setFacts] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [radioValues, setRadioValues] = useState<Record<RadioFields, string>>({
+    gender: "",
+    maritalStatus: "",
+  });
+
+  const handleRadioOnChange = (key: RadioFields, value: string) => {
+    setRadioValues((prev) => ({ ...prev, [key]: value }));
+  };
+
   const handleFormSubmit = async (values: FormUserInfo) => {
-    console.log(values);
+    const payload = { ...values, ...radioValues, facts };
+
+    const { gender, maritalStatus } = radioValues;
+
+    if (!gender || !maritalStatus || !facts.length) {
+      switch (true) {
+        case getToastMessage(gender, "Please fill out gender field"):
+          return;
+        case getToastMessage(
+          maritalStatus,
+          "Please fill out marital status field"
+        ):
+          return;
+        case getToastMessage(
+          facts.length,
+          "Fill out at least one fact about you"
+        ):
+          return;
+        default:
+          toast.error("Please fill out all fields");
+          return;
+      }
+    }
+
+    if (session && signUpData) {
+      const { user } = session;
+
+      const { hasSugestion } = signUpData;
+
+      let userId;
+
+      if (hasSugestion) {
+        // eslint-disable-next-line no-underscore-dangle
+        userId = signUpData._tempProfileId;
+      } else {
+        userId = signUpData.personId;
+      }
+
+      setLoading(true);
+      try {
+        const res = await Axios.patch(`/person/${userId}`, payload, {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        });
+
+        if (res) {
+          toast.success("User profile updated successfully");
+          router.push("/dashboard");
+        }
+      } catch (error) {
+        toast.error(String(error));
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      toast.error("You are not signed, Sign in to proceed");
+    }
   };
 
   return (
     <Formik
       initialValues={{
-        about: "",
         address: "",
         occupation: "",
         gender: "",
         maritalStatus: "",
       }}
-      validationSchema={CreateUserSchema}
+      validationSchema={UpdateUserAboutSchema}
       onSubmit={handleFormSubmit}
     >
       {({
@@ -92,6 +184,13 @@ const AboutProfileForm = () => {
                 />
               </fieldset>
             ))}
+            <div>
+              <SeparatorInput
+                {...SpecialInput}
+                onTagsChange={setFacts}
+                tags={facts}
+              />
+            </div>
             <div className="space-y-4">
               {checkboxFields.map(
                 ({ Component, name, label, placeholder, options }) => (
@@ -103,16 +202,15 @@ const AboutProfileForm = () => {
                       parentClass="w-full"
                       onBlur={handleBlur}
                       options={options}
-                      isError={!!(touched[name] && errors[name])}
-                      hint={touched[name] && errors[name] ? errors[name] : ""}
-                      defaultValue={options[0]}
+                      value={radioValues[name]}
+                      onValueChange={(val) => handleRadioOnChange(name, val)}
                     />
                   </fieldset>
                 )
               )}
             </div>
           </div>
-          <Button className="mx-auto mt-8" type="submit">
+          <Button loading={loading} className="mx-auto mt-8" type="submit">
             Finish
           </Button>
         </form>

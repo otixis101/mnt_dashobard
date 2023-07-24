@@ -4,7 +4,6 @@ import AppLayout from "@/components/Layouts/AppLayout";
 import { useSession } from "next-auth/react";
 import TreeCard from "@/components/molecules/TreeCard";
 import SearchBar from "@/components/molecules/SearchBar";
-import useStore from "@/base/store";
 
 interface Nodeprops extends CustomNodeElementProps {
   foreignObjectProps: {
@@ -138,9 +137,6 @@ const Node = ({ nodeDatum, toggleNode, foreignObjectProps }: Nodeprops) => (
 const Dashboard = () => {
   const { data } = useSession();
   const [treePosition, setTreePosition] = useState({ x: 0, y: 0 });
-  const { suggestions } = useStore();
-
-  console.log(suggestions);
 
   const nodeSize = { x: 140, y: 300 };
   const foreignObjectProps = {

@@ -32,3 +32,12 @@ export const apiFetcher: Fetcher = async (apiUrl: string) => {
 
   return res.json();
 };
+
+export const getElementOptionValue = (
+  opt: InputOptions[number],
+  key: keyof KeyLabel
+) => {
+  if (typeof opt === "string" || typeof opt === "number") return opt;
+
+  return opt[key];
+};

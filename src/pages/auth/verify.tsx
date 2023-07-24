@@ -45,8 +45,8 @@ const Verify = () => {
 
   return (
     <AuthLayout type="website">
-      <div className="container px-4 max-sm:h-app">
-        <div className="mx-auto mt-36 flex flex-col items-center justify-center gap-6 rounded-lg md:h-96 md:w-2/6 md:border md:px-20 md:py-72 md:gradient-borders--v1">
+      <div className="container flex items-center justify-center px-4 h-app">
+        <div className="mx-auto flex flex-col items-center justify-center gap-6 rounded-lg md:h-96 md:w-2/6 md:border md:px-20 md:py-72 md:gradient-borders--v1">
           <div className="w-2/5 md:flex md:justify-center">
             <Image src={MailboxImg} alt="mail box icon" />
           </div>

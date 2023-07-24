@@ -1,20 +1,20 @@
 import { create } from "zustand";
 
 interface GlobalStoreInterface {
-  suggestions: string[];
+  signUpData: DbCreatePerson | null;
 }
 
 const initialState: GlobalStoreInterface = {
-  suggestions: [],
+  signUpData: null,
 };
 
 interface AppStore extends GlobalStoreInterface {
-  setSuggestions: (suggestions: string[]) => void;
+  setSignUpData: (signUpData: DbCreatePerson) => void;
 }
 
 const useStore = create<AppStore>()((set) => ({
   ...initialState,
-  setSuggestions: (suggestions) => set({ suggestions }),
+  setSignUpData: (signUpData) => set({ signUpData }),
 }));
 
 export default useStore;

@@ -32,3 +32,52 @@ interface DbPerson {
   readonly placeOfBirth: string;
   readonly dateOfBirth: string;
 }
+
+declare interface APIResponse<TData> {
+  success: boolean;
+  data: Readonly<TData>;
+  message: string;
+}
+
+declare interface DbPersonWithOutSuggestion {
+  hasSugestion: false;
+  personId: string;
+}
+
+declare interface DbPersonWithSuggestion {
+  suggestions: DbSuggestion[];
+  hasSugestion: true;
+  _tempProfileId: string;
+}
+
+declare interface DbSuggestion {
+  person: DbSuggestionPerson;
+  contributor: DbContributor;
+}
+
+declare interface DbContributor {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+}
+
+declare interface DbSuggestionPerson {
+  _id: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  dateOfBirth: string;
+  mothersMaidenName: string;
+  phoneNumber: string;
+  homeTown: string;
+  facts: any[];
+  userId: string;
+  contibutorId: string;
+  stateOfOrigin: string;
+  countryOfOrigin: string;
+  __v: number;
+}
+
+declare type DbCreatePerson =
+  | DbPersonWithSuggestion
+  | DbPersonWithOutSuggestion;

@@ -5,6 +5,7 @@ import Logo from "public/logo-alt.webp";
 import { useState } from "react";
 import useMenuOnScroll from "@/base/hooks/useMenuOnScroll";
 import LogoWhite from "public/logo.webp";
+import Avatar from "@/components/atoms/Avatar";
 import MobileMenu from "../MobileMenu";
 
 const navLinks = [
@@ -25,14 +26,6 @@ interface NoUser {
 }
 
 export type AppNavBarProps = User | NoUser;
-
-const getUserInitials = (name: string) => {
-  const [firstName, lastName] = name.split(" ");
-
-  if (lastName) return firstName[0] + lastName[0];
-
-  return firstName[0] + firstName[firstName.length - 1];
-};
 
 const AppNavBar = (props: AppNavBarProps) => {
   const { showUser, image, name = "N/A" } = props;
@@ -111,9 +104,7 @@ const AppNavBar = (props: AppNavBarProps) => {
                   />
                 </>
               ) : (
-                <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#435466] text-xl font-bold uppercase text-white md:h-[50px] md:w-[50px] md:text-2xl">
-                  {getUserInitials(name)}
-                </div>
+                <Avatar name={name} />
               )}
             </div>
             <span className="hidden font-extrabold md:block">{name}</span>

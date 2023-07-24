@@ -47,6 +47,7 @@ interface DefaultProps extends React.ComponentPropsWithoutRef<"input"> {
 
 type Props = Omit<DefaultProps, "value" | "defaultValue" | "onChange" | "type">;
 
+/** @toda add focus out of input to trigger effect */
 const SeparatorInput = (props: Props) => {
   const [shouldPopOver, setShouldPopOver] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -141,12 +142,10 @@ const SeparatorInput = (props: Props) => {
           toast.error(`${inputValue} already exists`);
         }
       }
-    } else if (
-      event.key === "Backspace" &&
-      event.currentTarget.value === "" &&
-      popOverContentRef.current
-    ) {
-      onTagsChange(tags.slice(0, -1));
+    } else if (event.key === "Backspace" && event.currentTarget.value === "") {
+      if (!shouldPopOver) {
+        onTagsChange(tags.slice(0, -1));
+      }
     }
   };
 

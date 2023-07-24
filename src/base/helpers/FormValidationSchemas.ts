@@ -15,6 +15,13 @@ export const CreateUserSchema = Yup.object().shape({
   homeTown: Yup.string().required("Required"),
 });
 
+export const UpdateUserAboutSchema = Yup.object().shape({
+  address: Yup.string().required("Address cannot be blank"),
+  occupation: Yup.string().required("Occupation cannot be blank"),
+  // gender: Yup.string().required("Gender cannot be blank"),
+  // maritalStatus: Yup.string().required("Marital status cannot be blank"),
+});
+
 export const NumberSchema = Yup.number().typeError(
   "Only numbers are accepted as a valid format"
 );
@@ -26,3 +33,7 @@ export const StringSchema = Yup.string().typeError(
 export const EmailSchema = Yup.string()
   .email()
   .typeError("Please pass in a valid email");
+
+export const InviteFamilyMemberSchema = Yup.array()
+  .of(Yup.string())
+  .min(1, "At least one email is required");

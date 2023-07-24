@@ -24,7 +24,7 @@ const UserProfile = () => {
 
   const { query } = router;
 
-  const { step = "moreinfo" } = query;
+  const { step } = query;
 
   const notValidStep = useMemo(() => !AllSteps.includes(step as Steps), [step]);
 
