@@ -4,6 +4,8 @@ import AuthLayout from "@/components/Layouts/AuthLayout";
 
 import MailboxImg from "public/assets/mail-box.png";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next/types";
 
 const Verify = () => {
   const router = useRouter();
@@ -67,4 +69,21 @@ const Verify = () => {
   );
 };
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
 export default Verify;

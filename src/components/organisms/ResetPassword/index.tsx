@@ -18,6 +18,7 @@ const Index = () => {
   const onHandleSubmit = async (values: Credentials) => {
     const { email: userEmail } = values;
     setIsLoading(true);
+    console.log("hello");
 
     try {
       const res = await fetch(
@@ -30,16 +31,16 @@ const Index = () => {
       );
       if (res && res.ok) {
         toast.success("Password reset link has been sent to your email");
-        /**
-         * TODO route users to the Email Sent Page
-         */
         router.push(`/auth/resetpassword?step=checkemail&email=${userEmail}`);
+      } else {
+        toast.error("Something went wrong");
       }
-    } catch (err: any) {
+    } catch (err) {
       /**
        * TODO toast error message for users feedback
        */
-      toast.error("Something went wrong");
+
+      toast("Something went wrong");
     } finally {
       setIsLoading(false);
     }

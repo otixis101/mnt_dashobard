@@ -28,6 +28,7 @@ interface DbPerson {
   readonly dateOfDeath: string | null;
   readonly maritalStatus: "single" | "married" | "divorced" | "widowed";
   readonly facts: string[];
+  readonly images: string[];
   readonly occupation: string;
   readonly placeOfBirth: string;
   readonly dateOfBirth: string;

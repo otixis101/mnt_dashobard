@@ -1,9 +1,13 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from "react";
 import Tree, { CustomNodeElementProps } from "react-d3-tree";
 import AppLayout from "@/components/Layouts/AppLayout";
 import { useSession } from "next-auth/react";
 import TreeCard from "@/components/molecules/TreeCard";
 import SearchBar from "@/components/molecules/SearchBar";
+import { useRouter } from "next/router";
+// import useStore from "@/base/store";
+// import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 
 interface Nodeprops extends CustomNodeElementProps {
   foreignObjectProps: {
@@ -13,53 +17,33 @@ interface Nodeprops extends CustomNodeElementProps {
     y: number;
   };
 }
-const orgChart = {
-  name: "CEO",
+
+interface TreeNode {
+  name: string;
+  children?: TreeNode[];
+  x?: number;
+  y?: number;
+  depth?: number;
+}
+const treeData: TreeNode = {
+  name: "Owner",
   children: [
     {
-      name: "Manager",
-      attributes: {
-        department: "Production",
-      },
+      name: "Parent",
       children: [
         {
-          name: "Foreman",
-          attributes: {
-            department: "Fabrication",
-          },
+          name: "Parent",
+
           children: [
             {
-              name: "Worker",
+              name: "grace",
             },
           ],
         },
+
         {
-          name: "Foreman",
-          attributes: {
-            department: "Assembly",
-          },
-          children: [
-            {
-              name: "Worker",
-            },
-          ],
-        },
-        {
-          name: "Foreman",
-          attributes: {
-            department: "Assembly",
-          },
-          children: [
-            {
-              name: "Worker",
-            },
-          ],
-        },
-        {
-          name: "Foreman",
-          attributes: {
-            department: "Assembly",
-          },
+          name: "Sibling",
+
           children: [
             {
               name: "Worker",
@@ -69,74 +53,86 @@ const orgChart = {
       ],
     },
     {
-      name: "Manager",
-      attributes: {
-        department: "Production",
-      },
+      name: "Parent2",
       children: [
         {
-          name: "Foreman",
-          attributes: {
-            department: "Fabrication",
-          },
-          children: [
-            {
-              name: "Worker",
-            },
-          ],
+          name: "John samuel",
         },
+      ],
+    },
+    {
+      name: "Spouse",
+
+      children: [
         {
-          name: "Foreman",
-          attributes: {
-            department: "Assembly",
-          },
-          children: [
-            {
-              name: "Worker",
-            },
-          ],
+          name: "Worker",
         },
       ],
     },
   ],
 };
 
-const Node = ({ nodeDatum, toggleNode, foreignObjectProps }: Nodeprops) => (
-  <g
-    // key={nodeDatum.__rd3t.id}
-    onClick={() => toggleNode()}
-    style={{ background: "red" }}
-    className="h-6 w-6 bg-red-300 text-black"
-  >
-    {/* Links to documentation */}
-    {/* https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js */}
-    {/* https://bkrem.github.io/react-d3-tree/docs/ */}
-    {/* <circle r={20}></circle> */}
-    <foreignObject {...foreignObjectProps}>
-      {/* <div title="hello" className="bg-red-300 rounded-full w-fit"> */}
-      {/*        
-        <div className="w-12 h-12">
-          <img
-            src="https://images.pexels.com/photos/16971540/pexels-photo-16971540/free-photo-of-woman-standing-with-gray-horse.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            alt=""
-            className="w-full h-full rounded-full"
-          />
-        </div>
-         */}
+// const collapseManager = (treeData: any) => {
+//   treeData.map((node: any) => {});
+// };
 
-      <TreeCard
-        imageSrc="https://images.pexels.com/photos/16971540/pexels-photo-16971540/free-photo-of-woman-standing-with-gray-horse.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-        personName={nodeDatum.name}
-        identity="You"
-      />
-      {/* </div> */}
-    </foreignObject>
-  </g>
-);
+const customTreePositioning = (nodeData: TreeNode) => {
+  // Set a custom x-coordinate for each node based on their type
+  if (nodeData.name === "Owner") {
+    nodeData.x = 0; // Owner at the center
+  } else if (nodeData.name === "Parent") {
+    nodeData.x = -500;
+    nodeData.y = -400; // Parent1 above the owner
+  } else {
+    nodeData.x = 100; // Spouse and Siblings below the owner
+  }
 
+  // Set a custom y-coordinate based on the tree depth
+  // Adjust the multiplier as per your needs
+};
+
+const Node = ({ nodeDatum, toggleNode, foreignObjectProps }: Nodeprops) => {
+  console.log("");
+  return (
+    <g
+      // eslint-disable-next-line no-underscore-dangle
+
+      key={nodeDatum.__rd3t.id}
+      onClick={() => toggleNode()}
+      style={{ background: "red" }}
+      className="h-6 w-6 bg-red-300 text-black"
+    >
+      {/* Links to documentation */}
+      {/* https://codesandbox.io/s/rd3t-v2-custom-svg-tag-1bq1e?file=/src/App.js */}
+      {/* https://bkrem.github.io/react-d3-tree/docs/ */}
+      {/* <circle r={20}></circle> */}
+      <foreignObject {...foreignObjectProps}>
+        <TreeCard
+          imageSrc="https://images.pexels.com/photos/16971540/pexels-photo-16971540/free-photo-of-woman-standing-with-gray-horse.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          personName={nodeDatum.name}
+          identity="You"
+        />
+        {/* </div> */}
+      </foreignObject>
+    </g>
+  );
+};
 const Dashboard = () => {
-  const { data } = useSession();
+  const { data: session } = useSession();
   const [treePosition, setTreePosition] = useState({ x: 0, y: 0 });
+  const positionedTreeData = { ...treeData };
+  const router = useRouter();
+  customTreePositioning(positionedTreeData);
+
+  const applyPositioning = (data: TreeNode) => {
+    if (data) {
+      customTreePositioning(data);
+      if (data.children) {
+        data.children.forEach(applyPositioning);
+        // console.log(data.children);
+      }
+    }
+  };
 
   const nodeSize = { x: 140, y: 300 };
   const foreignObjectProps = {
@@ -146,7 +142,10 @@ const Dashboard = () => {
     y: 10,
   };
 
-  console.log(data);
+  console.log(session);
+
+  // const { data } = useFetchPersonFamilyTree();
+  // console.log(data);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -156,13 +155,17 @@ const Dashboard = () => {
         y: window.innerHeight / 6,
       }));
     }
+    applyPositioning(treeData);
   }, [typeof window]);
 
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
-        <div className="mx-auto mt-5 w-2/4">
-          <SearchBar placeholder="Explore other families " />
+        <div className="mx-auto mt-5 w-full md:w-2/4">
+          <SearchBar
+            onSearch={(value) => router.push(`/search?q=${value}`)}
+            placeholder="Explore other families "
+          />
         </div>
         <div className="container flex h-screen items-center justify-center ">
           <Tree
@@ -178,10 +181,10 @@ const Dashboard = () => {
             }}
             orientation="vertical"
             nodeSize={nodeSize}
-            data={orgChart}
+            data={treeData}
             zoomable
             draggable
-            collapsible={false}
+            collapsible
           />
         </div>
       </section>

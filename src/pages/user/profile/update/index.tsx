@@ -6,6 +6,7 @@ import MoreInfoHeader from "@/components/molecules/UpdateProfile/MoreInfoHeader"
 import { useRouter } from "next/router";
 import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
 import AboutPage from "@/components/organisms/UpdateProfile/AboutPage";
+import { useSession } from "next-auth/react";
 
 /** position of element in the array matters, would be nice if i had used a map or a hash table, who knows */
 const AllSteps = ["moreinfo", "suggestions", "about"] as const;
@@ -21,6 +22,9 @@ const PageHeader: Record<Steps, string> = {
 
 const UserProfile = () => {
   const router = useRouter();
+  const { data } = useSession();
+
+  console.log(data);
 
   const { query } = router;
 

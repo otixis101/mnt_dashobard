@@ -27,7 +27,7 @@ const Index = ({ email }: Props) => {
         if (res && res.ok) {
           toast.success("password reset link sent to email");
         }
-      } catch (err: any) {
+      } catch (err) {
         toast.error("Something went wrong");
       }
     } else {

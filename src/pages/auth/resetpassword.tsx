@@ -7,6 +7,8 @@ import EmailSentSuccess from "@/components/organisms/ResetPassword/EmailSentSucc
 import ResetPassword from "@/components/organisms/ResetPassword";
 import NewPassword from "@/components/organisms/ResetPassword/NewPassword";
 import ResetSuccess from "@/components/organisms/ResetPassword/ResetSuccess";
+import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next/types";
 
 interface AllowedQueries extends ParsedUrlQuery {
   step?: "checkemail" | "newpassword" | "resetsuccess";
@@ -33,5 +35,23 @@ const Resetpassword = () => {
     </AuthLayout>
   );
 };
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
 
 export default Resetpassword;
