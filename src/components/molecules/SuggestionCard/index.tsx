@@ -1,14 +1,15 @@
 import Button from "@/components/atoms/Button";
 import Image from "next/image";
+import Placeholder from "public/assets/Family_Bg.jpeg";
 
 interface Props {
   addedBy: {
     name: string;
     /** accepts an absolute url */
-    image: string;
+    image?: string;
   };
   /** accepts an absolute url */
-  profileImage: string;
+  profileImage?: string;
   name: string;
   state: string;
   onAccept?(): void;
@@ -33,7 +34,7 @@ const SuggestionCard = (props: Props) => {
             className="object-cover"
             /** using fill, image would be fetched from a server vs static images */
             fill
-            src={profileImage}
+            src={profileImage ?? Placeholder}
             alt={name}
           />
         </div>
@@ -50,7 +51,12 @@ const SuggestionCard = (props: Props) => {
             </span>
             <div className="flex w-full items-center gap-2 rounded-lg bg-midpup p-2 text-custom-black">
               <div className="relative h-12 w-12 overflow-hidden rounded-md">
-                <Image fill src={aImage} alt={aName} className="object-cover" />
+                <Image
+                  fill
+                  src={aImage ?? Placeholder}
+                  alt={aName}
+                  className="object-cover"
+                />
               </div>
               <h5 className="font-medium sm:text-lg">{aName}</h5>
             </div>

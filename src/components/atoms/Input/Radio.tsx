@@ -1,12 +1,10 @@
 import React from "react";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import { cn } from "@/base/utils";
+import { cn, getElementOptionValue } from "@/base/utils";
 import { IoMdInformationCircle } from "react-icons/io";
 
-type Options = (string | number)[] | readonly (string | number)[];
-
 interface Props extends React.ComponentProps<typeof RadioGroup.Root> {
-  options: Options;
+  options: InputOptions;
   label: string;
   /** class for the wrapper - RadioGroup.Root */
   class?: string;
@@ -55,12 +53,12 @@ const Radio = (props: Props) => {
           className={cn("flex flex-wrap gap-4", wrapperClass)}
         >
           {options.map((ele) => {
-            const stringEle = String(ele);
+            const stringEle = String(getElementOptionValue(ele, "value"));
 
             return (
               <div
                 className={cn("flex items-center gap-2", radioElementClass)}
-                key={ele}
+                key={getElementOptionValue(ele, "value")}
               >
                 <RadioGroup.Item
                   className={cn(
@@ -81,7 +79,7 @@ const Radio = (props: Props) => {
                   className={cn("leading-none", radioLabel)}
                   htmlFor={stringEle}
                 >
-                  {ele}
+                  {getElementOptionValue(ele, "label")}
                 </label>
               </div>
             );

@@ -4,6 +4,8 @@ import AuthLayout from "@/components/Layouts/AuthLayout";
 
 import MailboxImg from "public/assets/mail-box.png";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next/types";
 
 const Verify = () => {
   const router = useRouter();
@@ -42,10 +44,11 @@ const Verify = () => {
 
     return () => clearInterval(interval);
   }, [countDown]);
+
   return (
     <AuthLayout type="website">
-      <div className="container px-4 max-sm:h-app">
-        <div className="mx-auto mt-36 flex flex-col items-center justify-center gap-6 rounded-lg md:h-96 md:w-2/6 md:border md:px-20 md:py-72 md:gradient-borders--v1">
+      <div className="container flex items-center justify-center px-4 h-app">
+        <div className="mx-auto flex flex-col items-center justify-center gap-6 rounded-lg md:h-96 md:w-2/6 md:border md:px-20 md:py-72 md:gradient-borders--v1">
           <div className="w-2/5 md:flex md:justify-center">
             <Image src={MailboxImg} alt="mail box icon" />
           </div>
@@ -66,4 +69,21 @@ const Verify = () => {
   );
 };
 
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
 export default Verify;

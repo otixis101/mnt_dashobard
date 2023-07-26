@@ -174,7 +174,7 @@ const LoginForm = () => {
               />
               <p className="mt-2 text-sm text-gray-500">
                 Forgot Password ?{" "}
-                <Link href="/" className="text-primary">
+                <Link href="/auth/resetpassword" className="text-primary">
                   Reset
                 </Link>
               </p>

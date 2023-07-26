@@ -1,6 +1,6 @@
 import React from "react";
 import ProgressIndicator from "@/components/atoms/ProgressIndicator";
-import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { BsArrowLeft } from "react-icons/bs";
 
 interface Props {
   text: string;
@@ -23,7 +23,7 @@ const MoreInfoHeader = (props: Props) => {
         )}
         {currentStep < steps && (
           <button type="button" onClick={onNextClick}>
-            <BsArrowRight className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
+            {/* <BsArrowRight className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" /> */}
           </button>
         )}
       </div>

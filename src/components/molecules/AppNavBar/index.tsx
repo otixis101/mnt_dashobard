@@ -5,6 +5,9 @@ import Logo from "public/logo-alt.webp";
 import { useState } from "react";
 import useMenuOnScroll from "@/base/hooks/useMenuOnScroll";
 import LogoWhite from "public/logo.webp";
+import Avatar from "@/components/atoms/Avatar";
+import { useSession } from "next-auth/react";
+import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import MobileMenu from "../MobileMenu";
 
 const navLinks = [
@@ -26,17 +29,14 @@ interface NoUser {
 
 export type AppNavBarProps = User | NoUser;
 
-const getUserInitials = (name: string) => {
-  const [firstName, lastName] = name.split(" ");
-
-  if (lastName) return firstName[0] + lastName[0];
-
-  return firstName[0] + firstName[firstName.length - 1];
-};
-
 const AppNavBar = (props: AppNavBarProps) => {
   const { showUser, image, name = "N/A" } = props;
   const [changeLogo, setChangeLogo] = useState(false);
+  const { data: user } = useSession();
+  const { data } = useFetchPerson(user?.user?.id ?? "");
+  // const { image: userImage, firstName } = user?.user || {};
+
+  console.log(data);
 
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
@@ -48,7 +48,7 @@ const AppNavBar = (props: AppNavBarProps) => {
       ref={ref}
       className="sticky top-0 z-50 h-[100px] duration-300 ease-in-out"
     >
-      <div className="container mx-auto flex  h-full items-center justify-between gap-2  px-3 py-6 max-md:px-4">
+      <div className="container mx-auto flex h-full items-center justify-between gap-2 px-3 py-6 max-md:px-4">
         <div
           className={cn(
             "sm:hidden",
@@ -111,12 +111,12 @@ const AppNavBar = (props: AppNavBarProps) => {
                   />
                 </>
               ) : (
-                <div className="flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#435466] text-xl font-bold uppercase text-white md:h-[50px] md:w-[50px] md:text-2xl">
-                  {getUserInitials(name)}
-                </div>
+                <Avatar name={data?.firstName ?? ""} />
               )}
             </div>
-            <span className="hidden font-extrabold md:block">{name}</span>
+            <span className="hidden font-extrabold md:block">
+              {data?.lastName}
+            </span>
           </div>
         )}
       </div>

@@ -141,3 +141,12 @@ body {
     grid-row: 2 / span 2;
   }
 }
+
+/* React D3 customization related classes */
+.rd3t-link {
+  stroke: #b39cf9 !important;
+  stroke-width: 3px;
+}
+.rd3t-svg {
+  overflow: visible !important;
+}

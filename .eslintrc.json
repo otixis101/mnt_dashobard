@@ -70,7 +70,8 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/ban-types": ["error", { "types": { "{}": false } }],
-    "react/jsx-fragments": "off"
+    "react/jsx-fragments": "off",
+    "@typescript-eslint/naming-convention": "warn"
   },
   "parserOptions": {
     "project": "./tsconfig.json"
