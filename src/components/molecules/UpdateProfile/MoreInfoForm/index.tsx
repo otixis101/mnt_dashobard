@@ -75,7 +75,7 @@ const MoreInfoForm: FC = () => {
     value: country,
   }));
 
-  const { setSignUpData } = useStore();
+  const { setPersonData } = useStore();
 
   const handleFormSubmit = async (values: FormUserInfo) => {
     const { firstName, lastName, mothersName, homeTown, middleName } = values;
@@ -114,9 +114,8 @@ const MoreInfoForm: FC = () => {
       if (res.status === 201) {
         toast.success("Profile created successfully");
         const person: APIResponse<DbCreatePerson> = await res.json();
-        router.push(`/user/profile/update?step=suggestions`);
 
-        setSignUpData(person.data);
+        setPersonData(person.data);
 
         if (person.data.hasSugestion) {
           router.push({ query: { step: "suggestions" } });
@@ -189,7 +188,6 @@ const MoreInfoForm: FC = () => {
               <p className="grid grid-cols-1 gap-2 text-sm text-black">
                 Enter your date of birth
               </p>
-              {/* <DayPickerCalendar /> */}
 
               <Popover>
                 <PopoverTrigger asChild>

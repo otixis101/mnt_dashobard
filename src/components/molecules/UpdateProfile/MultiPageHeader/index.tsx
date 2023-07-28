@@ -1,17 +1,20 @@
 import React from "react";
 import ProgressIndicator from "@/components/atoms/ProgressIndicator";
-import { BsArrowLeft } from "react-icons/bs";
+import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
+import { cn } from "@/base/utils";
 
 interface Props {
   text: string;
   steps: number;
   currentStep: number;
   onPrevClick(): void;
-  onNextClick(): void;
+  onNextClick?(): void;
+  className?: string;
 }
 
-const MoreInfoHeader = (props: Props) => {
-  const { currentStep, onPrevClick, onNextClick, steps, text } = props;
+const MultiPageHeader = (props: Props) => {
+  const { currentStep, onPrevClick, onNextClick, steps, text, className } =
+    props;
 
   return (
     <div className="relative mx-2">
@@ -21,14 +24,19 @@ const MoreInfoHeader = (props: Props) => {
             <BsArrowLeft className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
           </button>
         )}
-        {currentStep < steps && (
+        {onNextClick && currentStep < steps && (
           <button type="button" onClick={onNextClick}>
-            {/* <BsArrowRight className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" /> */}
+            <BsArrowRight className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
           </button>
         )}
       </div>
       <div className="mx-auto flex flex-col items-center justify-center">
-        <h3 className="text-center text-xl font-medium text-gray-900 md:text-2xl">
+        <h3
+          className={cn(
+            "text-center text-xl font-medium text-gray-900 md:text-2xl",
+            className
+          )}
+        >
           {text}
         </h3>
         <div className="mx-auto mt-8 w-full max-w-xl px-4">
@@ -39,4 +47,4 @@ const MoreInfoHeader = (props: Props) => {
   );
 };
 
-export default MoreInfoHeader;
+export default MultiPageHeader;

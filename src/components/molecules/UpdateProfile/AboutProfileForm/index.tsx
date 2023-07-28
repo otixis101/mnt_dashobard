@@ -74,7 +74,7 @@ const getToastMessage = (arg: unknown, msg: string) => {
 
 const AboutProfileForm = () => {
   const { data: session } = useSession();
-  const { signUpData } = useStore();
+  const { createPersonData } = useStore();
   const router = useRouter();
   const [facts, setFacts] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -112,18 +112,18 @@ const AboutProfileForm = () => {
       }
     }
 
-    if (session && signUpData) {
+    if (session && createPersonData) {
       const { user } = session;
 
-      const { hasSugestion } = signUpData;
+      const { hasSugestion } = createPersonData;
 
       let userId;
 
       if (hasSugestion) {
         // eslint-disable-next-line no-underscore-dangle
-        userId = signUpData._tempProfileId;
+        userId = createPersonData._tempProfileId;
       } else {
-        userId = signUpData.personId;
+        userId = createPersonData.personId;
       }
 
       setLoading(true);

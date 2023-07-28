@@ -1,8 +1,7 @@
 import React from "react";
-
 import Input from "@/components/atoms/Input";
 import Button from "@/components/atoms/Button";
-import RadioGroupBtn from "@/components/atoms/RadioGroup";
+import Radio from "@/components/atoms/Input/Radio";
 
 const fields = [
   {
@@ -37,11 +36,17 @@ const fields = [
   },
 ];
 
-const options = [
-  { name: "male", id: 1 },
-  { name: "female", id: 2 },
-  { name: "other", id: 3 },
-];
+const checkboxFields = {
+  label: "Choose Gender",
+  name: "gender",
+  placeholder: "Mother's maiden name ",
+  Component: Radio,
+  options: [
+    { label: "Male", value: "m" },
+    { label: "Female", value: "f" },
+    { label: "Others", value: "o" },
+  ],
+};
 
 const AddMemberForm = () => {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,15 +64,8 @@ const AddMemberForm = () => {
             label={label}
           />
         ))}
-        <div className="">
-          <label htmlFor="id" className="mb-8 capitalize text-black">
-            choose gender
-          </label>
-          <RadioGroupBtn
-            data={options}
-            defaultValue="male"
-            wrapperClass="mt-[1rem]"
-          />
+        <div className="flex items-center">
+          <Radio {...checkboxFields} />
         </div>
       </div>
       <Button className="mx-auto mt-8" type="submit">
