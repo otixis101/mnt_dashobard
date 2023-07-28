@@ -8,16 +8,24 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-const SuggestionsPage = () => {
+interface Props {
+  /** next step to redirect to */
+  nextPath?: Record<string, string>;
+  isUser?: boolean;
+}
+
+const SuggestionsPage = (props: Props) => {
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  const { signUpData, setSignUpData } = useStore();
+  const { createPersonData, setPersonData } = useStore();
   const { data: session } = useSession();
 
-  if (!signUpData || !signUpData.hasSugestion)
+  const { nextPath = { step: "about" }, isUser = true } = props;
+
+  if (!createPersonData || !createPersonData.hasSugestion)
     return (
       <div className="mx-auto w-full max-w-xs py-20 max-sm:mx-auto sm:max-w-lg">
         <div>
@@ -25,7 +33,7 @@ const SuggestionsPage = () => {
             No suggestions found,{" "}
             <Link
               className="text-center text-primary underline underline-offset-4"
-              href={{ query: { step: "about" } }}
+              href={{ query: { ...router.query, ...nextPath } }}
             >
               please proceed forward
             </Link>
@@ -34,7 +42,7 @@ const SuggestionsPage = () => {
       </div>
     );
 
-  const { suggestions, _tempProfileId } = signUpData;
+  const { suggestions, _tempProfileId } = createPersonData;
 
   const {
     contributor,
@@ -49,7 +57,7 @@ const SuggestionsPage = () => {
         _tempDataId: _tempProfileId,
         acceptedPersonId: userId,
         acceptedSuggestion: "true",
-        isUser: true,
+        isUser,
       };
 
       try {
@@ -59,10 +67,10 @@ const SuggestionsPage = () => {
           },
         });
 
-        setSignUpData({ ...signUpData, _tempProfileId: res.data.data });
+        setPersonData({ ...createPersonData, _tempProfileId: res.data.data });
 
         toast.success("User updated");
-        router.push({ query: { step: "about" } });
+        router.push({ query: { ...router.query, ...nextPath } });
       } catch (error) {
         toast.error(String(error));
       } finally {
