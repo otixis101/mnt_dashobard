@@ -1,18 +1,20 @@
 import { cn } from "@/base/utils";
-import React, { useState } from "react";
+import React from "react";
 
 interface DefaultProps {
   placeholder: string;
   className?: string;
   initialValue?: string;
+  value: string;
+  onChange?: (value: string) => void;
   onSearch(value: string): void;
 }
 
 type Props = DefaultProps;
 
 const SearchBar = (props: Props) => {
-  const { placeholder, onSearch, className, initialValue } = props;
-  const [value, setValue] = useState<string>(initialValue ?? "");
+  const { placeholder, onSearch, className, initialValue, onChange, value } =
+    props;
 
   return (
     <div
@@ -24,8 +26,8 @@ const SearchBar = (props: Props) => {
     >
       <input
         placeholder={placeholder}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={initialValue}
+        onChange={(e) => onChange?.(e.target.value as string)}
         className="h-full w-full bg-transparent text-[hsla(0,_0%,_44%,_1)] outline-none sm:text-lg"
       />
       <button

@@ -35,7 +35,6 @@ const LoginForm = () => {
 
       if (res && res.status === 200) {
         toast.success("Login successful");
-        router.push("/user/profile/update?step=moreinfo");
       } else {
         toast.error(res?.error);
       }
@@ -91,6 +90,16 @@ const LoginForm = () => {
       handleGoogleSignIn(googleAuthToken);
     }
   }, [status]);
+
+  useEffect(() => {
+    if (session && status === "authenticated") {
+      if (session.user.personId) {
+        router.push("/dashboard");
+      } else {
+        router.push("/user/profile/update?step=moreinfo");
+      }
+    }
+  }, [session]);
 
   useEffect(() => {
     const verifyUser = async () => {

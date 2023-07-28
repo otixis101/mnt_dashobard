@@ -13,7 +13,7 @@ declare type E164Number = string & {
 };
 
 interface DbPerson {
-  readonly id: string;
+  readonly _id: string;
   readonly userId: string;
   readonly firstName: string;
   readonly lastName: string;
@@ -21,6 +21,7 @@ interface DbPerson {
   readonly mothersMaidenName: string;
   readonly email: string;
   readonly mothersMaidenName: string;
+  readonly profilePhotoUrl: string;
   readonly phoneNumber: string;
   readonly contibutorId: string;
   readonly homeTown: string;
@@ -31,6 +32,8 @@ interface DbPerson {
   readonly images: string[];
   readonly occupation: string;
   readonly placeOfBirth: string;
+  readonly stateOfOrigin: string;
+  readonly countryOfOrigin: string;
   readonly dateOfBirth: string;
 }
 
