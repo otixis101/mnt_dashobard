@@ -4,6 +4,8 @@ import Link from "next/link";
 import starImage from "../../../../../public/assets/Star 3.png";
 
 const PaymentToggleCard = () => (
+  // end point :::: /api/stripe-payment/plans
+
   <div className="h-[252px] w-[71vw] rounded-t-3xl bg-[#323232] md:h-[330px] md:w-[45vw] md:pl-[31px] md:pr-[25px] lg:h-[408px] lg:w-[25vw] lg:rounded-l-3xl">
     <div className="flex items-center justify-center pt-[52px]">
       <div>

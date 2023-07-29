@@ -1,3 +1,4 @@
+// import { StripeProvider } from "@/base/hooks/api/stripePayment";
 import PaymentCardDetails from "./PaymentCardDetails";
 import PaymentToggleCard from "./PaymentToggleCard";
 
@@ -8,7 +9,9 @@ const PaymentCard = () => (
         <PaymentToggleCard />
       </div>
       <div>
+        {/* <StripeProvider> */}
         <PaymentCardDetails />
+        {/* </StripeProvider> */}
       </div>
     </div>
   </div>
