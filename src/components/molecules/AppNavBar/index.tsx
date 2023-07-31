@@ -36,8 +36,6 @@ const AppNavBar = (props: AppNavBarProps) => {
   const { data } = useFetchPerson(user?.user?.id ?? "");
   // const { image: userImage, firstName } = user?.user || {};
 
-  console.log(data);
-
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
     reverseEffect: () => setChangeLogo(false),

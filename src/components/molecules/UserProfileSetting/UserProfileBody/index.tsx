@@ -9,10 +9,34 @@ import { FiLogOut } from "react-icons/fi";
 
 import ToggleBtn from "@/components/atoms/ToggleBtn";
 
+// for api
+// import { useSession } from "next-auth/react";
+// import useFetchPersonSetting from "@/base/hooks/api/useFetchPersonSetting";
+
 const UserProfileBody = () => {
   const [mode, setMode] = useState<boolean>(false);
 
   const onChangeMode = () => setMode((prevMode) => !prevMode);
+
+  // const { data: session } = useSession();
+  // console.log(session)
+  // const { data } = useFetchPersonSetting(session?.user?.personId ?? "");
+  // const payload = {
+  //   settingUserId: data
+  // };
+  // console.log(payload)
+  try {
+    // const res = fetch(
+    //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/settings/${payload.settingUserId}`,
+    //   {
+    //     method: "GET",
+    //     headers: { "Content-Type": "application/json" },
+    //   }
+    // );
+    // console.log(res)
+  } catch (error) {
+    // console.log(error)
+  }
 
   return (
     <div className="">
