@@ -12,6 +12,7 @@ type UserResponse = {
   role: string;
   id: string;
   accessToken: string;
+  personId?: string;
 };
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -45,6 +46,7 @@ export const authOptions: NextAuthOptions = {
             email: data.email,
             id: data.id,
             accessToken: data.accessToken,
+            personId: data.personId ?? null,
           };
           return user;
         }
@@ -76,6 +78,7 @@ export const authOptions: NextAuthOptions = {
         token.lastName = session.user.lastName;
         token.email = session.user.email;
         token.role = session.user.role;
+        token.personId = user.personId;
       }
       if (user) {
         if (account && account.provider === "google") {
@@ -83,12 +86,16 @@ export const authOptions: NextAuthOptions = {
           token.refreshToken = account.refresh_token as string;
           token.channel = "google";
           token.id = user.id;
+          token.email = user.email;
+          token.role = user.role;
+          token.personId = user.personId;
         } else {
           token.id = user.id;
           token.email = user.email;
           token.accessToken = user.accessToken;
           token.role = user.role;
           token.channel = "credentials";
+          token.personId = user.personId;
         }
       }
       return token;
@@ -99,12 +106,15 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role;
         session.user.email = token.email;
         session.user.accessToken = token.accessToken;
+        session.user.channel = token.channel;
+        session.user.personId = token.personId;
       } else {
         session.user.channel = token.channel;
         session.user.accessToken = token.accessToken;
         session.user.refreshToken = token.refreshToken;
         session.user.id = token.id;
         session.user.idToken = token.idToken;
+        session.user.personId = token.personId;
       }
 
       return session;

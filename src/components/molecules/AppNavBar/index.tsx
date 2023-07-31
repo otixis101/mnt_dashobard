@@ -5,9 +5,16 @@ import Logo from "public/logo-alt.webp";
 import { useState } from "react";
 import useMenuOnScroll from "@/base/hooks/useMenuOnScroll";
 import LogoWhite from "public/logo.webp";
-import Avatar from "@/components/atoms/Avatar";
+// import Avatar from "@/components/atoms/Avatar";
 import { useSession } from "next-auth/react";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/atoms/Popover";
+import { RxAvatar } from "react-icons/rx";
+import { IoMdSettings } from "react-icons/io";
 import MobileMenu from "../MobileMenu";
 
 const navLinks = [
@@ -24,17 +31,15 @@ interface User {
 interface NoUser {
   showUser?: never;
   name?: never;
-  image?: never;
 }
 
 export type AppNavBarProps = User | NoUser;
 
 const AppNavBar = (props: AppNavBarProps) => {
-  const { showUser, image, name = "N/A" } = props;
+  const { showUser, name = "N/A" } = props;
   const [changeLogo, setChangeLogo] = useState(false);
-  const { data: user } = useSession();
-  const { data } = useFetchPerson(user?.user?.id ?? "");
-  // const { image: userImage, firstName } = user?.user || {};
+  const { data: session } = useSession();
+  const { data } = useFetchPerson(session?.user?.personId ?? "");
 
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
@@ -87,35 +92,78 @@ const AppNavBar = (props: AppNavBarProps) => {
             ))}
           </nav>
         ) : (
-          <div className="flex items-center gap-4">
-            <div className="rounded-full bg-primary/40 p-1.5">
-              {image ? (
-                <>
-                  <Image
-                    src={image}
-                    width={50}
-                    height={50}
-                    priority
-                    alt={name}
-                    className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
-                  />
-                  <Image
-                    src={image}
-                    width={40}
-                    height={40}
-                    priority
-                    alt={name}
-                    className="block h-[40px] w-[40px] rounded-full object-cover md:hidden"
-                  />
-                </>
-              ) : (
-                <Avatar name={data?.firstName ?? ""} />
-              )}
-            </div>
-            <span className="hidden font-extrabold md:block">
-              {data?.lastName}
-            </span>
-          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="flex cursor-pointer items-center gap-4">
+                <div className="rounded-full bg-primary/40 p-1.5">
+                  {data && (
+                    <div>
+                      {data.profilePhotoUrl ? (
+                        <>
+                          <Image
+                            src={data?.profilePhotoUrl ?? ""}
+                            width={50}
+                            height={50}
+                            priority
+                            alt={name}
+                            className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
+                          />
+                          <Image
+                            src={data?.profilePhotoUrl ?? ""}
+                            width={40}
+                            height={40}
+                            priority
+                            alt={name}
+                            className="block h-[40px] w-[40px] rounded-full object-cover md:hidden"
+                          />
+                        </>
+                      ) : (
+                        <RxAvatar className="text-4xl" />
+                      )}
+                    </div>
+                  )}
+                </div>
+                <span className="hidden font-extrabold capitalize md:block">
+                  Hi, {data?.firstName}
+                </span>
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-40 rounded-lg bg-[#EFEFEF] p-1.5">
+              <ul className="space-y-3">
+                <li>
+                  <Link
+                    className="flex items-center gap-2"
+                    // eslint-disable-next-line no-underscore-dangle
+                    href={`/user/${data?._id}`}
+                  >
+                    {data && data.profilePhotoUrl ? (
+                      <Image
+                        src={data?.profilePhotoUrl ?? ""}
+                        width={20}
+                        height={20}
+                        priority
+                        alt={name}
+                        className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
+                      />
+                    ) : (
+                      <RxAvatar className="text-xl" />
+                    )}
+
+                    <span>Profile</span>
+                  </Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Link
+                    className="flex items-center gap-2"
+                    href="/dashboard/account/settings"
+                  >
+                    <IoMdSettings />
+                    <span>Settings</span>
+                  </Link>
+                </li>
+              </ul>
+            </PopoverContent>
+          </Popover>
         )}
       </div>
     </header>

@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 declare module "next-auth" {
   interface User {
     id: string;
+    personId: string;
     role: string;
     email: string;
     accessToken: string;
@@ -22,6 +23,7 @@ declare module "next-auth/jwt" {
     id: string;
     role: string;
     email: string;
+    personId: string;
     firstName: string;
     lastName: string;
     accessToken: string;
