@@ -4,8 +4,8 @@ import FaqSection from "@/components/organisms/LandingPage/FaqSection";
 import AboutSection from "@/components/organisms/LandingPageAbout";
 import PricingSection from "@/components/organisms/LandingPage/PricingSection";
 import TestimonialSection from "@/components/molecules/TestemonialSection";
-import { GetServerSidePropsContext } from "next/types";
-import { getSession } from "next-auth/react";
+// import { GetServerSidePropsContext } from "next/types";
+// import { getSession } from "next-auth/react";
 
 const Home = () => (
   <LandingLayout type="website">
@@ -17,7 +17,7 @@ const Home = () => (
   </LandingLayout>
 );
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
+/* export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
   if (session) {
     return {
@@ -34,5 +34,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
   };
 }
+
+*/
 
 export default Home;
