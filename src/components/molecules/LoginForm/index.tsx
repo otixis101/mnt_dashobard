@@ -5,13 +5,13 @@ import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
 import PasswordInput from "@/components/atoms/PasswordInput";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
-import { getSession, signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AuthSchema } from "@/base/helpers/FormValidationSchemas";
 import { toast } from "react-toastify";
-import { GetServerSidePropsContext } from "next";
+// import { GetServerSidePropsContext } from "next";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -223,7 +223,7 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
+/* 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
   if (session) {
@@ -241,3 +241,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
   };
 }
+ */
