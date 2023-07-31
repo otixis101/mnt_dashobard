@@ -6,7 +6,7 @@ import { useState } from "react";
 import useMenuOnScroll from "@/base/hooks/useMenuOnScroll";
 import LogoWhite from "public/logo.webp";
 // import Avatar from "@/components/atoms/Avatar";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import {
   Popover,
@@ -15,6 +15,7 @@ import {
 } from "@/components/atoms/Popover";
 import { RxAvatar } from "react-icons/rx";
 import { IoMdSettings } from "react-icons/io";
+import { FiLogOut } from "react-icons/fi";
 import MobileMenu from "../MobileMenu";
 
 const navLinks = [
@@ -131,7 +132,7 @@ const AppNavBar = (props: AppNavBarProps) => {
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-40 rounded-lg bg-[#EFEFEF] p-1.5">
-              <ul className="space-y-3">
+              <ul className="space-y-3 px-1">
                 <li>
                   <Link
                     className="flex items-center gap-2"
@@ -162,6 +163,16 @@ const AppNavBar = (props: AppNavBarProps) => {
                     <IoMdSettings />
                     <span>Settings</span>
                   </Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <button
+                    onClick={() => signOut()}
+                    type="button"
+                    className="flex items-center gap-2"
+                  >
+                    <FiLogOut />
+                    <span>Logout</span>
+                  </button>
                 </li>
               </ul>
             </PopoverContent>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 import User from "public/assets/user-1.png";
 
@@ -111,7 +112,13 @@ const UserProfileBody = () => {
             <span>
               <FiLogOut className="mr-2 text-lg" />
             </span>
-            <span className="text-sm capitalize">Log out</span>
+            <button
+              onClick={() => signOut()}
+              type="button"
+              className="text-sm capitalize"
+            >
+              Log out
+            </button>
           </div>
         </div>
       </div>
