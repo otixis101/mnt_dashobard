@@ -5,9 +5,37 @@ const nextConfig = {
     // setting this for testing purposes
     domains: [
       "images.pexels.com",
-      "avatars.githubusercontent.com",
       "mnt-core-bucket.s3.eu-north-1.amazonaws.com",
     ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/dashboard/account",
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups", // "same-origin",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "cross-origin",
+          },
+          {
+            key: "Secure-Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+          {
+            key: "Cross-Origin-Embedder-Policy",
+            value: "credentialless"
+          },
+        ],
+      },
+    ];
   },
 };
 

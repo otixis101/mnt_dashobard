@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+/* eslint-disable no-underscore-dangle */
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+
 // icons
 import { RxDotFilled } from "react-icons/rx";
 import { GoShieldCheck } from "react-icons/go";
@@ -9,20 +13,80 @@ import User from "public/assets/user-1.png";
 import Tree from "public/assets/tree-icon.png";
 
 import Button from "@/components/atoms/Button";
+import { cn } from "@/base/utils";
 import UserProfileAlbums from "../UserProfileAlbums";
 import UserProfileEditPopup from "../UserProfileEditPopup";
 import UserProfileSettingPopup from "../UserProfileSettingPopup";
 
 type ModeOptions = "edit" | "settings";
 
+type UserObj = {
+  [key: string]: any;
+};
+
 const Index = () => {
   const [mode, setMode] = useState<ModeOptions>("edit");
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [userProfile, setUserProfile] = useState<UserObj>([]);
 
   const onChange = (modelOption?: ModeOptions) => {
     setOpenModal(true);
     setMode(modelOption as ModeOptions);
   };
+
+  useEffect(() => {
+    if (session) {
+      const fetchUser = async () => {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/person`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${session.user.accessToken}`,
+            },
+          }
+        );
+
+        if (res && res.ok) {
+          const { data } = await res.json();
+          setUserProfile(data);
+        } else {
+          router.push("/user/profile/update?step=moreinfo");
+        }
+      };
+
+      fetchUser();
+    }
+    console.log(userProfile);
+  }, [session?.user, mode]);
+
+  const calculateAge = (dob: string) => {
+    if (dob) {
+      const today = new Date();
+      const words = dob.split(" ");
+      const remainingWords = words.slice(1).join(" ");
+
+      const birthDate = new Date(remainingWords); // create a date object directly from `dob1` argument
+      let age_now = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age_now -= age_now;
+      }
+
+      return age_now;
+    }
+    return 0;
+  };
+
+  const classes: string[] = ["bg-[#ACF6AA]", "bg-[#F9D978]", "bg-[#877FB6]"];
+
+  function getRandomClass() {
+    const randomIndex = Math.floor(Math.random() * classes.length);
+    return classes[randomIndex];
+  }
 
   return (
     <>
@@ -30,23 +94,31 @@ const Index = () => {
         <UserProfileEditPopup
           mode={openModal}
           onChange={() => onChange()}
-          imgSrc={User}
+          imgSrc={userProfile.profilePhotoUrl ?? User}
+          userProfile={userProfile}
           uploadAction={() => onChange("settings")}
+          age={calculateAge(userProfile?.dateOfBirth ?? 0)}
         />
       )}
 
       {openModal && mode === "settings" && (
-        <UserProfileSettingPopup mode={openModal} onChange={() => onChange()} />
+        <UserProfileSettingPopup
+          mode={openModal}
+          onChange={() => onChange()}
+          personId={userProfile._id as string}
+        />
       )}
       <div className="flex w-full overflow-x-hidden md:w-[120%]">
         <div className="flex flex-col md:w-[60%] md:flex-row">
           <div className="flex flex-col items-center">
             <Image
-              src={User}
+              src={userProfile.profilePhotoUrl ?? User}
               alt="user"
+              width="100"
+              height="100"
               className="md:h-68 mx-auto md:w-[60rem]"
             />
-            <div className="my-4 flex w-full items-center">
+            <div className="my-4 flex w-full items-center justify-center">
               <Button
                 intent="outline"
                 className="mr-1 md:mr-2"
@@ -62,7 +134,7 @@ const Index = () => {
             <div className="mb-2">
               <span className="flex ">
                 <h4 className="mr-2 text-[1.7rem] font-extrabold capitalize text-primary md:text-[2.2rem]">
-                  Julian miller
+                  {userProfile.firstName} {userProfile.lastName}
                 </h4>
                 <div className="flex items-center text-gray-700">
                   <RxDotFilled className="text-xl text-black" />
@@ -71,13 +143,13 @@ const Index = () => {
                 </div>
               </span>
               <span className="mb-2 block text-lg font-medium capitalize text-gray-600 md:text-xl">
-                Abia state, Nigeria
+                {userProfile.stateOfOrigin} state, {userProfile.countryOfOrigin}
               </span>
               <span className="text-lg font-medium text-gray-600 md:text-xl">
                 <span className="flex items-center">
-                  4th june 1980
+                  {userProfile.dateOfBirth} {/* 4th june 1980 */}
                   <RxDotFilled />
-                  42 years
+                  {calculateAge(userProfile.dateOfBirth ?? " ")} years
                 </span>
               </span>
             </div>
@@ -93,23 +165,23 @@ const Index = () => {
                 my career.
               </p>
             </div>
+
             <div className="">
               <h4 className="mb-3 block text-xl capitalize text-primary">
                 Interesting facts
               </h4>
               <div className="">
-                <span className="m-2 mx-3 inline-block rounded-lg bg-[#877FB6] p-2">
-                  Has a twin
-                </span>
-                <span className="m-2 mx-3 inline-block rounded-lg bg-[#F9D978] p-2">
-                  Graduated top of her class
-                </span>
-                <span className="m-2 inline-block rounded-lg bg-[#ACF6AA] p-2">
-                  Forbes 30 under 30
-                </span>
-                <span className="m-2 inline-block rounded-lg bg-[#F9D978] p-2">
-                  Good citizen medal
-                </span>
+                {userProfile.facts?.map((fact: string) => (
+                  <span
+                    className={cn(
+                      "m-2 mx-3 inline-block rounded-lg p-2",
+                      getRandomClass()
+                    )}
+                    key={fact}
+                  >
+                    {fact}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -121,7 +193,8 @@ const Index = () => {
                 <div className="[&>span]:flex">
                   <span className="mb-1 items-center capitalize">
                     <RxDotFilled className="text-green-500" />
-                    public family tree
+                    {userProfile.isTreePrivate ? "Private" : "Public"} family
+                    tree
                   </span>
                   <span className="my-1 text-xl font-medium capitalize text-primary">
                     julian family tree
