@@ -41,7 +41,7 @@ const UserProfileEditPopup = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [interest, setInterest] = useState("");
-  const [about, setAbout] = useState("");
+  const [about, setAbout] = useState(userProfile.about);
 
   const { data: session } = useSession();
 
