@@ -131,7 +131,7 @@ const Index = () => {
                   About
                 </h4>
                 <p className="whitespace-normal break-normal text-justify text-lg leading-6 text-gray-600 md:pr-24">
-                  {data.about}
+                  {data.about ?? "User has not added any information yet"}
                 </p>
               </div>
 
