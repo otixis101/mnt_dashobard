@@ -35,6 +35,9 @@ interface DbPerson {
   readonly stateOfOrigin: string;
   readonly countryOfOrigin: string;
   readonly dateOfBirth: string;
+  readonly showInPublicSearch: boolean;
+  readonly isTreePrivate: boolean;
+  readonly membership: string;
 }
 
 declare interface APIResponse<TData> {

@@ -8,10 +8,21 @@ import cardImage from "../../../../../public/assets/card img.png";
 
 const PaymentCardDetails = () => {
   // const stripeService = useStripeService();
-
-  const handleCardDetailsSubmit = async (values: string | number) => {
+  const handleCardDetailsSubmit = async (
+    values: {
+      nameOnCard: string;
+      cardNumber: string;
+      expireDate: string;
+      cvv: string;
+    }
+    // formikHelpers: FormikHelpers<typeof values>
+  ): Promise<void> => {
     console.log("submitted", values);
+    // You can use formikHelpers to perform actions like setting form submission status, resetting form, etc.
   };
+  // const handleCardDetailsSubmit = async (values: string): void => {
+  //   console.log("submitted", values);
+  // };
 
   return (
     <div className="flex w-[84vw] items-center justify-center rounded-3xl pl-[38px] pr-[36px] pt-[31px] shadow-[0px_0px_8px_3px_#0000001F] md:h-[581px] md:w-[58vw] md:pl-[8px] md:pr-[0px] md:pt-[0px] lg:w-[47vw] lg:pl-[45px]">

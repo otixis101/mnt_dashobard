@@ -2,6 +2,8 @@ import useSWR from "swr";
 
 interface PersonSetting {
   data: DbPerson;
+  showInPublicSearch: boolean;
+  isTreePrivate: boolean;
 }
 
 const useFetchPersonSetting = (personId: string) => {
