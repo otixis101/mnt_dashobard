@@ -20,6 +20,7 @@ interface DbPerson {
   readonly middleName: string;
   readonly mothersMaidenName: string;
   readonly email: string;
+  readonly about: string;
   readonly mothersMaidenName: string;
   readonly profilePhotoUrl: string;
   readonly phoneNumber: string;
@@ -35,6 +36,7 @@ interface DbPerson {
   readonly stateOfOrigin: string;
   readonly countryOfOrigin: string;
   readonly dateOfBirth: string;
+  readonly isTreePrivate: boolean;
 }
 
 declare interface APIResponse<TData> {

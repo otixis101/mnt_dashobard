@@ -136,17 +136,16 @@ const AppNavBar = (props: AppNavBarProps) => {
                 <li>
                   <Link
                     className="flex items-center gap-2"
-                    // eslint-disable-next-line no-underscore-dangle
-                    href={`/user/${data?._id}`}
+                    href="/dashboard/account"
                   >
                     {data && data.profilePhotoUrl ? (
                       <Image
-                        src={data?.profilePhotoUrl ?? ""}
+                        src={data.profilePhotoUrl ?? ""}
                         width={20}
                         height={20}
                         priority
                         alt={name}
-                        className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
+                        className="hidden rounded-full object-cover md:block"
                       />
                     ) : (
                       <RxAvatar className="text-xl" />
@@ -168,7 +167,7 @@ const AppNavBar = (props: AppNavBarProps) => {
                   <button
                     onClick={() => signOut()}
                     type="button"
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 outline-none"
                   >
                     <FiLogOut />
                     <span>Logout</span>

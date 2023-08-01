@@ -19,7 +19,7 @@ interface Props {
   personId: string;
 }
 
-const APP_KEY = process.env.DROPBOX_API_KEY as string;
+const DROPBOX_APP_KEY = process.env.NEXT_PUBLIC_DROPBOX_API_KEY as string;
 
 const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
   const [file, setFile] = useState<File | string>();
@@ -29,7 +29,6 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
   const [openModal, setOpenModal] = useState(mode);
   const [authToken, setauthToken] = useState("");
   const [openPicker, authRes] = GoogleDrivePicker();
-  const [fileName, setFileName] = useState<DropboxFile[]>([]);
 
   const { data: session } = useSession();
 
@@ -70,16 +69,12 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
   const imageUploadToApi = async () => imageUpload();
 
   const onSuccess = async (files: DropboxFile[]) => {
-    // console.log("chose:", files);
-    files.map((_file: DropboxFile) =>
-      setFileName((fileNames) => [...fileNames, _file])
-    );
-
     setUploadStep(true);
 
-    const [dropImg] = fileName;
+    const [dropImg] = files;
     const imgLink = dropImg?.link as unknown as string;
 
+    console.log(imgLink);
     try {
       imageUpload(imgLink);
     } catch (err) {
@@ -89,9 +84,9 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
 
   const handlePickerOpen = () => {
     openPicker({
-      appId: process.env.GOOGLE_APPID,
-      clientId: process.env.GOOGLE_DRIVE_CLIENT_ID as string,
-      developerKey: process.env.GOOGLE_DEVELOPER_KEY as string,
+      appId: process.env.NEXT_PUBLIC_GOOGLE_APP_ID,
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID as string,
+      developerKey: process.env.NEXT_PUBLIC_GOOGLE_DEVELOPER_KEY as string,
       viewId: "DOCS_IMAGES",
       token: authToken,
       showUploadView: true,
@@ -152,7 +147,7 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
             <Image src={googleDrive} alt="google drive img" className="" />
           </button>
           <DropboxChooser
-            appKey={APP_KEY}
+            appKey={DROPBOX_APP_KEY}
             success={(files: DropboxFile[]) => onSuccess(files)}
             multiselect={false}
           >

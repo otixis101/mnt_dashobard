@@ -26,9 +26,10 @@ export const NumberSchema = Yup.number().typeError(
   "Only numbers are accepted as a valid format"
 );
 
-export const StringSchema = Yup.string().typeError(
-  "Only strings are accepted as a valid format"
-);
+export const StringSchema = Yup.object().shape({
+  interests: Yup.string(),
+  about: Yup.string(),
+});
 
 export const EmailSchema = Yup.string()
   .email()
