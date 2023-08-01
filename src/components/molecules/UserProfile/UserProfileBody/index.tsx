@@ -49,7 +49,14 @@ const Index = () => {
     setMode(modelOption as ModeOptions);
   };
 
-  const classes: string[] = ["bg-[#ACF6AA]", "bg-[#F9D978]", "bg-[#877FB6]"];
+  const classes: string[] = [
+    "bg-[#ACF6AA]",
+    "bg-[#F9D978]",
+    "bg-[#877FB6]",
+    "bg-[#ACF6AA]",
+    "bg-[#F9D978]",
+    "bg-[#877FB6]",
+  ];
 
   function getRandomClass() {
     const randomIndex = Math.floor(Math.random() * classes.length);
