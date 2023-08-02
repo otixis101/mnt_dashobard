@@ -18,6 +18,8 @@ const buttonStyles = cva(
           "bg-primary text-white disabled:shadow-[inset_999px_999px_0px_rgba(255,_255,_255,_0.2)] disabled:cursor-not-allowed disabled:isolate disabled:bg-pale-purple",
         outline:
           "border-primary border-2 text-primary disabled:border-pale-purple disabled:text-pale-purple",
+        whiteOutline: "border-white border-2 text-white disabled:border-white",
+        // gradientOutline: "disabled:cursor-not-allowed",
       },
       roundedFull: {
         true: "rounded-full",

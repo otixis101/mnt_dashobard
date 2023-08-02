@@ -42,8 +42,6 @@ const AppNavBar = (props: AppNavBarProps) => {
   const { data: session } = useSession();
   const { data } = useFetchPerson(session?.user?.personId ?? "");
 
-  console.log(data);
-
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
     reverseEffect: () => setChangeLogo(false),
