@@ -38,3 +38,16 @@ export const EmailSchema = Yup.string()
 export const InviteFamilyMemberSchema = Yup.array()
   .of(Yup.string())
   .min(1, "At least one email is required");
+
+export const CardFormValidationSchema = Yup.object().shape({
+  nameOnCard: Yup.string().required("Name on card is required"),
+  cardNumber: Yup.string()
+    .required("Card number is required")
+    .matches(/^[0-9]{16}$/, "Card number must be 16 digits"),
+  // expireDate: Yup.string()
+  //   .required("Expiration date is required")
+  //   .matches(/^(0[1-9]|1[0-2])\/[0-9]{2}$/, "Invalid expiration date (DD/MM)"),
+  cvv: Yup.string()
+    .required("CVV is required")
+    .matches(/^[0-9]{3}$/, "CVV must be 3 digits"),
+});
