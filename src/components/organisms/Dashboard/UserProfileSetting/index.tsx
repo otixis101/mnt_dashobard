@@ -2,7 +2,7 @@ import UserProfileBody from "@/components/molecules/UserProfileSetting/UserProfi
 import UserProfileHeader from "@/components/molecules/UserProfileSetting/UserProfileHeader";
 
 const UserProfileSetting = () => (
-  <section className="container h-[99vh] px-7">
+  <section className="md:pl-[12%]">
     <UserProfileHeader />
     <UserProfileBody />
   </section>

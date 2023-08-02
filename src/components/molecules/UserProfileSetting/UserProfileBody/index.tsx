@@ -15,13 +15,10 @@ import useFetchPersonSetting from "@/base/hooks/api/useFetchPersonSetting";
 
 const UserProfileBody = () => {
   const [mode, setMode] = useState<boolean>(false);
-  // const [userProfile, setUserProfile] = useState({});
-  // const onChangeMode = () => setMode((prevMode) => !prevMode);
+
   const { data: session } = useSession();
-  // console.log(session);
   const { data } = useFetchPersonSetting(session?.user?.personId ?? "");
-  // const { data } = useFetchUpdatePersonSettings(session?.user.personId ?? "");
-  // console.log(data);
+
   const [treePrivate, setTreePrivate] = useState<boolean>(false);
   const [changePublicProfileSearch, setChangePublicProfileSearch] =
     useState<boolean>(false);
@@ -65,24 +62,24 @@ const UserProfileBody = () => {
   };
 
   const onChangePrivateTree = () => {
-    setTreePrivate((prevMode) => !prevMode);
+    setTreePrivate((prevMode: boolean) => !prevMode);
     setMode(false);
   };
   const onChangePublicProfileSearch = () => {
-    setChangePublicProfileSearch((prevMode) => !prevMode);
+    setChangePublicProfileSearch((prevMode: boolean) => !prevMode);
   };
   updatePersonSettings();
 
   return (
-    <div className="">
-      <div className="">
-        <Image src={User} alt="user" className="h-56 w-56" />
+    <div className="mt-3.5 pb-[96px]">
+      <div className="mb-[15px]">
+        <Image src={User} alt="user" className="mx-auto h-56 w-56 lg:mx-0" />
       </div>
-      <div className="my-3.5 flex w-[70%] flex-shrink-0 flex-grow-0 rounded-lg bg-[#EEE] p-6">
+      <div className="flex w-full flex-shrink-0 flex-grow-0 flex-wrap rounded-lg bg-[#EEE] p-6 md:w-[56vw]">
         <div className="m-1 w-[50%] flex-shrink-0 flex-grow-0">
           <div className="mb-3 flex flex-col leading-6">
             <span className="flex items-center">
-              <h5 className="mr-2 text-[2rem] font-bold capitalize text-primary">
+              <h5 className="mr-2 whitespace-nowrap text-[2rem] font-bold capitalize text-primary">
                 {data?.firstName}
               </h5>
               <span className="flex items-center">
@@ -96,10 +93,10 @@ const UserProfileBody = () => {
             <span className="text-gray-950">{data?.email}</span>
           </div>
           <div className="mb-3">
-            <h3 className="text-lg font-semibold capitalize text-primary">
+            <h3 className="mb-[13px] text-lg font-semibold capitalize text-primary lg:mb-[9px]">
               Privary settings
             </h3>
-            <div className="rounded-2xl bg-[#fff] p-4">
+            <div className="w-[298px] rounded-2xl bg-[#fff] p-4 lg:w-[381px]">
               <ul>
                 <li className="my-4">
                   <ToggleBtn
