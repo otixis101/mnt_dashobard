@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { signOut } from "next-auth/react";
 
 import User from "public/assets/user-1.png";
 
@@ -11,7 +10,7 @@ import { FiLogOut } from "react-icons/fi";
 import ToggleBtn from "@/components/atoms/ToggleBtn";
 
 // for api
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import useFetchPersonSetting from "@/base/hooks/api/useFetchPersonSetting";
 
 const UserProfileBody = () => {
