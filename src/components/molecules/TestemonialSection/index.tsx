@@ -1,15 +1,15 @@
-import TestimonialCard from "@/components/atoms/TestimonialCard";
-import LegacyImage from "public/assets/mobile-family-legacy.jpg";
+// import TestimonialCard from "@/components/atoms/TestimonialCard";
+// import LegacyImage from "public/assets/mobile-family-legacy.jpg";
 
-import {
-  AboutSectionHeading,
-  AboutSectionText,
-} from "@/components/atoms/About/Primitives";
-import ReactSwiper from "@/components/atoms/ReactSwiper";
+// import {
+//   AboutSectionHeading,
+//   AboutSectionText,
+// } from "@/components/atoms/About/Primitives";
+// import ReactSwiper from "@/components/atoms/ReactSwiper";
 
 const TestimonialSection = () => (
   <section className="container mx-auto mt-20 px-5 md:my-20 md:mt-28">
-    <div className="mb-10 space-y-4 text-center">
+    {/* <div className="mb-10 space-y-4 text-center">
       <AboutSectionHeading className="mx-auto">
         What People have to say about My Native Tree
       </AboutSectionHeading>
@@ -17,9 +17,9 @@ const TestimonialSection = () => (
         Not our words but theirs. Hear what others think about the leading
         family tree app for people of color.
       </AboutSectionText>
-    </div>
+    </div> */}
     <div>
-      <div className="testimonial relative mx-auto px-10 md:max-w-[90%] md:px-20">
+      {/* <div className="testimonial relative mx-auto px-10 md:max-w-[90%] md:px-20">
         <ReactSwiper.Swiper
           breakpoints={{
             992: {
@@ -54,7 +54,7 @@ const TestimonialSection = () => (
             </ReactSwiper.SwiperSlide>
           ))}
         </ReactSwiper.Swiper>
-      </div>
+      </div> */}
     </div>
   </section>
 );

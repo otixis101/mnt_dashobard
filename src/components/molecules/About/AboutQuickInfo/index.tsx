@@ -21,10 +21,10 @@ const AboutQuickInfo = () => (
           <div className="flex items-center justify-center max-sm:order-2">
             <div className="w-full max-w-[500px] space-y-3 text-center max-sm:mx-auto sm:text-left md:space-y-5 lg:space-y-10">
               <AboutSectionHeading className="max-sm:mx-auto max-sm:max-w-[15ch]">
-                Preserve your family history
+                Connect! Discover! Preserve!
               </AboutSectionHeading>
               <AboutSectionText className="max-sm:mx-auto max-sm:max-w-[25ch]">
-                Plant your roots, preserving your family history for eternity.
+                Share family legacies through the creation of family trees.
               </AboutSectionText>
             </div>
           </div>
@@ -49,8 +49,7 @@ const AboutQuickInfo = () => (
               Learn about your ancestors
             </AboutSectionHeading>
             <AboutSectionText className="max-w-[30ch] max-sm:mx-auto max-sm:text-center sm:max-w-[28ch]">
-              Uncover the branches of your heritage. Unveil the secrets of your
-              ancestors.
+              Uncover the branches of your heritage.
             </AboutSectionText>
           </div>
         </div>

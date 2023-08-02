@@ -10,16 +10,16 @@ const LandingPageHeroSection = () => (
         <h1 className="mx-auto max-w-[20ch] text-3xl font-extrabold leading-[1.1] max-md:capitalize sm:max-w-[26ch] md:text-4xl lg:text-[50px] lg:leading-[55px] xl:text-[64px] xl:leading-[68px]">
           Cultivating heritage, uniting families, preserving legacies
         </h1>
-        {/* <p className="mx-auto max-w-[40ch] text-sm leading-tight md:text-lg lg:text-2xl lg:leading-[38px] xl:max-w-[50ch] xl:text-[32px]">
-          My Native Tree helps you create, preserve, and share your family
-          history
-        </p> */}
+
         <div className="pt-3 xl:pt-5">
           <Button
-            href="/auth/signin"
+            // href="/auth/signin"
+            href="https://waitlist.mynativetree.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="mx-auto block max-md:max-w-[200px] max-sm:max-w-[180px]"
           >
-            Create your family tree
+            Join the waitlist today
           </Button>
         </div>
       </div>

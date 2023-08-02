@@ -16,7 +16,7 @@ const NavBar = () => {
       ref={ref}
       className="fixed left-0 right-0 top-0 z-[99] h-[100px] duration-300 ease-in-out"
     >
-      <div className="container mx-auto  flex h-full items-center justify-between  gap-2 py-6 max-md:px-4">
+      <div className="container mx-auto flex h-full items-center justify-between gap-2 py-6 max-md:px-4">
         <div className="text-white sm:hidden">
           <MobileMenu />
         </div>
@@ -37,16 +37,19 @@ const NavBar = () => {
             <Link
               href={url}
               key={name}
-              className="hidden font-extrabold sm:inline-flex"
+              className="ml-auto mr-5 hidden font-extrabold sm:inline-flex"
             >
               {name}
             </Link>
           ))}
           <Button
-            href="/auth/signin"
+            // href="/auth/signin"
+            href="https://waitlist.mynativetree.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="h-8 px-0 py-1 max-sm:w-[75px] max-sm:rounded sm:h-12 sm:max-w-[100px] sm:py-3 md:max-w-[164px]"
           >
-            Log in
+            Join waitlist
           </Button>
         </nav>
       </div>
