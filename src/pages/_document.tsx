@@ -6,6 +6,7 @@ const Document = () => (
     <body>
       <Main />
       <NextScript />
+      <script async defer src="https://apis.google.com/js/api.js" />
     </body>
   </Html>
 );

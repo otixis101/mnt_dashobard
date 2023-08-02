@@ -57,6 +57,12 @@ const SEO = ({
       content={twitterCard || "summary"}
       key="twitter:card"
     />
+    <meta httpEquiv="Cross-Origin-Resource-Policy" content="cross-origin" />
+    <meta
+      httpEquiv="Cross-Origin-Opener-Policy"
+      content="same-origin-allow-popups"
+    />
+    {/* <meta httpEquiv="Cross-Origin-Resource-Policy" content="cross-origin" /> */}
 
     {noindex && <meta name="robots" content="noindex" key="noindex" />}
   </Head>

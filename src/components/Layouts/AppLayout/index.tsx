@@ -18,7 +18,7 @@ const AppLayout = (props: Props) => {
   } = props;
 
   return (
-    <div className="relative bg-white">
+    <div id="for-dialog" className="relative bg-white">
       <SEO {...seo} ogType={type} />
       <AppNavBar {...navbarProps} />
       <main className="relative z-[1] snap-y snap-start scroll-py-20 px-3 max-lg:overflow-y-scroll max-lg:min-h-app">
