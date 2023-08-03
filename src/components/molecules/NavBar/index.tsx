@@ -47,7 +47,7 @@ const NavBar = () => {
             href="https://waitlist.mynativetree.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="h-8 px-0 py-1 max-sm:w-[75px] max-sm:rounded sm:h-12 sm:max-w-[100px] sm:py-3 md:max-w-[164px]"
+            className="h-8 px-0 py-1 max-sm:w-[80px] max-sm:rounded max-sm:text-xs sm:h-12 sm:max-w-[100px] sm:py-3 md:max-w-[164px]"
           >
             Join waitlist
           </Button>
