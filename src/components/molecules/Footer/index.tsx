@@ -14,12 +14,12 @@ const socials = [
   { icon: Instagram, name: "Instagram", url: "#" },
 ];
 
-const links = [
-  { name: "About", url: "#about" },
-  { name: "Pricing", url: "#pricing" },
-  { name: "FAQs", url: "#faqs" },
-  { name: "Demo", url: "#demo" },
-];
+// const links = [
+//   { name: "About", url: "#about" },
+//   { name: "Pricing", url: "#pricing" },
+//   { name: "FAQs", url: "#faqs" },
+//   { name: "Demo", url: "#demo" },
+// ];
 
 const Footer = () => (
   <footer className="bg-[hsla(0,_0%,_8%,_1)] px-5 py-10 md:py-20">
@@ -33,13 +33,13 @@ const Footer = () => (
           alt="My Native Tree"
         />
       </Link>
-      <div className="flex items-center justify-between gap-4 text-sm text-white">
+      {/* <div className="flex items-center justify-between gap-4 text-sm text-white">
         {links.map(({ url, name }) => (
           <Link className="w-full max-w-[40px]" href={url} key={name}>
             {name}
           </Link>
         ))}
-      </div>
+      </div> */}
       <div className="flex items-center justify-center gap-5">
         {socials.map(({ name, icon, url }) => (
           <Link href={url} key={name}>
