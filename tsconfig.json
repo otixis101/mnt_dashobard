@@ -21,6 +21,11 @@
       "~/*": ["public/assets/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/components/molecules/PhotoFlow/PhotoFlowAlbum/loader.tsc"
+  ],
   "exclude": ["node_modules"]
 }

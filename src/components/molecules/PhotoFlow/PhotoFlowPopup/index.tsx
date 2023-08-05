@@ -1,45 +1,47 @@
 /* eslint-disable react/button-has-type */
-import React, { useState, useEffect } from "react";
-import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
+import React, { useState } from "react";
 import Image from "next/image";
+import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import GoogleDrivePicker from "google-drive-picker";
 
 import googleDrive from "public/assets/icon/googleDrive.png";
 import dropBox from "public/assets/icon/dropbox.png";
-import { useSession } from "next-auth/react";
 
 import Popup from "@/components/atoms/Popup";
 import Button from "@/components/atoms/Button";
-import UserProfileDropBox from "../UserProfileDropBox";
+import PhotoFlowDropBox from "../PhotoFlowDropBox";
 
 interface Props {
   mode: boolean;
   onChange: (e?: boolean) => void;
-  personId: string;
 }
 
-const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
-  const [file, setFile] = useState<File | string>();
-  const [isLoading, setIsLoading] = useState(false);
+const PhotoFlowPopup = ({ mode, onChange }: Props) => {
+  const { data: session } = useSession();
+  const [fileName, setFileName] = useState<DropboxFile[]>([]);
   const [uploadStep, setUploadStep] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | string>();
   const [openModal, setOpenModal] = useState(mode);
-  const [authToken, setauthToken] = useState("");
-  const [openPicker, authRes] = GoogleDrivePicker();
 
-  const { data: session } = useSession();
+  // const [isSuccess, setSuccess] = useState<boolean>(false);
 
   const imageUpload = async (imgFile?: string) => {
     const formData = new FormData();
-    if (!imgFile) {
-      formData.append("profilePhoto", file as File | string);
-    }
-    formData.append("profilePhoto", imgFile as string);
+    const personID = session?.user.personId;
 
+    if (!imgFile) {
+      formData.append("images", file as File | string);
+    } else {
+      formData.append("images", imgFile as string);
+    }
+    formData.append("personId", personID as string);
     setIsLoading(true);
+
     const customRequest = {
-      method: "PATCH",
+      method: "POST",
       headers: {
         authorization: `Bearer ${session?.user.accessToken}`,
       },
@@ -48,12 +50,12 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/person/${personId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/image-upload/browse-file`,
         customRequest
       );
 
       if (res && res.ok) {
-        toast.success("Profile Photo Updated successful");
+        toast.success("Photo Updated successful");
 
         setOpenModal((prevState) => !prevState);
       }
@@ -62,51 +64,6 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const imageUploadToApi = async () => imageUpload();
-
-  const onSuccess = async (files: DropboxFile[]) => {
-    setUploadStep(true);
-
-    const [dropImg] = files;
-    const imgLink = dropImg?.link as unknown as string;
-
-    console.log(imgLink);
-    try {
-      imageUpload(imgLink);
-    } catch (err) {
-      toast.error("something went wrong");
-    }
-  };
-
-  const handlePickerOpen = () => {
-    openPicker({
-      appId: process.env.NEXT_PUBLIC_GOOGLE_APP_ID,
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID as string,
-      developerKey: process.env.NEXT_PUBLIC_GOOGLE_DEVELOPER_KEY as string,
-      viewId: "DOCS_IMAGES",
-      token: authToken,
-      showUploadView: true,
-      showUploadFolders: true,
-      supportDrives: true,
-      multiselect: false,
-      setOrigin: "https://docs.google.com",
-      customScopes: [
-        "https://www.googleapis.com/auth/drive.appfolder",
-        "https://www.googleapis.com/auth/drive",
-      ],
-
-      // setParentFolder:"Your-Folder-ID",
-      // Other configuration options...
-      callbackFunction: (data) => {
-        if (data.action === "cancel") {
-          console.log("User clicked cancel/close button");
-        } else if (data.docs && data.docs.length > 0) {
-          // console.log(data);
-        }
-      },
-    });
   };
 
   const onHandleImagePicker = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,11 +76,22 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (authRes) {
-      setauthToken(authRes.access_token);
-    }
-  }, [authRes]);
+  const onSuccess = async (files: DropboxFile[]) => {
+    // console.log("chose:", files);
+    files.map((_file: DropboxFile) =>
+      setFileName((fileNames) => [...fileNames, _file])
+    );
+
+    setUploadStep(true);
+    setIsDisabled(false);
+
+    const [dropImg] = fileName;
+    const imgLink = dropImg?.link;
+
+    imageUpload(imgLink);
+  };
+
+  const imageUploadToApi = async () => imageUpload();
 
   return (
     <Popup open={openModal} onChangeState={onChange}>
@@ -131,9 +99,9 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
         <h4 className="text-2xl font-medium capitalize text-primary">
           Upload Pictures
         </h4>
-        <UserProfileDropBox
-          className="[&>*:not(:first-child)]:py-8"
+        <PhotoFlowDropBox
           onHandleImagePicker={onHandleImagePicker}
+          className="[&>*:not(:first-child)]:py-8"
           step={uploadStep}
         />
         <span className="grid grid-cols-[1fr,max-content,1fr] items-center gap-x-4 text-xl text-gray-700 before:block before:h-[1px] before:bg-gray-500 before:content-[''] after:block after:h-[1px] after:bg-gray-500 after:content-['']">
@@ -141,7 +109,7 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
         </span>
         <h6 className="capitalize text-gray-800">Upload from</h6>
         <div className="mx-auto mb-3 flex items-center [&>span:first-child]:mr-3">
-          <button onClick={handlePickerOpen}>
+          <button>
             <Image src={googleDrive} alt="google drive img" className="" />
           </button>
           <DropboxChooser
@@ -150,15 +118,14 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
             multiselect={false}
           >
             <button>
-              <Image src={dropBox} alt="google drive img" className="" />
+              <Image src={dropBox} alt="dropbox img" className="" />
             </button>
           </DropboxChooser>
         </div>
         <Button
           disabled={isDisabled}
-          loading={isLoading}
-          type="submit"
           onClick={imageUploadToApi}
+          loading={isLoading}
           className="mx-auto mt-4"
         >
           Upload
@@ -168,4 +135,4 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
   );
 };
 
-export default UserProfileSettingPopup;
+export default PhotoFlowPopup;
