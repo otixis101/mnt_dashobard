@@ -5,8 +5,8 @@ import { IoMdInformationCircle } from "react-icons/io";
 import { toast } from "react-toastify";
 import {
   EmailSchema,
-  StringSchema,
   NumberSchema,
+  SeparatorInputStringSchema,
 } from "@/base/helpers/FormValidationSchemas";
 import { motion } from "framer-motion";
 import { Popover, PopoverContent, PopoverTrigger } from "../Popover";
@@ -108,7 +108,7 @@ const SeparatorInput = (props: Props) => {
       const inputValue = event.currentTarget?.value.trim().toLowerCase() ?? "";
       if (inputValue) {
         if (!tags.includes(inputValue)) {
-          let schema: any = validationSchema ?? StringSchema;
+          let schema: any = validationSchema ?? SeparatorInputStringSchema;
           switch (tagsType) {
             case "email":
               schema = EmailSchema;
@@ -117,7 +117,7 @@ const SeparatorInput = (props: Props) => {
               schema = NumberSchema;
               break;
             case "string":
-              schema = StringSchema;
+              schema = SeparatorInputStringSchema;
               break;
             default:
               break;
@@ -134,9 +134,10 @@ const SeparatorInput = (props: Props) => {
           } catch (error) {
             /**
              *   error type           message
-             * [ "ValidationError", " Only numbers are accepted as a valid format"] */
-            const err = String(error).split(":");
-            toast.error(err[1].trim());
+             * [ "ValidationError", " Only numbers are accepted as a valid format", "..."] */
+            const [, ...err] = String(error).split(":");
+
+            toast.error(err.join(" ").trim());
           }
         } else {
           toast.error(`${inputValue} already exists`);
