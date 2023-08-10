@@ -23,7 +23,6 @@ const FamilyTree = () => {
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
-  console.log(data);
   const getTreeDataPreset = () => {
     const ownerObject = {
       id: data?.user.personId,
@@ -78,7 +77,6 @@ const FamilyTree = () => {
   useEffect(() => {
     if (data) {
       const treeDataPreset = getTreeDataPreset();
-      console.log(treeDataPreset);
       setTreeData(treeDataPreset);
     }
   }, [data]);
