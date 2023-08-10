@@ -19,6 +19,8 @@ const UserProfileBody = () => {
   const { data: session } = useSession();
   const { data } = useFetchPersonSetting(session?.user?.personId ?? "");
 
+  console.log(data);
+
   const [treePrivate, setTreePrivate] = useState<boolean>(false);
   const [changePublicProfileSearch, setChangePublicProfileSearch] =
     useState<boolean>(false);
@@ -53,7 +55,7 @@ const UserProfileBody = () => {
         }
       );
       if (response) {
-        const dataUpdate = response;
+        const dataUpdate = await response.json();
         console.log(dataUpdate);
       }
     } catch (error) {
@@ -68,24 +70,34 @@ const UserProfileBody = () => {
   const onChangePublicProfileSearch = () => {
     setChangePublicProfileSearch((prevMode: boolean) => !prevMode);
   };
-  updatePersonSettings();
+
+  useEffect(() => {
+    updatePersonSettings();
+  }, [treePrivate, changePublicProfileSearch]);
 
   return (
     <div className="mt-3.5 pb-[96px]">
       <div className="mb-[15px]">
-        <Image src={User} alt="user" className="mx-auto h-56 w-56 lg:mx-0" />
+        <Image
+          src={data?.profilePhotoUrl ?? User}
+          width="100"
+          height="100"
+          alt="user"
+          className="mx-auto h-56 w-56 rounded-lg lg:mx-0"
+        />
       </div>
       <div className="flex w-full flex-shrink-0 flex-grow-0 flex-wrap rounded-lg bg-[#EEE] p-6 md:w-[56vw]">
         <div className="m-1 w-[50%] flex-shrink-0 flex-grow-0">
           <div className="mb-3 flex flex-col leading-6">
             <span className="flex items-center">
               <h5 className="mr-2 whitespace-nowrap text-[2rem] font-bold capitalize text-primary">
-                {data?.firstName}
+                {`${data?.firstName} ${data?.lastName}`}
               </h5>
               <span className="flex items-center">
-                <span role="img" className="mr-0.5 text-sm">
-                  ⚫
-                </span>
+                <span
+                  role="img"
+                  className="mr-0.5 rounded-full bg-black p-1 text-sm"
+                />
                 <span className="text-black">{data?.membership}</span>
                 <AiFillStar className="text-yellow-500" />
               </span>

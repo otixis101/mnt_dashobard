@@ -9,7 +9,7 @@ import Button from "@/components/atoms/Button";
 
 const TreeMemberHeader = () => (
   <header className="">
-    <form className="mx-auto flex hidden w-[70%] items-center md:flex">
+    <form className="mx-auto  hidden w-[70%] items-center md:flex">
       <Input label="" parentClass="w-[90%]" />
       <Button className="ml-[-10.2rem] mt-2 w-[10rem] md:h-12">Search</Button>
     </form>

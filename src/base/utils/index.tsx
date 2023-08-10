@@ -61,3 +61,17 @@ export const getAgeByDate = (date: string) => {
 
   return age;
 };
+
+export const getRandomClass = () => {
+  const classes: string[] = [
+    "bg-[#ACF6AA]",
+    "bg-[#F9D978]",
+    "bg-[#877FB6]",
+    "bg-[#ACF6AA]",
+    "bg-[#F9D978]",
+    "bg-[#877FB6]",
+  ];
+
+  const randomIndex = Math.floor(Math.random() * classes.length);
+  return classes[randomIndex];
+};

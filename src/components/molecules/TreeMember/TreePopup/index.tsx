@@ -36,8 +36,10 @@ const TreePopup = ({ mode, onChange, imgSrc }: Props) => {
           <div className="flex flex-col items-center">
             <Image
               src={imgSrc}
+              width={100}
+              height={100}
               alt="user"
-              className="h-36 w-32 md:h-48 md:w-48"
+              className="h-36 w-32 rounded-lg md:h-48 md:w-48"
             />
             <Button intent="outline" className="my-4">
               upload

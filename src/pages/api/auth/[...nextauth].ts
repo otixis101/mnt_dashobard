@@ -78,7 +78,7 @@ export const authOptions: NextAuthOptions = {
         token.lastName = session.user.lastName;
         token.email = session.user.email;
         token.role = session.user.role;
-        token.personId = user.personId;
+        token.personId = session.user.personId;
       }
       if (user) {
         if (account && account.provider === "google") {

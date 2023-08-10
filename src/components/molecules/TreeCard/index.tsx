@@ -6,6 +6,7 @@ import {
 import { format } from "date-fns";
 
 import Image from "next/image";
+import { FaPlus } from "react-icons/fa";
 
 interface TreeCardProps {
   imageSrc: string;
@@ -13,6 +14,8 @@ interface TreeCardProps {
   dob: string;
   age: number;
   identity?: "you" | string;
+  hasAddButton?: boolean;
+  onPlusClick?: () => void;
 }
 
 const TreeCard = ({
@@ -21,23 +24,38 @@ const TreeCard = ({
   identity,
   age,
   dob,
+  hasAddButton,
+  onPlusClick,
 }: TreeCardProps) => (
   <HoverCard>
-    <HoverCardTrigger asChild>
-      <div className="relative flex h-28 w-24 cursor-pointer flex-col items-center justify-end overflow-hidden rounded-lg bg-slate-500 p-2 ">
-        <Image
-          style={{ objectFit: "cover" }}
-          src={imageSrc}
-          alt="woman image"
-          fill
-          className=""
-        />
-        <div className="relative w-full rounded-md bg-blue-100 bg-opacity-20 text-black drop-shadow-md backdrop-blur-md">
-          <h3 className="text-center text-sm ">{personName}</h3>
-        </div>
-        <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
-          <div className="h-2 w-2 rounded-full border bg-green-500 " />
-          <p className="text-[8px]">{identity}</p>
+    <HoverCardTrigger className="flex items-center" asChild>
+      <div className="relative">
+        {hasAddButton && (
+          <div className="absolute -left-12 z-50 opacity-50">
+            <button
+              type="button"
+              onClick={onPlusClick}
+              className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#898989]"
+            >
+              <FaPlus className="text-2xl text-[#898989]" />
+            </button>
+          </div>
+        )}
+        <div className="relative flex h-28 w-24 cursor-pointer flex-col items-center justify-end overflow-hidden rounded-lg bg-slate-500 p-2 ">
+          <Image
+            style={{ objectFit: "cover" }}
+            src={imageSrc}
+            alt="woman image"
+            fill
+            className=""
+          />
+          <div className="relative w-full rounded-md bg-blue-100 bg-opacity-20 text-black drop-shadow-md backdrop-blur-md">
+            <h3 className="text-center text-sm ">{personName}</h3>
+          </div>
+          <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
+            <div className="h-2 w-2 rounded-full border bg-green-500 " />
+            <p className="text-[8px]">{identity}</p>
+          </div>
         </div>
       </div>
     </HoverCardTrigger>

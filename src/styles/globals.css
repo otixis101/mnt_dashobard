@@ -150,3 +150,8 @@ body {
 .rd3t-svg {
   overflow: visible !important;
 }
+svg {
+  overflow: visible !important;
+  width: auto !important;
+  height: auto !important;
+}

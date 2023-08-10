@@ -6,6 +6,7 @@ const nextConfig = {
     domains: [
       "images.pexels.com",
       "mnt-core-bucket.s3.eu-north-1.amazonaws.com",
+      "avatars.githubusercontent.com",
     ],
   },
   async headers() {
@@ -31,7 +32,7 @@ const nextConfig = {
           },
           {
             key: "Cross-Origin-Embedder-Policy",
-            value: "credentialless"
+            value: "credentialless",
           },
         ],
       },

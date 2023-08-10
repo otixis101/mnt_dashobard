@@ -1,8 +1,8 @@
 import AuthLayout from "@/components/Layouts/AuthLayout";
 import LoginForm from "@/components/molecules/LoginForm";
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
 import Image from "next/image";
-import { GetServerSidePropsContext } from "next/types";
+// import { GetServerSidePropsContext } from "next/types";
 import BgImage from "public/assets/login-bg.png";
 
 const SignInPage = () => (
@@ -30,22 +30,25 @@ const SignInPage = () => (
   </AuthLayout>
 );
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    };
-  }
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   const session = await getSession(context);
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   const { personId } = session?.user ?? {};
+
+//   if (session && personId) {
+//     return {
+//       redirect: {
+//         destination: `/dashboard/tree/${personId}`,
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }
 
 export default SignInPage;

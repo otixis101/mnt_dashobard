@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/atoms/Popover";
-import { RxAvatar } from "react-icons/rx";
+import { RxAvatar, RxDashboard } from "react-icons/rx";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import MobileMenu from "../MobileMenu";
@@ -41,6 +41,8 @@ const AppNavBar = (props: AppNavBarProps) => {
   const [changeLogo, setChangeLogo] = useState(false);
   const { data: session } = useSession();
   const { data } = useFetchPerson(session?.user?.personId ?? "");
+
+  console.log(data);
 
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
@@ -101,6 +103,7 @@ const AppNavBar = (props: AppNavBarProps) => {
                     <div>
                       {data.profilePhotoUrl ? (
                         <>
+                          {/* Desktop image */}
                           <Image
                             src={data?.profilePhotoUrl ?? ""}
                             width={50}
@@ -109,6 +112,8 @@ const AppNavBar = (props: AppNavBarProps) => {
                             alt={name}
                             className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
                           />
+
+                          {/* Mobile image */}
                           <Image
                             src={data?.profilePhotoUrl ?? ""}
                             width={40}
@@ -132,10 +137,7 @@ const AppNavBar = (props: AppNavBarProps) => {
             <PopoverContent className="w-40 rounded-lg bg-[#EFEFEF] p-1.5">
               <ul className="space-y-3 px-1">
                 <li>
-                  <Link
-                    className="flex items-center gap-2"
-                    href="/dashboard/account"
-                  >
+                  <Link className="flex items-center gap-2" href="/account">
                     {data && data.profilePhotoUrl ? (
                       <Image
                         src={data.profilePhotoUrl ?? ""}
@@ -152,10 +154,18 @@ const AppNavBar = (props: AppNavBarProps) => {
                     <span>Profile</span>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    className="flex items-center gap-2"
+                    href={`/dashboard/tree/${data?.userId}`}
+                  >
+                    <RxDashboard /> <span>Dashboard</span>
+                  </Link>
+                </li>
                 <li className="flex items-center gap-2">
                   <Link
                     className="flex items-center gap-2"
-                    href="/dashboard/account/settings"
+                    href="/account/settings"
                   >
                     <IoMdSettings />
                     <span>Settings</span>

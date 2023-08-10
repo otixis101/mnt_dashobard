@@ -13,7 +13,7 @@ import Tree from "public/assets/tree-icon.png";
 
 import { format } from "date-fns";
 import Button from "@/components/atoms/Button";
-import { cn, getAgeByDate } from "@/base/utils";
+import { cn, getAgeByDate, getRandomClass } from "@/base/utils";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import useStore from "@/base/store";
 import UserProfileAlbums from "../UserProfileAlbums";
@@ -48,20 +48,6 @@ const Index = () => {
     setOpenModal(true);
     setMode(modelOption as ModeOptions);
   };
-
-  const classes: string[] = [
-    "bg-[#ACF6AA]",
-    "bg-[#F9D978]",
-    "bg-[#877FB6]",
-    "bg-[#ACF6AA]",
-    "bg-[#F9D978]",
-    "bg-[#877FB6]",
-  ];
-
-  function getRandomClass() {
-    const randomIndex = Math.floor(Math.random() * classes.length);
-    return classes[randomIndex];
-  }
 
   return (
     <>

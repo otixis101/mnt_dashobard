@@ -120,7 +120,12 @@ const AddMemberPage = () => {
         if (person.data.hasSugestion) {
           router.push({ query: { step: "suggestions" } });
         } else {
-          router.push({ query: { step: "about" } });
+          router.push({
+            query: {
+              step: "relationship",
+              reference: "64d3f57c2b1969cf877b9568",
+            },
+          });
         }
       }
     } catch (error) {

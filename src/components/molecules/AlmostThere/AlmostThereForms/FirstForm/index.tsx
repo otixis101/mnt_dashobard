@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Axios from "@/base/axios";
 import { cn } from "@/base/utils";
+import useStore from "@/base/store";
 import AlmostThereDropBox from "../../AlmostThereDropBox";
 
 const relationships = [
@@ -73,6 +74,13 @@ const FirstForm = () => {
     relationship: "",
   });
 
+  const { createPersonData } = useStore();
+
+  // This is temporary to remove typescript error message
+  const relative = createPersonData as DbPersonWithOutSuggestion;
+
+  console.log(relative);
+
   const [loading, setLoading] = useState(false);
   const [radioValues, setRadioValues] = useState<Record<RadioFields, string>>({
     maritalStatus: "",
@@ -119,9 +127,9 @@ const FirstForm = () => {
       const payload = {
         ...formData,
         ...radioValues,
-        facts,
+        facts: facts ?? [],
         deathOfDeath: date ?? null,
-        relativeId: user.id,
+        relativeId: relative.personId ?? "",
         reference: String(query.reference),
       };
 
