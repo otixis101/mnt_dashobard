@@ -11,7 +11,6 @@ interface Props {
 }
 const AlmostThereDropBox = (props: Props) => {
   const { className, name, onChange, file, onFileDelete } = props;
-
   return (
     <div className={cn(className)}>
       <span className="mb-2 block text-gray-800">Upload images</span>
