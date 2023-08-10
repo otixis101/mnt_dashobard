@@ -9,19 +9,19 @@ import TreeCard from "@/components/molecules/TreeCard";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import Button from "@/components/atoms/Button";
 import { FaPlus } from "react-icons/fa";
-import { TreeDataProps, emptyTreePresetData } from "@/components/constants";
+import { emptyTreePresetData } from "@/components/constants";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 import Link from "next/link";
 
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
   const [zoomPercentage, setZoomPercentage] = useState("100");
-  const [treeData, setTreeData] = useState<TreeDataProps[]>([]);
+  const [treeData, setTreeData] = useState([]);
 
   const router = useRouter();
   const { personId } = router.query;
 
-  const { data, isLoading } = useFetchPersonFamilyTree(personId as string);
+  const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
   console.log(data);
   const getTreeDataPreset = () => {
@@ -62,7 +62,7 @@ const FamilyTree = () => {
     return [...emptyTreePresetData, ownerObject];
   };
 
-  const handleClickToZoom = (type: "in" | "out") => {
+  const handleClickToZoom = (type) => {
     if (type === "in") {
       setZoomPercentage((prev) => {
         const newPercentage = parseInt(prev, 10) + 10;
@@ -79,7 +79,7 @@ const FamilyTree = () => {
     if (data) {
       const treeDataPreset = getTreeDataPreset();
       console.log(treeDataPreset);
-      setTreeData(treeDataPreset as TreeDataProps[]);
+      setTreeData(treeDataPreset);
     }
   }, [data]);
 
@@ -107,7 +107,7 @@ const FamilyTree = () => {
         itemSize: { width: 96, height: 110 },
         minimizedItemSize: { width: 3, height: 3 },
         // eslint-disable-next-line react/no-unstable-nested-components
-        onItemRender: ({ context: itemConfig }: TreeDataProps) => {
+        onItemRender: ({ context: itemConfig }) => {
           if (itemConfig.isEmpty) {
             return (
               <Link
