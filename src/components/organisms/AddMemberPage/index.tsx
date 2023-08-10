@@ -124,7 +124,7 @@ const AddMemberPage = () => {
           router.push({
             query: {
               step: "relationship",
-              reference: ref as string,
+              reference: ref,
             },
           });
         }
