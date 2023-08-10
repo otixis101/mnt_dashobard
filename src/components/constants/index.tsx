@@ -6,6 +6,27 @@ export const navLinks = [
   // { name: "FAQs", url: "#faqs" },
 ];
 
+export interface TreeDataProps {
+  id: string;
+  title?: string;
+  image?: string;
+  label?: string;
+  description?: string;
+  parents?: string[];
+  isEmpty?: boolean;
+}
+
+export const emptyTreePresetData: TreeDataProps[] = [
+  {
+    id: "1",
+    isEmpty: true,
+  },
+  {
+    id: "2",
+    isEmpty: true,
+  },
+];
+
 export const testTreeData = [
   {
     id: 1,

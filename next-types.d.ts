@@ -40,37 +40,38 @@ interface DbPerson {
   readonly isTreePrivate: boolean;
   readonly membership: string;
   readonly isTreePrivate: boolean;
+  readonly personId: string;
 }
 
-declare interface APIResponse<TData> {
+interface APIResponse<TData> {
   success: boolean;
   data: Readonly<TData>;
   message: string;
 }
 
-declare interface DbPersonWithOutSuggestion {
+interface DbPersonWithOutSuggestion {
   hasSugestion: false;
   personId: string;
 }
 
-declare interface DbPersonWithSuggestion {
+interface DbPersonWithSuggestion {
   suggestions: DbSuggestion[];
   hasSugestion: true;
   _tempProfileId: string;
 }
 
-declare interface DbSuggestion {
+interface DbSuggestion {
   person: DbSuggestionPerson;
   contributor: DbContributor;
 }
 
-declare interface DbContributor {
+interface DbContributor {
   firstName: string;
   middleName: string;
   lastName: string;
 }
 
-declare interface DbSuggestionPerson {
+interface DbSuggestionPerson {
   _id: string;
   firstName: string;
   middleName: string;
@@ -87,6 +88,17 @@ declare interface DbSuggestionPerson {
   __v: number;
 }
 
-declare type DbCreatePerson =
-  | DbPersonWithSuggestion
-  | DbPersonWithOutSuggestion;
+type DbCreatePerson = DbPersonWithSuggestion | DbPersonWithOutSuggestion;
+
+interface DbLinks {
+  readonly id: string;
+  readonly description: string;
+  readonly image: string;
+  readonly label: string;
+  readonly title: string;
+  readonly parents: string[];
+}
+interface DbRelationship {
+  links: DbLinks[];
+  nodes: DbPerson[];
+}

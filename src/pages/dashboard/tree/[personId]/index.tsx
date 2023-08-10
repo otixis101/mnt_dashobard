@@ -1,6 +1,6 @@
 // @ts-ignore
 import { FamDiagram } from "basicprimitivesreact";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { PageFitMode, Enabled } from "basicprimitives";
 import SearchBar from "@/components/molecules/SearchBar";
@@ -9,21 +9,60 @@ import TreeCard from "@/components/molecules/TreeCard";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import Button from "@/components/atoms/Button";
 import { FaPlus } from "react-icons/fa";
-import { testTreeData } from "@/components/constants";
+import { TreeDataProps, emptyTreePresetData } from "@/components/constants";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
+import Link from "next/link";
 
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
   const [zoomPercentage, setZoomPercentage] = useState("100");
+  const [treeData, setTreeData] = useState<TreeDataProps[]>([]);
 
   const router = useRouter();
   const { personId } = router.query;
 
-  const { data } = useFetchPersonFamilyTree(personId);
+  const { data, isLoading } = useFetchPersonFamilyTree(personId as string);
 
   console.log(data);
+  const getTreeDataPreset = () => {
+    const ownerObject = {
+      id: data?.user.personId,
+      title: `${data?.user.firstName} ${data?.user.lastName}`,
+      image: data?.user.profilePhotoUrl,
+      parents: emptyTreePresetData.map((item) => item.id),
+    };
 
-  const handleClickToZoom = (type) => {
+    if (data && data.relationship) {
+      const currentPerson = data.relationship.links.find(
+        (item) => item.id === data.user.personId
+      );
+
+      const dataWithoutOwner = data.relationship.links.filter(
+        (item) => item.id !== data.user.personId
+      );
+
+      // add empty placeholder parent if the current user has just one parent
+      if (currentPerson && currentPerson.parents.length === 1) {
+        const emptyParent = emptyTreePresetData[0];
+        // update the currentperson's parent array with the empty parent id
+        const currentPersonParentId = [
+          ...currentPerson.parents,
+          emptyParent.id,
+        ];
+
+        return [
+          ...dataWithoutOwner,
+          emptyParent,
+          { ...ownerObject, parents: currentPersonParentId },
+        ];
+      }
+
+      return data.relationship.links;
+    }
+    return [...emptyTreePresetData, ownerObject];
+  };
+
+  const handleClickToZoom = (type: "in" | "out") => {
     if (type === "in") {
       setZoomPercentage((prev) => {
         const newPercentage = parseInt(prev, 10) + 10;
@@ -36,6 +75,13 @@ const FamilyTree = () => {
       });
     }
   };
+  useEffect(() => {
+    if (data) {
+      const treeDataPreset = getTreeDataPreset();
+      console.log(treeDataPreset);
+      setTreeData(treeDataPreset as TreeDataProps[]);
+    }
+  }, [data]);
 
   const config = {
     pageFitMode: PageFitMode.AutoSize,
@@ -50,8 +96,8 @@ const FamilyTree = () => {
     lineLevelShift: 25,
     normalItemsInterval: 200,
     // dotItemsInterval: 10,
-    // lineItemsInterval: 60,
-    enablePanning: Enabled.True,
+    lineItemsInterval: 60,
+    enablePanning: true,
     defaultTemplateName: "info",
     emptyDiagramMessage: "Chart is empty.",
     showExtraArrows: false,
@@ -61,23 +107,40 @@ const FamilyTree = () => {
         itemSize: { width: 96, height: 110 },
         minimizedItemSize: { width: 3, height: 3 },
         // eslint-disable-next-line react/no-unstable-nested-components
-        onItemRender: ({ context: itemConfig }) => (
-          // eslint-disable-next-line react/jsx-filename-extension
-          <TreeCard
-            hasAddButton={itemConfig.identity === "owner"}
-            onPlusClick={() =>
-              router.push(`/dashboard/tree/member/add?step=bio-data`)
-            }
-            imageSrc={itemConfig.avatarUrl}
-            personName={itemConfig.title}
-            dob="Wed Jul 12 2023"
-            age={20}
-            identity="Owner"
-          />
-        ),
+        onItemRender: ({ context: itemConfig }: TreeDataProps) => {
+          if (itemConfig.isEmpty) {
+            return (
+              <Link
+                className="flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
+                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}`}
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#212121]">
+                  <FaPlus className="text-xl text-[#212121]" />
+                </div>
+                <p className="text-[10px] text-[#212121]">Add parents</p>
+              </Link>
+            );
+          }
+
+          return (
+            <TreeCard
+              hasAddButton={itemConfig.id === personId}
+              onPlusClick={() =>
+                router.push(
+                  `/dashboard/tree/member/add?step=bio-data&ref=${personId}`
+                )
+              }
+              imageSrc={itemConfig.image}
+              personName={itemConfig.title}
+              dob="Wed Jul 12 2023"
+              age={20}
+              identity="Owner"
+            />
+          );
+        },
       },
     ],
-    items: testTreeData,
+    items: treeData,
   };
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
@@ -138,7 +201,8 @@ const FamilyTree = () => {
         </div>
 
         <div className="flex items-center justify-center py-8">
-          <FamDiagram centerOnCursor config={config} />
+          {isLoading && <>loading...</>}
+          {data && <FamDiagram centerOnCursor config={config} />}
         </div>
       </section>
     </AppLayout>

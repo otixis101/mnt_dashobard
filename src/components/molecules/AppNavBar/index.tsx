@@ -42,7 +42,7 @@ const AppNavBar = (props: AppNavBarProps) => {
   const { data: session } = useSession();
   const { data } = useFetchPerson(session?.user?.personId ?? "");
 
-  console.log(data);
+  // console.log(data);
 
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
@@ -54,7 +54,7 @@ const AppNavBar = (props: AppNavBarProps) => {
       ref={ref}
       className="sticky top-0 z-50 h-[100px] duration-300 ease-in-out"
     >
-      <div className="container mx-auto flex h-full items-center justify-between gap-2 px-3 py-6 max-md:px-4">
+      <div className="container flex items-center justify-between h-full gap-2 px-3 py-6 mx-auto max-md:px-4">
         <div
           className={cn(
             "sm:hidden",
@@ -97,7 +97,7 @@ const AppNavBar = (props: AppNavBarProps) => {
         ) : (
           <Popover>
             <PopoverTrigger asChild>
-              <div className="flex cursor-pointer items-center gap-4">
+              <div className="flex items-center gap-4 cursor-pointer">
                 <div className="rounded-full bg-primary/40 p-1.5">
                   {data && (
                     <div>
@@ -135,7 +135,7 @@ const AppNavBar = (props: AppNavBarProps) => {
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-40 rounded-lg bg-[#EFEFEF] p-1.5">
-              <ul className="space-y-3 px-1">
+              <ul className="px-1 space-y-3">
                 <li>
                   <Link className="flex items-center gap-2" href="/account">
                     {data && data.profilePhotoUrl ? (
@@ -145,7 +145,7 @@ const AppNavBar = (props: AppNavBarProps) => {
                         height={20}
                         priority
                         alt={name}
-                        className="hidden rounded-full object-cover md:block"
+                        className="hidden object-cover rounded-full md:block"
                       />
                     ) : (
                       <RxAvatar className="text-xl" />
