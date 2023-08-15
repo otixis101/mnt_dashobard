@@ -6,6 +6,103 @@ export const navLinks = [
   // { name: "FAQs", url: "#faqs" },
 ];
 
+export interface TreeDataProps {
+  id: string;
+  title?: string;
+  image?: string;
+  label?: string;
+  description?: string;
+  parents?: string[];
+  isEmpty?: boolean;
+}
+
+export const emptyTreePresetData: TreeDataProps[] = [
+  {
+    id: "1",
+    isEmpty: true,
+  },
+  {
+    id: "2",
+    isEmpty: true,
+  },
+];
+
+export const testTreeData = [
+  {
+    id: 1,
+    title: "David Dalton",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191589",
+    label: "David Dalton",
+    description: "1, Chief Executive Officer (CEO)",
+    phone: "352-206-7599",
+    email: "davidalt@name.com",
+    image: "/api/images/photos/q.png",
+  },
+  {
+    id: 2,
+    relativeItem: 1,
+    position: 1,
+    title: "Steven",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191596",
+    label: "Steven Lacombe",
+    description: "2, GM, Platform Strategy",
+    phone: "805-800-7397",
+    email: "stevlaco@name.com",
+    image: "/api/images/photos/a.png",
+  },
+  {
+    id: 3,
+    parents: [1, 2],
+    title: "Nancy Smith",
+    label: "Nancy Smith",
+    description: "3, GM, Strategic Marketing and Communications",
+    phone: "631-787-3495",
+    email: "nancsmit@name.com",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191582",
+  },
+  {
+    id: 8,
+    parents: [1, 2],
+    title: "Nancy Smith",
+    label: "Nancy Smith",
+    description: "3, GM, Strategic Marketing and Communications",
+    phone: "631-787-3495",
+    email: "nancsmit@name.com",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191572",
+  },
+  {
+    id: 9,
+    parents: [1, 2],
+    identity: "owner",
+    title: "Nancy Smith",
+    label: "Nancy Smith",
+    description: "3, GM, Strategic Marketing and Communications",
+    phone: "631-787-3495",
+    email: "nancsmit@name.com",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191528",
+  },
+  {
+    id: 4,
+    parents: [3],
+    title: "Ann Smith",
+    label: "Nancy Smith",
+    description: "4, GM, Strategic Marketing and Communications",
+    phone: "631-787-3495",
+    email: "nancsmit@name.com",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191598",
+  },
+  {
+    id: 5,
+    parents: [3],
+    title: "Ella Smith",
+    label: "Nancy Smith",
+    description: "5, GM, Strategic Marketing and Communications",
+    phone: "631-787-3495",
+    email: "nancsmit@name.com",
+    avatarUrl: "https://avatars.githubusercontent.com/u/191571",
+  },
+];
+
 export const countryArrray = [
   {
     country: "Afghanistan",

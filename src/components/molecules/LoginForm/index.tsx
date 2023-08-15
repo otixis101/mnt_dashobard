@@ -58,19 +58,23 @@ const LoginForm = () => {
         }
       );
       if (res && res.ok) {
-        const { data: user } = await res.json();
+        const { data } = await res.json();
         setIsGoogleLoading(true);
         update({
           ...session,
           user: {
             ...session?.user,
-            ...user,
+            ...data,
           },
         });
         setIsGoogleLoading(false);
         toast.success("Login successful");
 
-        router.push("/user/profile/update?step=moreinfo");
+        if (data.personId) {
+          router.push(`/dashboard/tree/${data.personId}`);
+        } else {
+          router.push("/user/profile/update?step=moreinfo");
+        }
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -94,7 +98,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (session && status === "authenticated") {
       if (session.user.personId) {
-        router.push("/dashboard");
+        router.push(`/dashboard/tree/${session.user.personId}`);
       } else {
         router.push("/user/profile/update?step=moreinfo");
       }

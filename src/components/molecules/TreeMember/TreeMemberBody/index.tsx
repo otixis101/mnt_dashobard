@@ -9,6 +9,7 @@ import Button from "@/components/atoms/Button";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
+import { cn, getRandomClass } from "@/base/utils";
 import FamilyMembers from "../FamilyMembers";
 import TreeAlbums from "../TreeAlbums";
 import TreePopup from "../TreePopup";
@@ -26,22 +27,31 @@ const TreeMemberBody = () => {
 
   return (
     <>
-      {mode && <TreePopup mode={mode} onChange={onChange} imgSrc={User} />}
+      {mode && (
+        <TreePopup
+          mode={mode}
+          onChange={onChange}
+          imgSrc={data?.profilePhotoUrl ?? User}
+        />
+      )}
 
       {data && (
         <div className="flex flex-col items-center md:flex-row ">
           <div className="py-4 md:flex md:w-[60%]">
             <div className="flex flex-col items-center">
-              <Image
-                src={User}
-                alt="user"
-                className="md:h-68 mx-auto md:w-[60rem]"
-              />
+              <div className="relative h-52 w-48 overflow-hidden rounded-lg md:h-64 md:w-60">
+                <Image
+                  src={data.profilePhotoUrl ?? User}
+                  fill
+                  alt="user profile photo"
+                  className="md:h-68 mx-auto md:w-[60rem]"
+                />
+              </div>
               <Button intent="outline" className="my-4" onClick={onChange}>
                 Edit
               </Button>
             </div>
-            <div className="mx-8 flex flex-col rounded-md bg-gray-100 p-4">
+            <div className="flex w-full flex-col rounded-lg bg-gray-100 p-10 md:mx-8">
               <div className="mb-2">
                 <span className="flex ">
                   <h4 className="mr-2 text-[1.7rem] font-extrabold capitalize text-primary md:text-[2.2rem]">
@@ -68,36 +78,24 @@ const TreeMemberBody = () => {
                   About
                 </h4>
                 <p className="whitespace-normal break-normal text-justify text-lg leading-6 text-gray-600">
-                  Welcome to my profile! I&apos;m Dr. Julian Miller, a dedicated
-                  and compassionate medical doctor with a drive to make a
-                  positive impact in the field of healthcare. At 27 years old, I
-                  have had the privilege of achieving several notable milestones
-                  throughout my career.
+                  {data.about ?? ""}
                 </p>
               </div>
               <div className="">
                 <h4 className="mb-3 block text-xl capitalize text-primary">
                   Interesting facts
                 </h4>
-                <div className="">
-                  <span className="m-2 mx-3 inline-block rounded-lg bg-[#877FB6] p-2">
-                    Has a twin
-                  </span>
-                  <span className="m-2 mx-3 inline-block rounded-lg bg-[#F9D978] p-2">
-                    Graduated top of her class
-                  </span>
-                  <span className="m-2 inline-block rounded-lg bg-[#ACF6AA] p-2">
-                    Forbes 30 under 30
-                  </span>
-                  <span className="m-2 inline-block rounded-lg bg-[#877FB6] p-2">
-                    spoke at tedx
-                  </span>
-                  <span className="m-2 inline-block rounded-lg bg-[#ACF6AA] p-2">
-                    Graduated top from harvard
-                  </span>
-                  <span className="m-2 inline-block rounded-lg bg-[#F9D978] p-2">
-                    Good citizen medal
-                  </span>
+                <div className="flex flex-wrap gap-1">
+                  {data.facts &&
+                    data.facts.length > 0 &&
+                    data.facts.map((fact: string) => (
+                      <span
+                        className={cn("rounded-lg p-2", getRandomClass())}
+                        key={fact}
+                      >
+                        {fact}
+                      </span>
+                    ))}
                 </div>
               </div>
             </div>

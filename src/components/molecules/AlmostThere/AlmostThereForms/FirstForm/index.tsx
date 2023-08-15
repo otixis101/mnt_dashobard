@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Axios from "@/base/axios";
 import { cn } from "@/base/utils";
+import useStore from "@/base/store";
 import AlmostThereDropBox from "../../AlmostThereDropBox";
 
 const relationships = [
@@ -73,6 +74,13 @@ const FirstForm = () => {
     relationship: "",
   });
 
+  const { createPersonData } = useStore();
+
+  // This is temporary to remove typescript error message
+  const relative = createPersonData as DbPersonWithOutSuggestion;
+
+  console.log(relative);
+
   const [loading, setLoading] = useState(false);
   const [radioValues, setRadioValues] = useState<Record<RadioFields, string>>({
     maritalStatus: "",
@@ -119,9 +127,9 @@ const FirstForm = () => {
       const payload = {
         ...formData,
         ...radioValues,
-        facts,
+        facts: facts ?? [],
         deathOfDeath: date ?? null,
-        relativeId: user.id,
+        relativeId: relative.personId ?? "",
         reference: String(query.reference),
       };
 
@@ -135,7 +143,7 @@ const FirstForm = () => {
 
         if (res) {
           toast.success("User profile updated successfully");
-          router.push("/dashboard");
+          router.push(`dashboard/tree/${user.personId}`);
         }
       } catch (error) {
         toast.error(String(error));
@@ -203,7 +211,7 @@ const FirstForm = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
+                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
                   >
                     <Input
                       disabled
@@ -214,14 +222,14 @@ const FirstForm = () => {
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto bg-white p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-white">
                   <DayPickerCalendar
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="rounded-md border"
+                    className="border rounded-md"
                   />
                 </PopoverContent>
               </Popover>

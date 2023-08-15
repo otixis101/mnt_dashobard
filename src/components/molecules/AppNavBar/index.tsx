@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/atoms/Popover";
-import { RxAvatar } from "react-icons/rx";
+import { RxAvatar, RxDashboard } from "react-icons/rx";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import MobileMenu from "../MobileMenu";
@@ -42,6 +42,8 @@ const AppNavBar = (props: AppNavBarProps) => {
   const { data: session } = useSession();
   const { data } = useFetchPerson(session?.user?.personId ?? "");
 
+  // console.log(data);
+
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
     reverseEffect: () => setChangeLogo(false),
@@ -52,7 +54,7 @@ const AppNavBar = (props: AppNavBarProps) => {
       ref={ref}
       className="sticky top-0 z-50 h-[100px] duration-300 ease-in-out"
     >
-      <div className="container mx-auto flex h-full items-center justify-between gap-2 px-3 py-6 max-md:px-4">
+      <div className="container flex items-center justify-between h-full gap-2 px-3 py-6 mx-auto max-md:px-4">
         <div
           className={cn(
             "sm:hidden",
@@ -95,12 +97,13 @@ const AppNavBar = (props: AppNavBarProps) => {
         ) : (
           <Popover>
             <PopoverTrigger asChild>
-              <div className="flex cursor-pointer items-center gap-4">
+              <div className="flex items-center gap-4 cursor-pointer">
                 <div className="rounded-full bg-primary/40 p-1.5">
                   {data && (
                     <div>
                       {data.profilePhotoUrl ? (
                         <>
+                          {/* Desktop image */}
                           <Image
                             src={data?.profilePhotoUrl ?? ""}
                             width={50}
@@ -109,6 +112,8 @@ const AppNavBar = (props: AppNavBarProps) => {
                             alt={name}
                             className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
                           />
+
+                          {/* Mobile image */}
                           <Image
                             src={data?.profilePhotoUrl ?? ""}
                             width={40}
@@ -130,12 +135,9 @@ const AppNavBar = (props: AppNavBarProps) => {
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-40 rounded-lg bg-[#EFEFEF] p-1.5">
-              <ul className="space-y-3 px-1">
+              <ul className="px-1 space-y-3">
                 <li>
-                  <Link
-                    className="flex items-center gap-2"
-                    href="/dashboard/account"
-                  >
+                  <Link className="flex items-center gap-2" href="/account">
                     {data && data.profilePhotoUrl ? (
                       <Image
                         src={data.profilePhotoUrl ?? ""}
@@ -143,7 +145,7 @@ const AppNavBar = (props: AppNavBarProps) => {
                         height={20}
                         priority
                         alt={name}
-                        className="hidden rounded-full object-cover md:block"
+                        className="hidden object-cover rounded-full md:block"
                       />
                     ) : (
                       <RxAvatar className="text-xl" />
@@ -152,10 +154,18 @@ const AppNavBar = (props: AppNavBarProps) => {
                     <span>Profile</span>
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    className="flex items-center gap-2"
+                    href={`/dashboard/tree/${data?.userId}`}
+                  >
+                    <RxDashboard /> <span>Dashboard</span>
+                  </Link>
+                </li>
                 <li className="flex items-center gap-2">
                   <Link
                     className="flex items-center gap-2"
-                    href="/dashboard/account/settings"
+                    href="/account/settings"
                   >
                     <IoMdSettings />
                     <span>Settings</span>

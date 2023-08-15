@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import * as Yup from "yup";
 
 export const AuthSchema = Yup.object().shape({
@@ -24,6 +23,10 @@ export const UpdateUserAboutSchema = Yup.object().shape({
 
 export const NumberSchema = Yup.number().typeError(
   "Only numbers are accepted as a valid format"
+);
+
+export const SeparatorInputStringSchema = Yup.string().typeError(
+  "Only strings are accepted as a valid format"
 );
 
 export const StringSchema = Yup.object().shape({

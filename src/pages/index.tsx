@@ -4,8 +4,8 @@ import LandingLayout from "@/components/Layouts/LandingLayout";
 import AboutSection from "@/components/organisms/LandingPageAbout";
 // import PricingSection from "@/components/organisms/LandingPage/PricingSection";
 import TestimonialSection from "@/components/molecules/TestemonialSection";
-// import { GetServerSidePropsContext } from "next/types";
-// import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next/types";
+import { getSession } from "next-auth/react";
 
 const Home = () => (
   <LandingLayout type="website">
@@ -17,12 +17,16 @@ const Home = () => (
   </LandingLayout>
 );
 
-/* export async function getServerSideProps(context: GetServerSidePropsContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
+  const { personId } = session?.user ?? {};
+
   if (session) {
     return {
       redirect: {
-        destination: "/dashboard",
+        destination: personId
+          ? `/dashboard/tree/${personId}`
+          : `/user/profile/update?step=moreinfo`,
         permanent: false,
       },
     };
@@ -34,7 +38,5 @@ const Home = () => (
     },
   };
 }
-
-*/
 
 export default Home;

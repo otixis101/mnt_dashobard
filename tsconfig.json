@@ -25,6 +25,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     "src/components/molecules/PhotoFlow/PhotoFlowAlbum/loader.tsc"
   ],
   "exclude": ["node_modules"]

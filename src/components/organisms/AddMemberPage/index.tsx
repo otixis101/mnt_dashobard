@@ -64,6 +64,7 @@ const fields = [
 const AddMemberPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const { ref } = router.query;
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
   const [date, setDate] = useState<Date>();
   const [loading, setLoading] = useState(false);
@@ -120,7 +121,12 @@ const AddMemberPage = () => {
         if (person.data.hasSugestion) {
           router.push({ query: { step: "suggestions" } });
         } else {
-          router.push({ query: { step: "about" } });
+          router.push({
+            query: {
+              step: "relationship",
+              reference: ref,
+            },
+          });
         }
       }
     } catch (error) {
@@ -193,7 +199,7 @@ const AddMemberPage = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
+                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
                   >
                     <Input
                       disabled
@@ -204,14 +210,14 @@ const AddMemberPage = () => {
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto bg-white p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-white">
                   <DayPickerCalendar
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="rounded-md border"
+                    className="border rounded-md"
                   />
                 </PopoverContent>
               </Popover>

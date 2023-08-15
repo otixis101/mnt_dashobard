@@ -47,7 +47,7 @@ const SearchResultPage = () => {
   console.log(data);
 
   return (
-    <AppLayout hideSpirals type="website">
+    <AppLayout hideSpirals showUser name="" image="" type="website">
       <div className="mx-auto mt-5 w-full md:w-2/4">
         <SearchBar
           value={searchValue}
@@ -61,32 +61,12 @@ const SearchResultPage = () => {
           {data &&
             data.length > 0 &&
             data.map(({ _id, profilePhotoUrl, firstName, lastName }) => (
-              <>
-                <SearchCard
-                  key={_id}
-                  title={`${firstName} ${lastName}`}
-                  image={profilePhotoUrl}
-                  onClick={() => {}}
-                />
-                <SearchCard
-                  key={_id}
-                  title={`${firstName} ${lastName}`}
-                  image={profilePhotoUrl}
-                  onClick={() => {}}
-                />
-                <SearchCard
-                  key={_id}
-                  title={`${firstName} ${lastName}`}
-                  image={profilePhotoUrl}
-                  onClick={() => {}}
-                />
-                <SearchCard
-                  key={_id}
-                  title={`${firstName} ${lastName}`}
-                  image={profilePhotoUrl}
-                  onClick={() => {}}
-                />
-              </>
+              <SearchCard
+                key={_id}
+                title={`${firstName} ${lastName}`}
+                image={profilePhotoUrl}
+                userId={_id}
+              />
             ))}
 
           {data && data.length === 0 && (
