@@ -6,11 +6,13 @@ import {
 import { format } from "date-fns";
 
 import Image from "next/image";
+import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 
 interface TreeCardProps {
   imageSrc: string;
   personName: string;
+  id: string;
   dob: string;
   age: number;
   identity?: "you" | string;
@@ -26,6 +28,7 @@ const TreeCard = ({
   dob,
   hasAddButton,
   onPlusClick,
+  id,
 }: TreeCardProps) => (
   <HoverCard>
     <HoverCardTrigger className="flex items-center" asChild>
@@ -54,7 +57,7 @@ const TreeCard = ({
           </div>
           <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
             <div className="h-2 w-2 rounded-full border bg-green-500 " />
-            <p className="text-[8px]">{identity}</p>
+            <p className="text-[8px] capitalize">{identity}</p>
           </div>
         </div>
       </div>
@@ -84,12 +87,12 @@ const TreeCard = ({
           </p>
           <p className="text-sm">{age} Years</p>
         </div>
-        <button
+        <Link
+          href={`/user/${id}`}
           className="mt-auto h-max rounded-lg bg-primary px-5 py-1 capitalize text-white"
-          type="button"
         >
           profile
-        </button>
+        </Link>
       </div>
     </HoverCardContent>
   </HoverCard>

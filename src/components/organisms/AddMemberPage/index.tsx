@@ -119,7 +119,7 @@ const AddMemberPage = () => {
         setPersonData(person.data);
 
         if (person.data.hasSugestion) {
-          router.push({ query: { step: "suggestions" } });
+          router.push({ query: { step: "suggestion" } });
         } else {
           router.push({
             query: {
@@ -199,7 +199,7 @@ const AddMemberPage = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
+                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
                   >
                     <Input
                       disabled
@@ -210,14 +210,14 @@ const AddMemberPage = () => {
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0 bg-white">
+                <PopoverContent align="start" className="w-auto bg-white p-0">
                   <DayPickerCalendar
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="border rounded-md"
+                    className="rounded-md border"
                   />
                 </PopoverContent>
               </Popover>

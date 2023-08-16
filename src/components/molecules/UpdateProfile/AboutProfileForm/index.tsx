@@ -136,7 +136,7 @@ const AboutProfileForm = () => {
 
         if (res) {
           toast.success("User profile updated successfully");
-          router.push("/dashboard");
+          router.push(`/dashboard/tree/${user.personId}`);
         }
       } catch (error) {
         toast.error(String(error));

@@ -1,4 +1,4 @@
-import SuggestionCard from "@/components/molecules/SuggestionCard";
+import SuggestionCard from "@/components/molecules/Switch/SuggestionCard";
 import useStore from "@/base/store";
 import { useState } from "react";
 import { toast } from "react-toastify";

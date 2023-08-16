@@ -1,4 +1,4 @@
-import SuggestionCard from "@/components/molecules/SuggestionCard";
+import SuggestionCard from "@/components/molecules/Switch/SuggestionCard";
 import { Meta } from "@storybook/react";
 import ProfileImage from "public/assets/hero_bg.jpg";
 import AssignedByImage from "public/assets/family-legacy.png";

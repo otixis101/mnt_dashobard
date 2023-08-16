@@ -150,11 +150,7 @@ body {
 .rd3t-svg {
   overflow: visible !important;
 }
-svg {
-  overflow: visible !important;
-  width: auto !important;
-  height: auto !important;
-}
+
 /* photo flow loader components */
 .lds {
   display: inline-block;

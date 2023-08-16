@@ -5,7 +5,7 @@ import { RxDotFilled } from "react-icons/rx";
 
 import User from "public/assets/user-2.png";
 
-import Button from "@/components/atoms/Button";
+// import Button from "@/components/atoms/Button";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
@@ -47,9 +47,9 @@ const TreeMemberBody = () => {
                   className="md:h-68 mx-auto md:w-[60rem]"
                 />
               </div>
-              <Button intent="outline" className="my-4" onClick={onChange}>
+              {/* <Button intent="outline" className="my-4" onClick={onChange}>
                 Edit
-              </Button>
+              </Button> */}
             </div>
             <div className="flex w-full flex-col rounded-lg bg-gray-100 p-10 md:mx-8">
               <div className="mb-2">

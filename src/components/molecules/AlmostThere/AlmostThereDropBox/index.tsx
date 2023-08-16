@@ -13,7 +13,7 @@ const AlmostThereDropBox = (props: Props) => {
   const { className, name, onChange, file, onFileDelete } = props;
   return (
     <div className={cn(className)}>
-      <span className="mb-2 block text-gray-800">Upload images</span>
+      <span className="mb-2 block text-gray-800">Upload profile image</span>
       <div className="relative mb-1 flex h-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dotted border-gray-400 bg-[#F3F3F3] focus-within:border-primary hover:border-primary">
         {!file ? (
           <React.Fragment>
