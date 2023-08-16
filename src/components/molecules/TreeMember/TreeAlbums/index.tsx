@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import Button from "@/components/atoms/Button";
 
 const TreeAlbums = () => {
-  const { pathname } = useRouter();
+  const { pathname, query } = useRouter();
+  const { personId } = query;
 
   useEffect(() => {
     if (pathname === "/dashboard/treemember") {
@@ -18,7 +19,11 @@ const TreeAlbums = () => {
   return (
     <div className="mx-2 hidden flex-1 overflow-hidden p-2 md:flex">
       <div className="absolute top-32 z-30 flex h-[60vh] w-[30vh] flex-col items-center justify-center overflow-hidden bg-[url(/assets/bg-tree.png)] bg-cover bg-no-repeat">
-        <Button intent="primary" className="mx-1 my-2 w-1/2 rounded-[2.5rem]">
+        <Button
+          href={`/user/${personId}/gallery`}
+          intent="primary"
+          className="mx-1 my-2 w-1/2 rounded-[2.5rem]"
+        >
           View Album
         </Button>
         <Button intent="outline" className="mx-1 my-2 w-1/2 rounded-[2.5rem]">

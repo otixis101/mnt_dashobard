@@ -19,7 +19,15 @@ const Index = () => {
   const [shareToken, setShareToken] = useState<string>("");
   const [host, setHost] = useState("");
   const { data: session } = useSession();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setHost(window.location.origin);
+    }
+  }, []);
+
   const router = useRouter();
+  const { personId } = router.query;
 
   const onHandleSubmit = async (values: Credential) => {
     const { email } = values;
@@ -36,7 +44,7 @@ const Index = () => {
             method: "POST",
             body: JSON.stringify({
               emails,
-              treeLink: `localhost:3000/dashboard/?share-token=${shareToken}`, // dashboard?id=dynamic
+              treeLink: `${host}/dashboard/tree/${personId}?share-token=${shareToken}`, // dashboard?id=dynamic
             }),
             headers: {
               "Content-Type": "application/json",
@@ -46,7 +54,7 @@ const Index = () => {
         );
         if (res && res.ok) {
           toast.success("Invite Link created successfully");
-          router.push("/dashboard/sharetree?step=success");
+          router.push(`/dashboard/tree/${personId}/share?step=success`);
         }
       } catch (err) {
         toast.error("Something went wrong");

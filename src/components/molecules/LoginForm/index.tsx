@@ -60,7 +60,7 @@ const LoginForm = () => {
       if (res && res.ok) {
         const { data } = await res.json();
         setIsGoogleLoading(true);
-        update({
+        await update({
           ...session,
           user: {
             ...session?.user,

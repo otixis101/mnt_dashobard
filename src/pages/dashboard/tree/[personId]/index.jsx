@@ -1,8 +1,9 @@
 // @ts-ignore
+import { useGesture } from "@use-gesture/react";
 import { FamDiagram } from "basicprimitivesreact";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { PageFitMode, Enabled } from "basicprimitives";
+import { PageFitMode, Enabled, NavigationMode } from "basicprimitives";
 import SearchBar from "@/components/molecules/SearchBar";
 import AppLayout from "@/components/Layouts/AppLayout";
 import TreeCard from "@/components/molecules/TreeCard";
@@ -12,11 +13,42 @@ import { FaPlus } from "react-icons/fa";
 import { emptyTreePresetData } from "@/components/constants";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 import Link from "next/link";
+import PhotoFlowLoader from "@/components/molecules/PhotoFlow/PhotoFlowLoader";
 
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
-  const [zoomPercentage, setZoomPercentage] = useState("100");
+  const [crop, setCrop] = useState({
+    x: 0,
+    y: 0,
+    scale: 1,
+  });
+  const [zoomPercentage, setZoomPercentage] = useState(
+    (crop.scale * 100).toFixed(0).toString()
+  );
   const [treeData, setTreeData] = useState([]);
+  const diagramRef = useRef(null);
+
+  const bind = useGesture(
+    {
+      onDrag: ({ offset: [x, y] }) => {
+        setCrop((prev) => ({
+          ...prev,
+          x,
+          y,
+        }));
+      },
+      onPinch: ({ offset: [d] }) => {
+        setCrop((prev) => ({
+          ...prev,
+          scale: 1 + d / 80,
+        }));
+        setZoomPercentage((crop.scale * 100).toFixed(0).toString());
+      },
+    },
+    {
+      eventOptions: { passive: false },
+    }
+  );
 
   const router = useRouter();
   const { personId } = router.query;
@@ -65,11 +97,21 @@ const FamilyTree = () => {
 
   const handleClickToZoom = (type) => {
     if (type === "in") {
+      // connect this to the zoom from gesture
+
+      setCrop((prev) => ({
+        ...prev,
+        scale: prev.scale + 0.1,
+      }));
       setZoomPercentage((prev) => {
         const newPercentage = parseInt(prev, 10) + 10;
         return newPercentage.toString();
       });
     } else {
+      setCrop((prev) => ({
+        ...prev,
+        scale: prev.scale - 0.1,
+      }));
       setZoomPercentage((prev) => {
         const newPercentage = parseInt(prev, 10) - 10;
         return newPercentage.toString();
@@ -85,27 +127,27 @@ const FamilyTree = () => {
 
   const config = {
     pageFitMode: PageFitMode.AutoSize,
+    navigationMode: NavigationMode.CursorOnly,
     autoSizeMinimum: { width: 100, height: 100 },
+    cursorItem: null,
+    highlightItem: null,
     linesWidth: 3,
     linesColor: "#b39cf9",
-    hasButtons: Enabled.True,
-    buttonsPanelSize: 40,
-    // hasSelectorCheckbox: Enabled.False,
+    hasSelectorCheckbox: Enabled.False,
     normalLevelShift: 50,
-    // dotLevelShift: 10,
     lineLevelShift: 25,
-    normalItemsInterval: 200,
-    // dotItemsInterval: 10,
+    normalItemsInterval: 300,
     lineItemsInterval: 60,
     enablePanning: true,
     defaultTemplateName: "info",
-    emptyDiagramMessage: "Chart is empty.",
     showExtraArrows: false,
     templates: [
       {
         name: "info",
         itemSize: { width: 96, height: 110 },
         minimizedItemSize: { width: 3, height: 3 },
+        itemBorderWidth: 0,
+        minimizedItemBorderWidth: 0,
         // eslint-disable-next-line react/no-unstable-nested-components
         onItemRender: ({ context: itemConfig }) => {
           if (itemConfig.isEmpty) {
@@ -126,7 +168,7 @@ const FamilyTree = () => {
           return (
             <TreeCard
               hasAddButton={
-                !(itemConfig.id === personId && itemConfig.parents.length > 0)
+                itemConfig.id === personId && itemConfig.parents.length > 0
               }
               onPlusClick={() =>
                 router.push(
@@ -161,7 +203,7 @@ const FamilyTree = () => {
           />
         </div>
         {/* Dashboard Header Section */}
-        <div className="flex w-full justify-between">
+        <div className="z-10 flex w-full justify-between">
           <h1 className="mt-5 text-center text-2xl font-normal text-slate-700">
             Your Family Tree
           </h1>
@@ -207,9 +249,23 @@ const FamilyTree = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-center py-8">
-          {isLoading && <>loading...</>}
-          {data && <FamDiagram centerOnCursor config={config} />}
+        <div className="flex h-[calc(100vh-20px)] items-start justify-center overflow-hidden py-8">
+          {isLoading && <PhotoFlowLoader />}
+          {data && (
+            <div
+              {...bind()}
+              className="relative cursor-pointer"
+              ref={diagramRef}
+              style={{
+                top: crop.y,
+                left: crop.x,
+                transform: `scale(${crop.scale})`,
+                touchAction: "none",
+              }}
+            >
+              <FamDiagram cursorItem={null} centerOnCursor config={config} />
+            </div>
+          )}
         </div>
       </section>
     </AppLayout>

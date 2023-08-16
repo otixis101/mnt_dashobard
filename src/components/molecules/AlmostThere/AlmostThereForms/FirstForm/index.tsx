@@ -99,7 +99,7 @@ const FirstForm = () => {
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
-    console.log(files);
+    console.log(files?.[0]);
     if (files) {
       setFile(files[0]);
     } else {
@@ -138,16 +138,6 @@ const FirstForm = () => {
       formDataPayload.append("relativeId", relative.personId ?? "");
       formDataPayload.append("reference", String(query.reference));
       formDataPayload.append("maritalStatus", radioValues.maritalStatus);
-
-      // const payload = {
-      //   ...formData,
-      //   ...radioValues,
-      //   facts: facts ?? [],
-      //   deathOfDeath: date ?? null,
-      //   relativeId: relative.personId ?? "",
-      //   reference: String(query.reference),
-      //   profilePhotoUrl: file,
-      // };
 
       setLoading(true);
       try {

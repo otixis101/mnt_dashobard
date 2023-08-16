@@ -13,15 +13,14 @@ import { cn, getRandomClass } from "@/base/utils";
 import FamilyMembers from "../FamilyMembers";
 import TreeAlbums from "../TreeAlbums";
 import TreePopup from "../TreePopup";
+import PhotoFlowLoader from "../../PhotoFlow/PhotoFlowLoader";
 
 const TreeMemberBody = () => {
   const [mode, setMode] = useState<boolean>(false);
   const router = useRouter();
   const { personId } = router.query;
 
-  const { data } = useFetchPerson(personId as string);
-
-  console.log(data);
+  const { data, isLoading } = useFetchPerson(personId as string);
 
   const onChange = (_?: any) => setMode((prevState) => !prevState);
 
@@ -34,6 +33,8 @@ const TreeMemberBody = () => {
           imgSrc={data?.profilePhotoUrl ?? User}
         />
       )}
+
+      {isLoading && <PhotoFlowLoader />}
 
       {data && (
         <div className="flex flex-col items-center md:flex-row ">

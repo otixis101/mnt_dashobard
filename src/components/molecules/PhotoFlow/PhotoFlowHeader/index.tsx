@@ -11,7 +11,7 @@ interface Props {
 }
 const PhotoFlowHeader = ({ onChange }: Props) => (
   <header className="flex items-center justify-between">
-    <form className="mr-auto flex hidden w-[35%] items-center md:flex">
+    <form className="mr-auto flex  w-[35%] items-center md:flex">
       <Input label="" parentClass="w-[90%]" />
       <Button className="ml-[-10.2rem] mt-2 w-[10rem] md:h-12">Search</Button>
     </form>

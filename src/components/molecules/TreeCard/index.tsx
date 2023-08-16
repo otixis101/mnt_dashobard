@@ -1,3 +1,4 @@
+import { cn, truncateString } from "@/base/utils";
 import {
   HoverCard,
   HoverCardContent,
@@ -31,10 +32,16 @@ const TreeCard = ({
   id,
 }: TreeCardProps) => (
   <HoverCard>
-    <HoverCardTrigger className="flex items-center" asChild>
+    <HoverCardTrigger
+      className={cn(
+        "flex items-center ",
+        identity === "you" && " rounded-lg border-[3.5px] border-green-500"
+      )}
+      asChild
+    >
       <div className="relative">
         {hasAddButton && (
-          <div className="absolute -left-12 z-50 opacity-50">
+          <div className="absolute -left-14 z-50 opacity-50">
             <button
               type="button"
               onClick={onPlusClick}
@@ -42,18 +49,21 @@ const TreeCard = ({
             >
               <FaPlus className="text-2xl text-[#898989]" />
             </button>
+            <span className="text-[9px]">Add siblings</span>
           </div>
         )}
-        <div className="relative flex h-28 w-24 cursor-pointer flex-col items-center justify-end overflow-hidden rounded-lg bg-slate-500 p-2 ">
+        <div className="relative flex h-28 w-24 cursor-pointer flex-col items-center justify-end overflow-hidden rounded-md bg-slate-500 p-2 ">
           <Image
             style={{ objectFit: "cover" }}
             src={imageSrc}
-            alt="woman image"
+            alt={`${personName} image`}
             fill
             className=""
           />
           <div className="relative w-full rounded-md bg-blue-100 bg-opacity-20 text-black drop-shadow-md backdrop-blur-md">
-            <h3 className="text-center text-sm ">{personName}</h3>
+            <h3 className="text-center text-sm ">
+              {truncateString(personName, 8)}
+            </h3>
           </div>
           <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
             <div className="h-2 w-2 rounded-full border bg-green-500 " />

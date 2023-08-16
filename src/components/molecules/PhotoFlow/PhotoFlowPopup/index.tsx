@@ -10,23 +10,26 @@ import dropBox from "public/assets/icon/dropbox.png";
 
 import Popup from "@/components/atoms/Popup";
 import Button from "@/components/atoms/Button";
+import { useRouter } from "next/router";
+import { useSWRConfig } from "swr";
 import PhotoFlowDropBox from "../PhotoFlowDropBox";
 
 interface Props {
-  mode: boolean;
   onChange: (e?: boolean) => void;
 }
 
-const PhotoFlowPopup = ({ mode, onChange }: Props) => {
+const PhotoFlowPopup = ({ onChange }: Props) => {
   const { data: session } = useSession();
   const [fileName, setFileName] = useState<DropboxFile[]>([]);
   const [uploadStep, setUploadStep] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | string>();
-  const [openModal, setOpenModal] = useState(mode);
-
-  // const [isSuccess, setSuccess] = useState<boolean>(false);
+  const router = useRouter();
+  const { pathname } = router;
+  const { personId } = router.query;
+  const { mutate } = useSWRConfig();
+  const [openModal] = useState<boolean>(pathname.includes("add"));
 
   const imageUpload = async (imgFile?: string) => {
     const formData = new FormData();
@@ -56,8 +59,9 @@ const PhotoFlowPopup = ({ mode, onChange }: Props) => {
 
       if (res && res.ok) {
         toast.success("Photo Updated successful");
+        mutate(`/person?personId=${personId}`);
 
-        setOpenModal((prevState) => !prevState);
+        router.push(`/user/${personId}/gallery`);
       }
     } catch (err) {
       toast.error("Something went wrong");
@@ -68,7 +72,6 @@ const PhotoFlowPopup = ({ mode, onChange }: Props) => {
 
   const onHandleImagePicker = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    // console.log(selectedFile);
     if (selectedFile) {
       setFile(selectedFile);
       setUploadStep((prevState) => !prevState);
