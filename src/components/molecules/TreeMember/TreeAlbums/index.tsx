@@ -2,10 +2,15 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import Button from "@/components/atoms/Button";
+import { useSession } from "next-auth/react";
 
 const TreeAlbums = () => {
   const { pathname, query } = useRouter();
   const { personId } = query;
+
+  const { data: session } = useSession();
+
+  const { personId: personIdSession } = session?.user ?? {};
 
   useEffect(() => {
     if (pathname === "/dashboard/treemember") {
@@ -26,9 +31,15 @@ const TreeAlbums = () => {
         >
           View Album
         </Button>
-        <Button intent="outline" className="mx-1 my-2 w-1/2 rounded-[2.5rem]">
-          Add Photos
-        </Button>
+        {personId === personIdSession && (
+          <Button
+            href={`/user/${personId}/gallery/add`}
+            intent="outline"
+            className="mx-1 my-2 w-1/2 rounded-[2.5rem]"
+          >
+            Add Photos
+          </Button>
+        )}
       </div>
     </div>
   );
