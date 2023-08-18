@@ -1,10 +1,9 @@
 import AuthLayout from "@/components/Layouts/AuthLayout";
 import LoginForm from "@/components/molecules/LoginForm";
-import { GetServerSidePropsContext } from "next";
+
 import { getSession } from "next-auth/react";
-// import { getSession } from "next-auth/react";
 import Image from "next/image";
-// import { GetServerSidePropsContext } from "next/types";
+import { GetServerSidePropsContext } from "next/types";
 import BgImage from "public/assets/login-bg.png";
 
 const SignInPage = () => (
