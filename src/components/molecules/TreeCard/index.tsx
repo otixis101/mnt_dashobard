@@ -35,7 +35,8 @@ const TreeCard = ({
     <HoverCardTrigger
       className={cn(
         "flex items-center ",
-        identity === "you" && " rounded-lg border-[3.5px] border-green-500"
+        identity === "you" &&
+          " translate-y-2 scale-[1.15] rounded-lg border-[3.5px] border-green-500"
       )}
       asChild
     >

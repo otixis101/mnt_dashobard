@@ -38,9 +38,7 @@ const SignUpForm = () => {
       );
       if (res && res.ok) {
         toast.success("Sign up successful");
-        /**
-         * TODO route users to the verify email page
-         */
+
         router.push(`/auth/verify?email=${email}`);
       }
     } catch (error) {

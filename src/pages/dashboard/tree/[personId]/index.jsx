@@ -14,6 +14,7 @@ import { emptyTreePresetData } from "@/components/constants";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 import Link from "next/link";
 import PhotoFlowLoader from "@/components/molecules/PhotoFlow/PhotoFlowLoader";
+import { cn } from "@/base/utils";
 
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
@@ -70,9 +71,22 @@ const FamilyTree = () => {
         (item) => item.id === data.user.personId
       );
 
-      const dataWithoutOwner = data.relationship.links.filter(
-        (item) => item.id !== data.user.personId
-      );
+      let nodes = data.relationship.links;
+      
+
+      const emptySpouse = {
+        isEmpty: true,
+        id: "empty-spouse",
+        parents: [data.user.personId],
+      };
+
+      const ownerWithSpouse = data.relationship.links
+        .filter((node) => node.parents)
+        .find((node) => node.parents.includes(data.user.personId));
+
+      if (ownerWithSpouse === undefined) {
+        nodes = [...nodes, emptySpouse];
+      }
 
       // add empty placeholder parent if the current user has just one parent
       if (currentPerson && currentPerson.parents.length === 1) {
@@ -90,15 +104,13 @@ const FamilyTree = () => {
         ];
       }
 
-      return data.relationship.links;
+      return nodes;
     }
     return [...emptyTreePresetData, ownerObject];
   };
 
   const handleClickToZoom = (type) => {
     if (type === "in") {
-      // connect this to the zoom from gesture
-
       setCrop((prev) => ({
         ...prev,
         scale: prev.scale + 0.1,
@@ -127,6 +139,8 @@ const FamilyTree = () => {
 
   const config = {
     pageFitMode: PageFitMode.AutoSize,
+    enableMatrixLayout: true,
+    minimumMatrixSize: 6,
     navigationMode: NavigationMode.CursorOnly,
     autoSizeMinimum: { width: 100, height: 100 },
     cursorItem: null,
@@ -134,17 +148,18 @@ const FamilyTree = () => {
     linesWidth: 3,
     linesColor: "#b39cf9",
     hasSelectorCheckbox: Enabled.False,
-    normalLevelShift: 50,
+    normalLevelShift: 40,
     lineLevelShift: 25,
     normalItemsInterval: 300,
-    lineItemsInterval: 60,
+    lineItemsInterval: 30,
     enablePanning: true,
     defaultTemplateName: "info",
     showExtraArrows: false,
+    offset: { x: -500, y: 0 },
     templates: [
       {
         name: "info",
-        itemSize: { width: 96, height: 110 },
+        itemSize: { width: 100, height: 110 },
         minimizedItemSize: { width: 3, height: 3 },
         itemBorderWidth: 0,
         minimizedItemBorderWidth: 0,
@@ -154,13 +169,21 @@ const FamilyTree = () => {
             return (
               // eslint-disable-next-line react/jsx-filename-extension
               <Link
-                className="flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
+                className={cn(
+                  "flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
+                  // itemConfig.id === "empty-spouse" &&
+                  //   "-translate-y-5 scale-[.8]"
+                )}
                 href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#212121]">
                   <FaPlus className="text-xl text-[#212121]" />
                 </div>
-                <p className="text-[10px] text-[#212121]">Add parents</p>
+                <p className="text-[10px] text-[#212121]">
+                  {itemConfig.id === "empty-spouse"
+                    ? "Add Member"
+                    : "Add Parent"}
+                </p>
               </Link>
             );
           }
@@ -194,7 +217,7 @@ const FamilyTree = () => {
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
-        <div className="mx-auto mt-5 w-full md:w-2/4">
+        <div className="w-full mx-auto mt-5 md:w-2/4">
           <SearchBar
             value={searchTerms}
             onChange={(value) => setSearchTerms(value)}
@@ -203,8 +226,8 @@ const FamilyTree = () => {
           />
         </div>
         {/* Dashboard Header Section */}
-        <div className="z-10 flex w-full justify-between">
-          <h1 className="mt-5 text-center text-2xl font-normal text-slate-700">
+        <div className="z-10 flex justify-between w-full">
+          <h1 className="mt-5 text-2xl font-normal text-center text-slate-700">
             Your Family Tree
           </h1>
           <div className="flex gap-8">
@@ -216,12 +239,12 @@ const FamilyTree = () => {
               >
                 <AiFillMinusSquare
                   fill="hsla(255, 83%, 53%, 1)"
-                  className="cursor-pointer text-2xl"
+                  className="text-2xl cursor-pointer"
                 />
               </button>
-              <div className="flex w-max rounded-lg bg-midpup px-2">
+              <div className="flex px-2 rounded-lg w-max bg-midpup">
                 <input
-                  className="w-10 bg-transparent py-2 text-center outline-none"
+                  className="w-10 py-2 text-center bg-transparent outline-none"
                   value={zoomPercentage}
                   onChange={(e) => setZoomPercentage(e.target.value)}
                   type="text"
@@ -235,7 +258,7 @@ const FamilyTree = () => {
               >
                 <AiFillPlusSquare
                   fill="hsla(255, 83%, 53%, 1)"
-                  className="cursor-pointer text-2xl"
+                  className="text-2xl cursor-pointer"
                 />
               </button>
             </div>

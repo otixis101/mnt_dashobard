@@ -30,22 +30,22 @@ const SignInPage = () => (
   </AuthLayout>
 );
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        destination: "/dashboard",
-        permanent: false,
-      },
-    };
-  }
+// export async function getServerSideProps(context: GetServerSidePropsContext) {
+//   const session = await getSession(context);
+//   if (session) {
+//     return {
+//       redirect: {
+//         destination: "/dashboard",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: {
-      session,
-    },
-  };
-}
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }
 
 export default SignInPage;

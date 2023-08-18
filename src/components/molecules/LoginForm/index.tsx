@@ -111,7 +111,7 @@ const LoginForm = () => {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify-email`,
           {
-            method: "POST",
+            method: "PATCH",
             body: JSON.stringify({ code: token, email }),
             headers: { "Content-Type": "application/json" },
           }
@@ -227,22 +227,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-/* 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        destination: "/user/profile/update?step=moreinfo",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      session,
-    },
-  };
-}
- */

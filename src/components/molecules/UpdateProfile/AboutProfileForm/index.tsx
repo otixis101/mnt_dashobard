@@ -73,7 +73,7 @@ const getToastMessage = (arg: unknown, msg: string) => {
 };
 
 const AboutProfileForm = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const { createPersonData } = useStore();
   const router = useRouter();
   const [facts, setFacts] = useState<string[]>([]);
@@ -135,6 +135,14 @@ const AboutProfileForm = () => {
         });
 
         if (res) {
+          await update({
+            ...session,
+            user: {
+              ...session.user,
+              personId: user.personId,
+            },
+          });
+
           toast.success("User profile updated successfully");
           router.push(`/dashboard/tree/${user.personId}`);
         }
