@@ -1,17 +1,17 @@
 import AuthLayout from "@/components/Layouts/AuthLayout";
 import SignUpForm from "@/components/molecules/SignUpForm";
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
 import Image from "next/image";
-import { GetServerSidePropsContext } from "next/types";
+// import { GetServerSidePropsContext } from "next/types";
 import BgImage from "public/assets/signup-bg.png";
 
 const SignInPage = () => (
   <AuthLayout type="website" hideLogo>
-    <div className="snap-y snap-start scroll-py-20 px-3 max-lg:overflow-y-scroll max-sm:h-screen max-sm:pt-8">
+    <div className="px-3 snap-y snap-start scroll-py-20 max-lg:overflow-y-scroll max-sm:h-screen max-sm:pt-8">
       <section className="container">
         <div className="">
           <div className="grid w-full items-center gap-2 sm:h-[calc(100vh-100px)] lg:grid-cols-2">
-            <div className="hidden h-full items-start justify-start pb-5 lg:flex">
+            <div className="items-start justify-start hidden h-full pb-5 lg:flex">
               <Image
                 src={BgImage}
                 alt=""
