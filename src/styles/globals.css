@@ -17,6 +17,11 @@ body {
   animation: toggleImage 1.5s infinite ease-in-out;
 }
 
+/* Temporary walk around to aviod overflow hidden on dashboard tree as the library sets a static width that i've not figured how to manipulate */
+div {
+  overflow: visible !important;
+}
+
 @keyframes toggleImage {
   0% {
     background-image: url("/assets/spiral-1.png");

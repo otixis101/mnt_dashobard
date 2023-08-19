@@ -135,11 +135,12 @@ const AboutProfileForm = () => {
         });
 
         if (res) {
+          const person = res.data;
           await update({
             ...session,
             user: {
               ...session.user,
-              personId: user.personId,
+              personId: person.personId,
             },
           });
 
