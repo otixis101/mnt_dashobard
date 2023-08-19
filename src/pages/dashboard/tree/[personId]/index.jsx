@@ -56,6 +56,14 @@ const FamilyTree = () => {
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
+  const parentsIds =
+    data && data.relationship
+      ? data.relationship.links
+        .filter((node) => node.id === personId)
+        .map((person) => person.parents)
+      : [];
+
+  console.log(parentsIds);
   console.log(data);
 
   const getTreeDataPreset = () => {
@@ -72,7 +80,16 @@ const FamilyTree = () => {
       );
 
       let nodes = data.relationship.links;
-      
+
+      const dataWithoutOwner = data.relationship.links.filter(
+        (node) => node.id !== data.user.personId
+      );
+
+      const dataWithoutSpouse = nodes.filter(
+        (node) =>
+          node.description !==
+          `Spouse: ${data.user.firstName} ${data.user.lastName}`
+      );
 
       const emptySpouse = {
         isEmpty: true,
@@ -80,12 +97,40 @@ const FamilyTree = () => {
         parents: [data.user.personId],
       };
 
-      const ownerWithSpouse = data.relationship.links
-        .filter((node) => node.parents)
-        .find((node) => node.parents.includes(data.user.personId));
+      const ownerSpouse = data.relationship.links.filter(
+        (node) =>
+          node.description ===
+          `Spouse: ${data.user.firstName} ${data.user.lastName}`
+      );
 
-      if (ownerWithSpouse === undefined) {
+      const ownerChildren = data.relationship.links.filter(
+        (node) => node.parents?.[0] === data.user.personId
+      );
+      const libraryFormattedOwnerChildren = ownerChildren.map((child) => ({
+        ...child,
+        parents:
+          ownerSpouse.length > 0 ? [ownerSpouse[0].id] : [data.user.personId],
+      }));
+
+      if (ownerSpouse === undefined) {
         nodes = [...nodes, emptySpouse];
+      } else {
+        nodes = [
+          ...dataWithoutSpouse,
+          { ...ownerSpouse[0], parents: [data.user.personId] },
+        ];
+      }
+
+      if (ownerChildren.length > 0 && ownerSpouse.length > 0) {
+        const dataWithoutChildren = dataWithoutSpouse.filter(
+          (node) => node.parents?.[0] !== data.user.personId
+        );
+
+        nodes = [
+          ...dataWithoutChildren,
+          { ...ownerSpouse[0], parents: [data.user.personId] },
+          ...libraryFormattedOwnerChildren,
+        ];
       }
 
       // add empty placeholder parent if the current user has just one parent
@@ -137,6 +182,8 @@ const FamilyTree = () => {
     }
   }, [data]);
 
+  console.log(treeData);
+
   const config = {
     pageFitMode: PageFitMode.AutoSize,
     enableMatrixLayout: true,
@@ -154,8 +201,6 @@ const FamilyTree = () => {
     lineItemsInterval: 30,
     enablePanning: true,
     defaultTemplateName: "info",
-    showExtraArrows: false,
-    offset: { x: -500, y: 0 },
     templates: [
       {
         name: "info",
@@ -171,8 +216,6 @@ const FamilyTree = () => {
               <Link
                 className={cn(
                   "flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
-                  // itemConfig.id === "empty-spouse" &&
-                  //   "-translate-y-5 scale-[.8]"
                 )}
                 href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}`}
               >
@@ -198,11 +241,20 @@ const FamilyTree = () => {
                   `/dashboard/tree/member/add?step=bio-data&ref=${itemConfig.parents[0]}`
                 )
               }
-              identity={itemConfig.id === personId ? "you" : "parent"}
+              identity={
+                itemConfig.id === personId
+                  ? "you"
+                  : itemConfig.parents?.includes(parentsIds[0])
+                    ? "siblings"
+                    : itemConfig.parents?.includes(personId)
+                      ? "spouse"
+                      : "parent"
+              }
               id={itemConfig.id}
               imageSrc={
-                itemConfig.image ||
-                "https://avatars.githubusercontent.com/u/191589"
+                itemConfig.id === personId
+                  ? data.user.profilePhotoUrl
+                  : itemConfig.image
               }
               personName={itemConfig.title}
               dob="Wed Jul 12 2023"
@@ -217,7 +269,7 @@ const FamilyTree = () => {
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
-        <div className="w-full mx-auto mt-5 md:w-2/4">
+        <div className="mx-auto mt-5 w-full md:w-2/4">
           <SearchBar
             value={searchTerms}
             onChange={(value) => setSearchTerms(value)}
@@ -226,8 +278,8 @@ const FamilyTree = () => {
           />
         </div>
         {/* Dashboard Header Section */}
-        <div className="z-10 flex justify-between w-full">
-          <h1 className="mt-5 text-2xl font-normal text-center text-slate-700">
+        <div className="z-10 flex w-full justify-between">
+          <h1 className="mt-5 text-center text-2xl font-normal text-slate-700">
             Your Family Tree
           </h1>
           <div className="flex gap-8">
@@ -239,12 +291,12 @@ const FamilyTree = () => {
               >
                 <AiFillMinusSquare
                   fill="hsla(255, 83%, 53%, 1)"
-                  className="text-2xl cursor-pointer"
+                  className="cursor-pointer text-2xl"
                 />
               </button>
-              <div className="flex px-2 rounded-lg w-max bg-midpup">
+              <div className="flex w-max rounded-lg bg-midpup px-2">
                 <input
-                  className="w-10 py-2 text-center bg-transparent outline-none"
+                  className="w-10 bg-transparent py-2 text-center outline-none"
                   value={zoomPercentage}
                   onChange={(e) => setZoomPercentage(e.target.value)}
                   type="text"
@@ -258,7 +310,7 @@ const FamilyTree = () => {
               >
                 <AiFillPlusSquare
                   fill="hsla(255, 83%, 53%, 1)"
-                  className="text-2xl cursor-pointer"
+                  className="cursor-pointer text-2xl"
                 />
               </button>
             </div>
