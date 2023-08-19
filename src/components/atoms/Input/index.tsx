@@ -24,7 +24,7 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const [ show, setShow ] = useState(false);
+  const [ shouldNotShowPassword, setShouldNotShowPassword ] = useState(true);
   const {
     label,
     type = "text",
@@ -61,7 +61,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
             <input
               {...prop}
               ref={ref}
-              type={type && password ? "password" : type}
+              type={shouldNotShowPassword && password ? type : "text" }
               name={name}
               className="w-full outline-transparent focus-visible:outline-none"
               id={id ?? name}
@@ -69,12 +69,12 @@ const Input = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
           </p>
           {
             password && <button
-              aria-label={show ? "Hide Password" : "Show Password"}
+              aria-label={shouldNotShowPassword ? "Hide Password" : "Show Password"}
               type="button"
-              onClick={() => setShow((c) => !c)}
+              onClick={() => setShouldNotShowPassword((c) => !c)}
               className="text-[hsla(0,_0%,_20%,_1)]"
             >
-              {show ? <BsFillEyeSlashFill size={20} /> : <BsEyeFill size={20} />}
+              {shouldNotShowPassword ? <BsFillEyeSlashFill size={20} /> : <BsEyeFill size={20} />}
             </button>
           }
         </span>
