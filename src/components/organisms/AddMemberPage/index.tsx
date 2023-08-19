@@ -215,6 +215,7 @@ const AddMemberPage = () => {
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"
+                    captionLayout="dropdown-buttons"
                     selected={date}
                     onSelect={setDate}
                     className="rounded-md border"
