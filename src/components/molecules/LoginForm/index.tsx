@@ -3,7 +3,7 @@ import Input from "@/components/atoms/Input";
 import { Formik, FormikHelpers } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
-import PasswordInput from "@/components/atoms/PasswordInput";
+// import PasswordInput from "@/components/atoms/PasswordInput";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
@@ -172,11 +172,13 @@ const LoginForm = () => {
               />
             </fieldset>
             <fieldset>
-              <PasswordInput
+              <Input
                 hint={
                   touched.password && errors.password ? errors.password : ""
                 }
+                isError={!!(touched.password && errors.password)}
                 required
+                password
                 name="password"
                 type="password"
                 onBlur={handleBlur}

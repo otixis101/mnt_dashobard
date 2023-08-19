@@ -108,7 +108,7 @@ const SignUpForm = () => {
         onSubmit={handleSignUp}
         validationSchema={AuthSchema}
       >
-        {({ handleSubmit, handleChange, values, handleBlur, errors }) => (
+        {({ handleSubmit, handleChange, values, handleBlur, errors, touched }) => (
           <form
             onSubmit={handleSubmit}
             className="mt-4 flex flex-col gap-4 space-y-1"
@@ -118,8 +118,8 @@ const SignUpForm = () => {
                 required
                 name="email"
                 type="email"
-                hint={errors.email}
-                isError={!!errors.email}
+                hint={touched.email && errors.email ? errors.email : ""}
+                isError={!!(errors.email && touched.email)}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.email}
@@ -133,8 +133,8 @@ const SignUpForm = () => {
                 password
                 name="password"
                 type="password"
-                hint={errors.password}
-                isError={!!errors.password}
+                hint={touched.password && errors.password ? errors.password : ""}
+                isError={!!(errors.password && touched.password)}
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.password}
