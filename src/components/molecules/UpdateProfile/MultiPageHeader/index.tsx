@@ -17,20 +17,20 @@ const MultiPageHeader = (props: Props) => {
     props;
 
   return (
-    <div className="relative mx-2">
-      <div className="absolute -top-10 right-0 flex items-center gap-4 xl:top-0">
+    <div className="relative mx-2 !overflow-hidden">
+      <div className="absolute right-0 flex items-center gap-4 -top-10 xl:top-0">
         {currentStep > 1 && (
           <button type="button" onClick={onPrevClick}>
-            <BsArrowLeft className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
+            <BsArrowLeft className="w-8 h-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
           </button>
         )}
         {onNextClick && currentStep < steps && (
           <button type="button" onClick={onNextClick}>
-            <BsArrowRight className="h-8 w-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
+            <BsArrowRight className="w-8 h-8 cursor-pointer md:-translate-x-10 xl:h-12 xl:w-14" />
           </button>
         )}
       </div>
-      <div className="mx-auto flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center mx-auto">
         <h3
           className={cn(
             "text-center text-xl font-medium text-gray-900 md:text-2xl",
@@ -39,7 +39,7 @@ const MultiPageHeader = (props: Props) => {
         >
           {text}
         </h3>
-        <div className="mx-auto mt-8 w-full max-w-xl px-4">
+        <div className="w-full max-w-xl px-4 mx-auto mt-8">
           <ProgressIndicator steps={steps} currentStep={currentStep} />
         </div>
       </div>

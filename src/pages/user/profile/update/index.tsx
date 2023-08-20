@@ -86,7 +86,7 @@ const UserProfile = () => {
   return (
     <AppLayout>
       <section className="relative flex items-center justify-center px-4 md:min-h-[calc(100vh-100px)]">
-        <div className="w-full space-y-5 min-h-app max-md:py-10 max-md:pb-20 md:space-y-7 md:pt-20">
+        <div className="w-full space-y-5 !overflow-auto min-h-app max-md:py-10 max-md:pb-20 md:space-y-7 md:pt-20">
           <MultiPageHeader
             text={PageHeader[dummyStep]}
             steps={AllSteps.length}

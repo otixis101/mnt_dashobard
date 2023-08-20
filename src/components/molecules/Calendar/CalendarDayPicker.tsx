@@ -31,8 +31,7 @@ const DayPickerCalendar = ({
       nav_button: clsx(
         "h-7 w-7 bg-transparent border inline-flex rounded-md  items-center justify-center p-0 opacity-50 hover:opacity-100"
       ),
-      // nav_button_previous: "absolute left-1",
-      // nav_button_next: "absolute right-1",
+
       table: "w-full border-collapse space-y-1",
       head_row: "flex",
       head_cell: " rounded-md w-9 font-normal text-[0.8rem]",
@@ -48,8 +47,6 @@ const DayPickerCalendar = ({
       day_hidden: "invisible",
       ...classNames,
     }}
-    fromYear={2015} 
-    toYear={2025}
     components={{
       IconLeft: ({ ...props }) => <HiArrowSmLeft className="w-4 h-4" />,
       IconRight: ({ ...props }) => <HiArrowSmRight className="w-4 h-4" />,

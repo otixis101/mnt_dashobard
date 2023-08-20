@@ -19,7 +19,7 @@ const ProgressIndicator = (props: Props) => {
   return (
     <RadixProgress.Root
       className={cn(
-        "relative h-[7px] w-full overflow-hidden rounded-full bg-[hsla(0,_0%,_85%,_1)]",
+        "relative h-[7px] w-full !overflow-hidden rounded-full bg-[hsla(0,_0%,_85%,_1)]",
         wrapperClass
       )}
       style={{

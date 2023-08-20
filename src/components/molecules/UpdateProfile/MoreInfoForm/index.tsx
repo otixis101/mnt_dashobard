@@ -157,10 +157,11 @@ const MoreInfoForm: FC = () => {
 
   useEffect(() => {
     if (calenderOpen) {
-      dateInputRef.current?.focus();
+      // Using this timeout to allow the popover to open before focusing on the input
+      setTimeout(() => {
+        dateInputRef.current?.focus();
+      }, 1500);
     }
-
-    console.log(inputProps.value);
   }, [calenderOpen]);
 
   return (
