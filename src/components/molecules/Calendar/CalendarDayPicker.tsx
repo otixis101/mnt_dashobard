@@ -48,8 +48,8 @@ const DayPickerCalendar = ({
       ...classNames,
     }}
     components={{
-      IconLeft: ({ ...props }) => <HiArrowSmLeft className="w-4 h-4" />,
-      IconRight: ({ ...props }) => <HiArrowSmRight className="w-4 h-4" />,
+      IconLeft: () => <HiArrowSmLeft className="w-4 h-4" />,
+      IconRight: () => <HiArrowSmRight className="w-4 h-4" />,
     }}
     {...props}
   />
