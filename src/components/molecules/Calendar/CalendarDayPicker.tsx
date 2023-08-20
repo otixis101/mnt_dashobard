@@ -48,7 +48,7 @@ const DayPickerCalendar = ({
       day_hidden: "invisible",
       ...classNames,
     }}
-    fromYear={2015} 
+    fromYear={1732} 
     toYear={2025}
     components={{
       IconLeft: ({ ...props }) => <HiArrowSmLeft className="h-4 w-4" />,
