@@ -59,7 +59,7 @@ const checkboxFields = [
     ],
   },
 ] as const;
-type RadioFields = (typeof checkboxFields)[number]["name"];
+type RadioFields = (typeof checkboxFields)[ number ][ "name" ];
 
 const FirstForm = () => {
   const [status, setStatus] = useState("Living");
@@ -92,13 +92,13 @@ const FirstForm = () => {
   const { query } = router;
 
   const handleRadioOnChange = (key: RadioFields, value: string) => {
-    setRadioValues((prev) => ({ ...prev, [key]: value }));
+    setRadioValues((prev) => ({ ...prev, [ key ]: value }));
   };
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
-    console.log(files?.[0]);
+    console.log(files?.[ 0 ]);
     if (files) {
       setFile(files[0]);
       const reader = new FileReader();
@@ -116,7 +116,7 @@ const FirstForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((c) => ({ ...c, [name]: value }));
+    setFormData((c) => ({ ...c, [ name ]: value }));
   };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -141,20 +141,20 @@ const FirstForm = () => {
       formDataPayload.append("occupation", formData.occupation);
       formDataPayload.append("address", formData.address);
       formDataPayload.append("relationship", formData.relationship);
-      formDataPayload.append("relativeId", relative.personId ?? "");
+      formDataPayload.append("relativeId", relative?.personId ?? "");
       formDataPayload.append("reference", String(query.reference));
       formDataPayload.append("maritalStatus", radioValues.maritalStatus);
       setLoading(true);
       try {
         const res = await Axios.post(`/person/family/add`, formDataPayload, {
           headers: {
-            Authorization: `Bearer ${user.accessToken}`,
+            Authorization: `Bearer ${ user.accessToken }`,
           },
         });
 
         if (res) {
           toast.success("User profile updated successfully");
-          router.push(`/dashboard/tree/${user.personId}`);
+          router.push(`/dashboard/tree/${ user.personId }`);
         }
       } catch (error) {
         toast.error(String(error));
@@ -172,7 +172,7 @@ const FirstForm = () => {
         <div className="grid grid-cols-1 gap-4 gap-x-8 sm:mb-4 sm:grid-cols-2">
           <Radio
             label=" Life status"
-            options={["Living", "Deceased"]}
+            options={[ "Living", "Deceased" ]}
             value={status}
             onValueChange={setStatus}
             className="capitalize"
@@ -186,7 +186,7 @@ const FirstForm = () => {
                   label={label}
                   parentClass="w-full"
                   options={options}
-                  value={radioValues[name]}
+                  value={radioValues[ name ]}
                   onValueChange={(val) => handleRadioOnChange(name, val)}
                 />
               </fieldset>
@@ -204,7 +204,7 @@ const FirstForm = () => {
             <Input
               {...opt}
               key={opt.name}
-              value={formData[opt.name]}
+              value={formData[ opt.name ]}
               onChange={handleChange}
             />
           ))}
@@ -227,7 +227,7 @@ const FirstForm = () => {
                     <Input
                       disabled
                       placeholder="Date of birth"
-                      value={date ? `${format(date, "PPP")}` : ""}
+                      value={date ? `${ format(date, "PPP") }` : ""}
                       label=""
                       parentClass="w-full"
                     />
