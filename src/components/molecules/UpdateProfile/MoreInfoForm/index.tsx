@@ -98,7 +98,7 @@ const MoreInfoForm: FC = () => {
       firstName,
       lastName,
       middleName,
-      dateOfBirth: inputProps.value,
+      dateOfBirth: new Date(inputProps.value as string),
       mothersMaidenName: mothersName,
       homeTown,
       phoneNumber,
