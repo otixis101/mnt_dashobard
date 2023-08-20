@@ -13,6 +13,8 @@ const Verify = () => {
   const [countDown, setCountDown] = useState(60);
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(":::::::::::;; in verify");
+  
   const handleResendEmail = async () => {
     setIsLoading(true);
     try {
@@ -71,10 +73,13 @@ const Verify = () => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
+  const { personId } = session?.user ?? {};
+  console.log("::::::::::::::::::::: in verify props");
+  
   if (session) {
     return {
       redirect: {
-        destination: "/dashboard",
+        destination: `/dashboard/tree/${personId}`,
         permanent: false,
       },
     };

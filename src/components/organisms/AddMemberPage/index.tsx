@@ -106,6 +106,8 @@ const AddMemberPage = () => {
       isUser: false,
     };
 
+    console.log("::::::::::: date date", inputProps.value);
+
     try {
       setLoading(true);
 
@@ -152,7 +154,7 @@ const AddMemberPage = () => {
     }
   }, [calenderOpen]);
 
-  console.log(new Date(inputProps.value as unknown as string));
+  console.log(":::::::::: inputProps:", new Date(inputProps.value as unknown as string));
 
   useEffect(() => {
     if (selectedCountry) {
