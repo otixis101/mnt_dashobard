@@ -64,6 +64,7 @@ type RadioFields = (typeof checkboxFields)[number]["name"];
 const FirstForm = () => {
   const [status, setStatus] = useState("Living");
   const [file, setFile] = useState<File>();
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
   const [facts, setFacts] = useState<string[]>([]);
   const [date, setDate] = useState<Date>();
   const [formData, setFormData] = useState({
@@ -78,8 +79,6 @@ const FirstForm = () => {
 
   // This is temporary to remove typescript error message
   const relative = createPersonData as DbPersonWithOutSuggestion;
-
-  console.log(relative);
 
   const [loading, setLoading] = useState(false);
   const [radioValues, setRadioValues] = useState<Record<RadioFields, string>>({
@@ -102,6 +101,13 @@ const FirstForm = () => {
     console.log(files?.[0]);
     if (files) {
       setFile(files[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(files[0]);
+      reader.onload = (event) => {
+        setProfilePhotoUrl(event.target?.result as string);
+      };
+
+      console.log(profilePhotoUrl);
     } else {
       toast.error("Please upload a file");
     }
@@ -127,7 +133,7 @@ const FirstForm = () => {
 
       const formDataPayload = new FormData();
 
-      formDataPayload.append("profilePhotoUrl", file as File);
+      formDataPayload.append("profilePhotoUrl", profilePhotoUrl);
       formDataPayload.append("placeOfBirth", formData.placeOfBirth);
       formDataPayload.append("facts", facts.join(","));
       formDataPayload.append("deathOfDeath", date ? String(date) : "");
@@ -138,7 +144,6 @@ const FirstForm = () => {
       formDataPayload.append("relativeId", relative.personId ?? "");
       formDataPayload.append("reference", String(query.reference));
       formDataPayload.append("maritalStatus", radioValues.maritalStatus);
-
       setLoading(true);
       try {
         const res = await Axios.post(`/person/family/add`, formDataPayload, {
@@ -217,7 +222,7 @@ const FirstForm = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
+                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
                   >
                     <Input
                       disabled
@@ -228,14 +233,14 @@ const FirstForm = () => {
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto bg-white p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-white">
                   <DayPickerCalendar
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="rounded-md border"
+                    className="border rounded-md"
                   />
                 </PopoverContent>
               </Popover>
