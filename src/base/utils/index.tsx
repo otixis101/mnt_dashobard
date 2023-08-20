@@ -75,3 +75,9 @@ export const getRandomClass = () => {
   const randomIndex = Math.floor(Math.random() * classes.length);
   return classes[randomIndex];
 };
+
+export const getUserInitials = (name: string) => {
+  const [firstName, lastName] = name.split(" ");
+
+  return `${firstName[0]}${lastName[0]}`;
+};

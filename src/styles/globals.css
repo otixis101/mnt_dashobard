@@ -18,9 +18,9 @@ body {
 }
 
 /* Temporary walk around to aviod overflow hidden on dashboard tree as the library sets a static width that i've not figured how to manipulate */
-div {
+/* div {
   overflow: visible !important;
-}
+} */
 
 @keyframes toggleImage {
   0% {

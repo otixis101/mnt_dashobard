@@ -9,7 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/atoms/Popover";
-import { format } from "date-fns";
 import { Formik } from "formik";
 import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
 import { toast } from "react-toastify";
@@ -17,6 +16,7 @@ import { useSession } from "next-auth/react";
 import useStore from "@/base/store/";
 import { useRouter } from "next/router";
 import { DayPickerCalendar } from "@/components/molecules/Calendar/CalendarDayPicker";
+import { useInput } from "react-day-picker";
 
 interface FormUserInfo {
   firstName: string;
@@ -64,9 +64,10 @@ const fields = [
 const AddMemberPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
+  const calendarRef = React.useRef<HTMLInputElement>(null);
   const { ref } = router.query;
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
-  const [date, setDate] = useState<Date>();
+  const [calenderOpen, setCalenderOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedCountry, setSelctedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -75,6 +76,13 @@ const AddMemberPage = () => {
     name: country,
     value: country,
   }));
+
+  const { inputProps, dayPickerProps } = useInput({
+    defaultSelected: new Date(),
+    fromYear: 1900,
+    toYear: new Date().getFullYear(),
+    required: true,
+  });
 
   const { setPersonData } = useStore();
 
@@ -89,7 +97,7 @@ const AddMemberPage = () => {
       firstName,
       lastName,
       middleName,
-      dateOfBirth: date,
+      dateOfBirth: new Date(inputProps.value as string),
       mothersMaidenName: mothersName,
       homeTown,
       phoneNumber,
@@ -135,6 +143,16 @@ const AddMemberPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (calenderOpen) {
+      setTimeout(() => {
+        calendarRef.current?.focus();
+      }, 1500);
+    }
+  }, [calenderOpen]);
+
+  console.log(new Date(inputProps.value as unknown as string));
 
   useEffect(() => {
     if (selectedCountry) {
@@ -195,30 +213,33 @@ const AddMemberPage = () => {
                 Enter your date of birth
               </p>
 
-              <Popover>
+              <Popover
+                onOpenChange={(prevValue) => setCalenderOpen(!prevValue)}
+                defaultOpen={calenderOpen}
+              >
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
+                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
                   >
                     <Input
-                      disabled
-                      placeholder="Date of birth"
-                      value={date ? `${format(date, "PPP")}` : ""}
+                      ref={calendarRef}
+                      {...inputProps}
                       label=""
                       parentClass="w-full"
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto bg-white p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-white">
                   <DayPickerCalendar
                     // block user's from selecting a future date
-                    toDate={new Date()}
+
                     mode="single"
-                    captionLayout="dropdown-buttons"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border"
+                    // captionLayout="dropdown-buttons"
+                    {...dayPickerProps}
+                    // selected={date}
+                    // onSelect={setDate}
+                    className="border rounded-md"
                   />
                 </PopoverContent>
               </Popover>

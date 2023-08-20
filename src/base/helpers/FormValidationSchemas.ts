@@ -4,9 +4,9 @@ export const AuthSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
     .min(6, "min password length is 6 chars.")
-    .matches(/[A-Z]/, "Password must contain at least 1 uppercase letter")
-    .matches(/[a-z]/, "Password must contain at least 1 lowercase letter")
-    .matches(/[0-9]/, "Password must contain at least 1 number")
+    // .matches(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+    // .matches(/[a-z]/, "Password must contain at least 1 lowercase letter")
+    // .matches(/[0-9]/, "Password must contain at least 1 number")
     .required("password is required"),
 });
 

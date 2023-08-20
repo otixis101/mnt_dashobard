@@ -9,13 +9,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/atoms/Popover";
-import { format } from "date-fns";
 import { Formik } from "formik";
 import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
 import useStore from "@/base/store/";
 import { useRouter } from "next/router";
+import { useInput } from "react-day-picker";
 import { DayPickerCalendar } from "../../Calendar/CalendarDayPicker";
 
 interface FormUserInfo {
@@ -65,15 +65,25 @@ const MoreInfoForm: FC = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
-  const [date, setDate] = useState<Date>();
+
+  const dateInputRef = React.useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [selectedCountry, setSelctedCountry] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [states, setStates] = useState<DataProps[]>([]);
+  const [calenderOpen, setCalenderOpen] = useState(false);
   const countries = countryArrray.map(({ country }) => ({
     name: country,
     value: country,
   }));
+
+  const { inputProps, dayPickerProps } = useInput({
+    defaultSelected: new Date(),
+    fromYear: 1900,
+    toYear: 2023,
+    format: "PPP",
+    required: true,
+  });
 
   const { setPersonData } = useStore();
 
@@ -88,7 +98,7 @@ const MoreInfoForm: FC = () => {
       firstName,
       lastName,
       middleName,
-      dateOfBirth: date,
+      dateOfBirth: new Date(inputProps.value as string),
       mothersMaidenName: mothersName,
       homeTown,
       phoneNumber,
@@ -145,6 +155,15 @@ const MoreInfoForm: FC = () => {
     }
   }, [selectedCountry]);
 
+  useEffect(() => {
+    if (calenderOpen) {
+      // Using this timeout to allow the popover to open before focusing on the input
+      setTimeout(() => {
+        dateInputRef.current?.focus();
+      }, 1500);
+    }
+  }, [calenderOpen]);
+
   return (
     <Formik
       initialValues={{
@@ -189,29 +208,29 @@ const MoreInfoForm: FC = () => {
                 Enter your date of birth
               </p>
 
-              <Popover>
+              <Popover
+                onOpenChange={(prevValue) => setCalenderOpen(!prevValue)}
+                defaultOpen={calenderOpen}
+              >
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
+                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
                   >
                     <Input
-                      disabled
-                      placeholder="Date of birth"
-                      value={date ? `${format(date, "PPP")}` : ""}
+                      ref={dateInputRef}
                       label=""
+                      {...inputProps}
                       parentClass="w-full"
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto bg-white p-0">
+                <PopoverContent align="start" className="w-auto p-0 bg-white">
                   <DayPickerCalendar
                     // block user's from selecting a future date
-                    toDate={new Date()}
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="rounded-md border"
+
+                    {...dayPickerProps}
+                    className="border rounded-md"
                   />
                 </PopoverContent>
               </Popover>
