@@ -110,7 +110,7 @@ const FamilyTree = () => {
           ownerSpouse.length > 0 ? [ownerSpouse[0].id] : [data.user.personId],
       }));
 
-      if (ownerSpouse === undefined) {
+      if (!ownerSpouse.length) {
         nodes = [...nodes, emptySpouse];
       } else {
         nodes = [
