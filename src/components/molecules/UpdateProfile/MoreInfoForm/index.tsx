@@ -80,8 +80,7 @@ const MoreInfoForm: FC = () => {
   const { inputProps, dayPickerProps } = useInput({
     defaultSelected: new Date(),
     fromYear: 1900,
-    toYear: 2023,
-    format: "PPP",
+    toYear: new Date().getFullYear(),
     required: true,
   });
 
@@ -215,7 +214,7 @@ const MoreInfoForm: FC = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
+                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
                   >
                     <Input
                       ref={dateInputRef}
@@ -225,12 +224,12 @@ const MoreInfoForm: FC = () => {
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0 bg-white">
+                <PopoverContent align="start" className="w-auto bg-white p-0">
                   <DayPickerCalendar
                     // block user's from selecting a future date
 
                     {...dayPickerProps}
-                    className="border rounded-md"
+                    className="rounded-md border"
                   />
                 </PopoverContent>
               </Popover>
