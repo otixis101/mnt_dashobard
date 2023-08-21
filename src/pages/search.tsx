@@ -1,5 +1,6 @@
 import AppLayout from "@/components/Layouts/AppLayout";
 import SearchCard from "@/components/atoms/Searchcard";
+import PhotoFlowLoader from "@/components/molecules/PhotoFlow/PhotoFlowLoader";
 import SearchBar from "@/components/molecules/SearchBar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -57,7 +58,11 @@ const SearchResultPage = () => {
         />
 
         <div className="mt-10 flex flex-wrap gap-6">
-          {isLoading && <p className="w-full text-center">loading...</p>}
+          {isLoading && (
+            <div className="mx-auto text-center">
+              <PhotoFlowLoader />
+            </div>
+          )}
           {data &&
             data.length > 0 &&
             data.map(({ _id, profilePhotoUrl, firstName, lastName }) => (
