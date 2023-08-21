@@ -10,11 +10,12 @@ import Button from "@/components/atoms/Button";
 import { RxDotFilled } from "react-icons/rx";
 import Input from "@/components/atoms/Input";
 import { useSession } from "next-auth/react";
+import Avatar from "@/components/atoms/Avatar";
 
 interface Props {
   mode: boolean;
   onChange: (e?: boolean) => void;
-  imgSrc: string | StaticImageData;
+  imgSrc?: string | StaticImageData;
   uploadAction: () => void;
   age: number;
   userProfile: {
@@ -148,15 +149,21 @@ const UserProfileEditPopup = ({
       <div className="flex flex-col md:flex-row">
         <div className="flex py-4 md:w-[30%]">
           <div className="flex flex-col items-center">
-            <Image
-              src={imgSrc}
-              alt="user"
-              width="100"
-              height="100"
-              className="h-36 w-32 rounded-lg md:h-52 md:w-48"
-            />
+            <div className="relative h-36 w-32 overflow-hidden rounded-lg md:h-52 md:w-48">
+              {imgSrc ? (
+                <Image src={imgSrc} alt="user" width="100" height="100" />
+              ) : (
+                <Avatar
+                  name={{
+                    firstName: userProfile?.firstName,
+                    lastName: userProfile.lastName,
+                  }}
+                  className="max-md:text-5xl"
+                />
+              )}
+            </div>
             <Button intent="outline" className="my-4" onClick={uploadAction}>
-              upload
+              Upload
             </Button>
           </div>
           <div className="m-2 block md:hidden">
@@ -166,7 +173,7 @@ const UserProfileEditPopup = ({
               </h4>
               <div className="flex items-center text-gray-700">
                 <RxDotFilled className="text-primary" />
-                spouse
+                {userProfile.maritalStatus}
               </div>
             </span>
             <span className="mb-2 block text-sm font-medium capitalize text-gray-600 md:text-xl">
@@ -189,7 +196,7 @@ const UserProfileEditPopup = ({
               </h4>
               <div className="flex items-center text-gray-700">
                 <RxDotFilled className="text-primary" />
-                spouse
+                {userProfile.maritalStatus}
               </div>
             </span>
             <span className="mb-2 block text-lg font-medium capitalize text-gray-600 md:text-xl">

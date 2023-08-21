@@ -5,7 +5,6 @@ import Logo from "public/logo-alt.webp";
 import { useState } from "react";
 import useMenuOnScroll from "@/base/hooks/useMenuOnScroll";
 import LogoWhite from "public/logo.webp";
-// import Avatar from "@/components/atoms/Avatar";
 import { useSession, signOut } from "next-auth/react";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import {

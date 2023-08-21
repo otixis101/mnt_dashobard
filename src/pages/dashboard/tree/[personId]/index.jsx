@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // @ts-ignore
 import { useGesture } from "@use-gesture/react";
 import { FamDiagram } from "basicprimitivesreact";
@@ -59,8 +60,8 @@ const FamilyTree = () => {
   const parentsIds =
     data && data.relationship
       ? data.relationship.links
-        .filter((node) => node.id === personId)
-        .map((person) => person.parents)
+          .filter((node) => node.id === personId)
+          .map((person) => person.parents)
       : [];
 
   const getTreeDataPreset = () => {
@@ -242,10 +243,10 @@ const FamilyTree = () => {
                 itemConfig.id === personId
                   ? "you"
                   : itemConfig.parents?.includes(parentsIds[0])
-                    ? "siblings"
-                    : itemConfig.parents?.includes(personId)
-                      ? "spouse"
-                      : "parent"
+                  ? "siblings"
+                  : itemConfig.parents?.includes(personId)
+                  ? "spouse"
+                  : "parent"
               }
               id={itemConfig.id}
               imageSrc={
@@ -254,8 +255,8 @@ const FamilyTree = () => {
                   : itemConfig.image
               }
               personName={itemConfig.title}
-              dob="Wed Jul 12 2023"
-              age={20}
+              // dob="Wed Jul 12 2023"
+              // age={20}
             />
           );
         },

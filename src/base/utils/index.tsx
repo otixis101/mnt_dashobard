@@ -62,14 +62,18 @@ export const getAgeByDate = (date: string) => {
   return age;
 };
 
+/**
+ * add classes here to the tailwind dump folder
+ * to ensure they are generated during build time
+ */
 export const getRandomClass = () => {
   const classes: string[] = [
     "bg-[#ACF6AA]",
     "bg-[#F9D978]",
-    "bg-[#877FB6]",
+    "bg-[#877FB6] text-white",
     "bg-[#ACF6AA]",
     "bg-[#F9D978]",
-    "bg-[#877FB6]",
+    "bg-[#877FB6] text-white",
   ];
 
   const randomIndex = Math.floor(Math.random() * classes.length);

@@ -23,7 +23,7 @@ const Avatar = (props: Props) => {
   return (
     <div
       className={cn(
-        "flex h-[40px] w-[40px] items-center justify-center rounded-full bg-[#435466] text-xl font-bold uppercase text-white md:h-[50px] md:w-[50px] md:text-2xl",
+        "absolute bottom-0 flex h-full w-full items-center justify-center bg-primary/40 text-8xl uppercase tracking-wider text-white",
         className
       )}
     >

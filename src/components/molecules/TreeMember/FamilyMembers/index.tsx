@@ -1,30 +1,20 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
 import { cn } from "@/base/utils";
-
-import user1 from "public/assets/user3.png";
-import user2 from "public/assets/user4.png";
-import user3 from "public/assets/user5.png";
-import user4 from "public/assets/user6.png";
-import user5 from "public/assets/user7.png";
+import Avatar from "@/components/atoms/Avatar";
+import useFetchImmediateFamily from "@/base/hooks/api/useFetchImmediateFamily";
+import PhotoFlowLoader from "../../PhotoFlow/PhotoFlowLoader";
 
 interface CardProps {
-  label?: string;
-  img: string | StaticImageData;
   name: string;
+  img?: string | StaticImageData;
+  label?: string;
   className?: string;
 }
 
-const parents = [
-  { name: "Ugonna Miller", img: user1 },
-  { name: "chimma miller", img: user2 },
-];
-
-const childs = [
-  { name: "julius miller", desc: "spouse", img: user3 },
-  { name: "june miller", img: user4 },
-  { name: "julian miller jnr", img: user5 },
-];
+interface TRenderFamily extends DbContributor {
+  relationShip?: string;
+}
 
 const CardBox = ({ label, img, name, className }: CardProps) => (
   <div
@@ -34,7 +24,13 @@ const CardBox = ({ label, img, name, className }: CardProps) => (
       className
     )}
   >
-    <Image src={img} alt="user" className="mr-2 h-12 w-12 rounded-md" />
+    <div className="relative mr-2 h-12 w-12 overflow-hidden rounded-md">
+      {img ? (
+        <Image src={img} alt="user" fill className="" />
+      ) : (
+        <Avatar name={name} className="text-3xl" />
+      )}
+    </div>
     <h2 className="mr-2 text-[1rem] font-medium capitalize md:text-lg">
       {name}
     </h2>
@@ -46,31 +42,82 @@ const CardBox = ({ label, img, name, className }: CardProps) => (
   </div>
 );
 
-const FamilyMembers = () => (
-  <div className="flex flex-col md:mx-8 md:w-7/12 md:p-4">
-    <h2 className="text-2xl font-extrabold capitalize text-primary md:text-[2rem]">
-      Family Members
-    </h2>
-    <div className="">
-      <h4 className="mb-1 text-lg font-medium text-gray-600">Parents</h4>
-      {parents.map((parent) => (
-        <CardBox key={parent.name} name={parent.name} img={parent.img} />
-      ))}
-    </div>
-    <div className="">
-      <h4 className="mb-1 text-lg font-medium text-gray-600">
-        Spouse & children
-      </h4>
-      {childs.map((child) => (
+const renderFamilyCard = (data: TRenderFamily[]) => {
+  if (data.length > 0)
+    return data.map(
+      ({ firstName, lastName, relationShip, profilePhotoUrl }) => (
         <CardBox
-          key={child.name}
-          label={child.desc}
-          name={child.name}
-          img={child.img}
+          key={firstName + lastName}
+          name={`${firstName} ${lastName}`}
+          img={profilePhotoUrl}
+          label={relationShip}
         />
-      ))}
-    </div>
+      )
+    );
+
+  return <div className="py-4">No available data found</div>;
+};
+
+interface IFamilyCard {
+  title: string;
+  children: React.ReactNode;
+}
+
+const FamilyCard = ({ children, title }: IFamilyCard) => (
+  <div>
+    <h4 className="mb-1 text-lg font-medium text-gray-600">{title}</h4>
+    {children}
   </div>
 );
+
+const FamilyMembers = ({ personId }: { personId: string }) => {
+  const { data, isLoading } = useFetchImmediateFamily(personId);
+
+  const addRelationShip = (
+    arg: DbContributor[],
+    relationShip?: string
+  ): TRenderFamily[] => {
+    if (!relationShip) return arg;
+
+    return arg.map((family) => ({
+      ...family,
+      relationShip,
+    }));
+  };
+
+  return (
+    <div className="flex w-full flex-col space-y-4 md:mx-8 md:w-7/12 md:p-4">
+      {isLoading ? (
+        <PhotoFlowLoader className="h-auto" />
+      ) : (
+        <React.Fragment>
+          <h2 className="text-2xl font-extrabold capitalize text-primary md:text-[2rem]">
+            Family Members
+          </h2>
+          {data ? (
+            <React.Fragment>
+              <FamilyCard title="Parents">
+                {renderFamilyCard(data.parents)}
+              </FamilyCard>
+              <FamilyCard title="Spouse & Children">
+                {renderFamilyCard([
+                  ...addRelationShip(data.spouse, "spouse"),
+                  ...data.children,
+                ])}
+              </FamilyCard>
+              <FamilyCard title="Siblings">
+                {renderFamilyCard(data.siblings)}
+              </FamilyCard>
+            </React.Fragment>
+          ) : (
+            <div className="pt-10 text-left">
+              No family member data to display
+            </div>
+          )}
+        </React.Fragment>
+      )}
+    </div>
+  );
+};
 
 export default FamilyMembers;

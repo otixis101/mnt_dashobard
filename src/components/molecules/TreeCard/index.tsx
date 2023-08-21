@@ -14,8 +14,8 @@ interface TreeCardProps {
   imageSrc: string;
   personName: string;
   id: string;
-  dob: string;
-  age: number;
+  dob?: string;
+  age?: number;
   identity?: "you" | string;
   hasAddButton?: boolean;
   onPlusClick?: () => void;
@@ -106,10 +106,12 @@ const TreeCard = ({
             <div className="w-2 h-2 bg-green-500 border rounded-full " />
             <p className="text-[10px]">{identity}</p>
           </div>
-          <p className="text-sm">
-            {format(new Date(dob ?? "Wed Jul 12 2023"), "PPP")}
-          </p>
-          <p className="text-sm">{age} Years</p>
+          {dob && (
+            <p className="text-sm">
+              {format(new Date(dob ?? "Wed Jul 12 2023"), "PPP")}
+            </p>
+          )}
+          {age && <p className="text-sm">{age} Years</p>}
         </div>
         <Link
           href={`/user/${id}`}

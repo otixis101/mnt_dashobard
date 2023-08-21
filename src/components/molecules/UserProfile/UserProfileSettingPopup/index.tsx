@@ -140,17 +140,27 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
           or
         </span>
         <h6 className="capitalize text-gray-800">Upload from</h6>
-        <div className="mx-auto mb-3 flex items-center [&>span:first-child]:mr-3">
+        <div className="mx-auto mb-3 flex items-center gap-2">
           <button onClick={handlePickerOpen}>
-            <Image src={googleDrive} alt="google drive img" className="" />
+            <Image
+              width={120}
+              src={googleDrive}
+              alt="google drive img"
+              className=""
+            />
           </button>
           <DropboxChooser
             appKey={process.env.NEXT_PUBLIC_DROPBOX_API_KEY as string}
             success={(files: DropboxFile[]) => onSuccess(files)}
             multiselect={false}
           >
-            <button>
-              <Image src={dropBox} alt="google drive img" className="" />
+            <button className="mt-2">
+              <Image
+                width={100}
+                src={dropBox}
+                alt="google drive img"
+                className=""
+              />
             </button>
           </DropboxChooser>
         </div>

@@ -15,7 +15,7 @@ const TreeMemberHeader = () => (
     </form>
     <nav className="flex items-center justify-between">
       <h3 className="flex items-center text-xl font-bold">
-        Dash board
+        Dashboard
         <span>
           <RxCaretRight />
         </span>

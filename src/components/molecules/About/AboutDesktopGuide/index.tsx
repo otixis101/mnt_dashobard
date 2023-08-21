@@ -11,7 +11,7 @@ const AboutDesktopGuide = () => (
   <section>
     <div className="bg-midpup p-10 sm:py-5">
       <div className="container mx-auto md:px-5 lg:px-0">
-        <div className="grid items-center border sm:grid-cols-2 sm:gap-10">
+        <div className="grid items-center sm:grid-cols-2 sm:gap-10">
           <div className="mx-auto px-3 sm:order-2 sm:px-0">
             <Image src={ConnectWithFamily} alt="" />
           </div>

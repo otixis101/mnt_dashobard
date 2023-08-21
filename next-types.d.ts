@@ -69,6 +69,7 @@ interface DbContributor {
   firstName: string;
   middleName: string;
   lastName: string;
+  profilePhotoUrl?: string;
 }
 
 interface DbSuggestionPerson {

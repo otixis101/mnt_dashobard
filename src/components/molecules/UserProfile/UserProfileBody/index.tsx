@@ -9,16 +9,12 @@ import { GoShieldCheck } from "react-icons/go";
 import { AiFillStar } from "react-icons/ai";
 
 import User from "public/assets/user-1.png";
-import Tree from "public/assets/tree-icon.png";
+import TreeIcon from "public/assets/icon/tree-icon.png";
 
 import { format } from "date-fns";
 import Button from "@/components/atoms/Button";
-import {
-  cn,
-  getAgeByDate,
-  getRandomClass,
-  getUserInitials,
-} from "@/base/utils";
+import { cn, getAgeByDate, getRandomClass } from "@/base/utils";
+import Avatar from "@/components/atoms/Avatar";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import useStore from "@/base/store";
 import UserProfileAlbums from "../UserProfileAlbums";
@@ -28,7 +24,7 @@ import UserProfileSettingPopup from "../UserProfileSettingPopup";
 type ModeOptions = "edit" | "settings";
 
 const Index = () => {
-  const [mode, setMode] = useState<ModeOptions>("edit");
+  const [mode, setMode] = useState<ModeOptions>();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { data: session } = useSession();
@@ -51,7 +47,7 @@ const Index = () => {
 
   const onChange = (modelOption?: ModeOptions) => {
     setOpenModal(true);
-    setMode(modelOption as ModeOptions);
+    setMode(modelOption);
   };
 
   return (
@@ -60,7 +56,7 @@ const Index = () => {
         <UserProfileEditPopup
           mode={openModal}
           onChange={() => onChange()}
-          imgSrc={data?.profilePhotoUrl ?? User}
+          imgSrc={data?.profilePhotoUrl}
           userProfile={data ?? {}}
           uploadAction={() => onChange("settings")}
           age={getAgeByDate(data?.dateOfBirth ?? "")}
@@ -89,26 +85,18 @@ const Index = () => {
                     className="md:h-68 mx-auto md:w-[60rem]"
                   />
                 ) : (
-                  <div className="absolute bottom-0 flex items-center justify-center w-full h-full tracking-wider text-white uppercase bg-primary/40 text-8xl">
-                    {getUserInitials(getFullName())}
-                  </div>
+                  <Avatar name={getFullName()} />
                 )}
               </div>
-              <div className="flex items-center w-full my-4">
-                <Button
-                  intent="outline"
-                  className="mr-1 md:mr-2"
-                  onClick={() => onChange("edit")}
-                >
+              <div className="my-4 flex w-full gap-2">
+                <Button intent="outline" onClick={() => onChange("edit")}>
                   Edit
                 </Button>
-                <Button href="/dashboard/account/settings" className="">
-                  settings
-                </Button>
+                <Button href="/account/settings">Settings</Button>
               </div>
             </div>
 
-            <div className="flex flex-col w-full p-10 bg-gray-100 rounded-lg md:mx-8">
+            <div className="flex w-full flex-col rounded-lg bg-gray-100 p-10 md:mx-8">
               <div className="mb-2">
                 <span className="flex ">
                   <h4 className="mr-2 text-[1.7rem] font-extrabold capitalize text-primary md:text-[2.2rem]">
@@ -120,7 +108,7 @@ const Index = () => {
                     <AiFillStar className="text-yellow-500" />
                   </div>
                 </span>
-                <span className="block mb-2 text-lg font-medium text-gray-600 capitalize md:text-xl">
+                <span className="mb-2 block text-lg font-medium capitalize text-gray-600 md:text-xl">
                   {data.stateOfOrigin} state, {data.countryOfOrigin}
                 </span>
                 <span className="text-lg font-medium text-gray-600 md:text-xl">
@@ -131,23 +119,26 @@ const Index = () => {
                 </span>
               </div>
               <div className="mb-3">
-                <h4 className="block mb-1 text-xl capitalize text-primary">
+                <h4 className="mb-1 block text-xl capitalize text-primary">
                   About
                 </h4>
-                <p className="text-lg leading-6 text-justify text-gray-600 break-normal whitespace-normal md:pr-24">
+                <p className="whitespace-normal break-normal text-justify text-lg leading-6 text-gray-600 md:pr-24">
                   {data.about ?? "User has not added any information yet"}
                 </p>
               </div>
 
               <div className="">
-                <h4 className="block mb-3 text-xl capitalize text-primary">
+                <h4 className="mb-3 block text-xl capitalize text-primary">
                   Interesting facts
                 </h4>
                 <div className="flex flex-wrap gap-2.5">
                   {data.facts.length > 0 &&
                     data.facts.map((fact: string) => (
                       <span
-                        className={cn("rounded-lg p-2", getRandomClass())}
+                        className={cn(
+                          "rounded-lg p-2 capitalize",
+                          getRandomClass()
+                        )}
                         key={fact}
                       >
                         {fact}
@@ -156,13 +147,13 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="w-full my-2 md:w-3/6">
-                <h4 className="block mb-3 text-xl font-medium capitalize text-primary">
+              <div className="my-2 w-full pt-3 sm:max-w-xs">
+                <h4 className="mb-3 block text-xl font-medium capitalize text-primary">
                   family history
                 </h4>
-                <div className="flex items-center p-4 rounded-xl bg-gray-50">
+                <div className="relative flex items-center rounded-xl bg-gray-50 p-4">
                   <div className="[&>span]:flex">
-                    <span className="items-center mb-1 capitalize">
+                    <span className="mb-1 items-center capitalize">
                       <RxDotFilled className="text-green-500" />
                       {data.isTreePrivate ? "Private" : "Public"} family tree
                     </span>
@@ -172,19 +163,17 @@ const Index = () => {
                     <span>people: 12</span>
                     <span>media: 450</span>
                   </div>
-                  <div className="p-2 ml-auto rounded-full bg-primary">
-                    <Image
-                      src={Tree}
-                      alt="tree logo"
-                      className="h-[2rem] w-[2rem]"
-                    />
-                  </div>
+                  <Image
+                    src={TreeIcon}
+                    alt="tree logo"
+                    className="absolute right-0 max-w-[50px] translate-x-1/2"
+                  />
                 </div>
 
-                <div className="flex items-center w-full p-4 my-2 rounded-xl bg-gray-50 md:w-3/6">
+                <div className="my-2 flex w-full items-center rounded-xl bg-gray-50 p-4 text-right">
                   <GoShieldCheck className="mr-3 h-[2rem] w-[2rem]" />
                   <span className="flex flex-col">
-                    <p className="text-sm font-medium md:text-xl">
+                    <p className="whitespace-nowrap text-sm font-medium md:text-xl">
                       Document vault
                     </p>
                     <span className="flex items-center">

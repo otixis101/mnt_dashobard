@@ -58,7 +58,7 @@ const UserProfileDropBox = ({
               id="file"
               name={name}
               accept="image/*"
-              className="absolute inset-0 opacity-0"
+              className="absolute inset-0 cursor-pointer opacity-0"
               onChange={onHandleImagePicker}
             />
             <p className="mx-1">Drop files here to upload...</p>
