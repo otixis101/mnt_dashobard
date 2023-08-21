@@ -267,7 +267,7 @@ const FamilyTree = () => {
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
-        <div className="w-full mx-auto mt-5 md:w-2/4">
+        <div className="mx-auto mt-5 w-full md:w-2/4">
           <SearchBar
             value={searchTerms}
             onChange={(value) => setSearchTerms(value)}
@@ -276,8 +276,8 @@ const FamilyTree = () => {
           />
         </div>
         {/* Dashboard Header Section */}
-        <div className="z-10 flex justify-between w-full">
-          <h1 className="mt-5 text-2xl font-normal text-center text-slate-700">
+        <div className="z-10 flex w-full justify-between">
+          <h1 className="mt-5 text-center text-2xl font-normal text-slate-700">
             Your Family Tree
           </h1>
           <div className="flex gap-8">
@@ -289,12 +289,12 @@ const FamilyTree = () => {
               >
                 <AiFillMinusSquare
                   fill="hsla(255, 83%, 53%, 1)"
-                  className="text-2xl cursor-pointer"
+                  className="cursor-pointer text-2xl"
                 />
               </button>
-              <div className="flex px-2 rounded-lg w-max bg-midpup">
+              <div className="flex w-max rounded-lg bg-midpup px-2">
                 <input
-                  className="w-10 py-2 text-center bg-transparent outline-none"
+                  className="w-10 bg-transparent py-2 text-center outline-none"
                   value={zoomPercentage}
                   onChange={(e) => setZoomPercentage(e.target.value)}
                   type="text"
@@ -308,7 +308,7 @@ const FamilyTree = () => {
               >
                 <AiFillPlusSquare
                   fill="hsla(255, 83%, 53%, 1)"
-                  className="text-2xl cursor-pointer"
+                  className="cursor-pointer text-2xl"
                 />
               </button>
             </div>

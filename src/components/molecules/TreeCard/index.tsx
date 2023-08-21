@@ -34,15 +34,15 @@ const TreeCard = ({
   <HoverCard>
     <HoverCardTrigger
       className={cn(
-        "relative flex h-[118px]  w-24 items-center !overflow-hidden rounded-xl ",
+        "relative flex h-[118px]  w-24 items-center  rounded-xl ",
         identity === "you" &&
           " translate-y-2 scale-[1.15] rounded-xl border-[3.5px] border-green-500"
       )}
       asChild
     >
-      <div className="w-full h-full ">
+      <div className="h-full w-full ">
         {hasAddButton && (
-          <div className="absolute z-50 opacity-50 -left-14">
+          <div className="absolute -left-14 z-50 opacity-50">
             <button
               type="button"
               onClick={onPlusClick}
@@ -53,7 +53,7 @@ const TreeCard = ({
             <span className="text-[9px]">Add siblings</span>
           </div>
         )}
-        <div className="relative flex flex-col items-center justify-end w-full h-full p-2 cursor-pointer ">
+        <div className="relative flex h-full w-full cursor-pointer flex-col items-center justify-end overflow-hidden rounded-lg p-2 ">
           {imageSrc ? (
             <Image
               style={{ objectFit: "cover" }}
@@ -63,17 +63,17 @@ const TreeCard = ({
               className=""
             />
           ) : (
-            <div className="absolute bottom-0 flex items-center justify-center w-full h-full text-4xl tracking-wider text-white uppercase bg-primary/40 ">
+            <div className="absolute bottom-0 flex h-full w-full items-center justify-center bg-primary/40 text-4xl uppercase tracking-wider text-white ">
               {getUserInitials(personName)}
             </div>
           )}
-          <div className="relative w-full text-black bg-blue-100 rounded-md bg-opacity-20 drop-shadow-md backdrop-blur-md">
-            <h3 className="text-sm text-center ">
+          <div className="relative w-full rounded-md bg-blue-100 bg-opacity-20 text-black drop-shadow-md backdrop-blur-md">
+            <h3 className="text-center text-sm ">
               {truncateString(personName, 8)}
             </h3>
           </div>
-          <div className="z-10 flex items-center gap-1 px-1 mx-auto -translate-y-1 rounded-full w-max bg-stone-300">
-            <div className="w-2 h-2 bg-green-500 border rounded-full " />
+          <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
+            <div className="h-2 w-2 rounded-full border bg-green-500 " />
             <p className="text-[8px] capitalize">{identity}</p>
           </div>
         </div>
@@ -82,10 +82,10 @@ const TreeCard = ({
     <HoverCardContent
       side="right"
       sideOffset={6}
-      className="p-3 rounded-xl bg-slate-100"
+      className="rounded-xl bg-slate-100 p-3"
     >
       <div className="flex gap-3">
-        <div className="relative w-16 h-20 overflow-hidden rounded-md ">
+        <div className="relative h-20 w-16 overflow-hidden rounded-md ">
           {imageSrc ? (
             <Image
               style={{ objectFit: "cover" }}
@@ -95,7 +95,7 @@ const TreeCard = ({
               className="rounded-lg"
             />
           ) : (
-            <div className="absolute bottom-0 flex items-center justify-center w-full h-full text-4xl tracking-wider text-white uppercase rounded-lg bg-primary/40">
+            <div className="absolute bottom-0 flex h-full w-full items-center justify-center rounded-lg bg-primary/40 text-4xl uppercase tracking-wider text-white">
               {getUserInitials(personName)}
             </div>
           )}
@@ -103,7 +103,7 @@ const TreeCard = ({
         <div className="flex flex-col">
           <p className="font-semibold">{personName}</p>
           <div className="z-10   flex w-max items-center gap-0.5 rounded-lg bg-white px-1 py-0.5 ">
-            <div className="w-2 h-2 bg-green-500 border rounded-full " />
+            <div className="h-2 w-2 rounded-full border bg-green-500 " />
             <p className="text-[10px]">{identity}</p>
           </div>
           {dob && (
@@ -115,7 +115,7 @@ const TreeCard = ({
         </div>
         <Link
           href={`/user/${id}`}
-          className="px-5 py-1 mt-auto text-white capitalize rounded-lg h-max bg-primary"
+          className="mt-auto h-max rounded-lg bg-primary px-5 py-1 capitalize text-white"
         >
           profile
         </Link>

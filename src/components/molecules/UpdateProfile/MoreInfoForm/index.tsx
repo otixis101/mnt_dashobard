@@ -62,7 +62,7 @@ const fields = [
 ] as const;
 
 const MoreInfoForm: FC = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
 
@@ -129,6 +129,13 @@ const MoreInfoForm: FC = () => {
         if (person.data.hasSugestion) {
           router.push({ query: { step: "suggestions" } });
         } else {
+          await update({
+            ...session,
+            user: {
+              ...session?.user,
+              personId: person.data.personId,
+            },
+          });
           router.push({ query: { step: "about" } });
         }
       }
