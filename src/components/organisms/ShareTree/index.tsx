@@ -97,10 +97,7 @@ const Index = () => {
   }, [session?.user]);
 
   const onCopyLink = () => {
-    navigator.clipboard.writeText(
-      `${host}/dashboard/?share-token=${shareToken}`
-    );
-
+    navigator.clipboard.writeText(`${host}/dashboard/tree/${personId}`);
     toast.success("Link copied to clipboard!");
   };
 
