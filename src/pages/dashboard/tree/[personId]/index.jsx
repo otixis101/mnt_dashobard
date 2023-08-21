@@ -236,7 +236,7 @@ const FamilyTree = () => {
               }
               onPlusClick={() =>
                 router.push(
-                  `/dashboard/tree/member/add?step=bio-data&ref=${itemConfig.parents[0]}`
+                  `/dashboard/tree/member/add?step=bio-data&ref=${personId}`
                 )
               }
               identity={
