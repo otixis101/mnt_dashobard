@@ -57,6 +57,8 @@ const FamilyTree = () => {
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
+  console.log(data);
+
   const parentsIds =
     data && data.relationship
       ? data.relationship.links
@@ -180,7 +182,7 @@ const FamilyTree = () => {
     }
   }, [data]);
 
-  console.log(treeData);
+  // console.log(treeData);
 
   const config = {
     pageFitMode: PageFitMode.AutoSize,

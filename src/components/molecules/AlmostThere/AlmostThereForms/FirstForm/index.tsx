@@ -98,7 +98,6 @@ const FirstForm = () => {
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
-    console.log(files?.[0]);
     if (files) {
       setFile(files[0]);
       const reader = new FileReader();
@@ -133,14 +132,17 @@ const FirstForm = () => {
 
       const formDataPayload = new FormData();
 
-      formDataPayload.append("profilePhotoUrl", profilePhotoUrl);
+      formDataPayload.append("profilePhoto", file as File);
       formDataPayload.append("placeOfBirth", formData.placeOfBirth);
       formDataPayload.append("facts", facts.join(","));
       formDataPayload.append("deathOfDeath", date ? String(date) : "");
       formDataPayload.append("sex", formData.sex);
       formDataPayload.append("occupation", formData.occupation);
       formDataPayload.append("address", formData.address);
-      formDataPayload.append("relationship", formData.relationship);
+      formDataPayload.append(
+        "relationship",
+        formData.relationship.toLowerCase()
+      );
       formDataPayload.append("relativeId", relative?.personId ?? "");
       formDataPayload.append("reference", String(query.reference));
       formDataPayload.append("maritalStatus", radioValues.maritalStatus);
@@ -149,6 +151,7 @@ const FirstForm = () => {
         const res = await Axios.post(`/person/family/add`, formDataPayload, {
           headers: {
             Authorization: `Bearer ${user.accessToken}`,
+            "Content-Type": "multipart/form-data",
           },
         });
 
