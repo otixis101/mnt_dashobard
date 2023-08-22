@@ -156,7 +156,7 @@ const FirstForm = () => {
           toast.success("User profile updated successfully");
           router.push({
             query: {
-              step: "success",
+              step: "complete",
             },
           });
         }
