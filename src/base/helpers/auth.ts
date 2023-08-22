@@ -28,7 +28,7 @@ export const validateAuthToken = async (
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/validate-token`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
@@ -38,7 +38,7 @@ export const validateAuthToken = async (
 
     if (res && res.ok) {
       const isValid = await res.json();
-      return isValid;
+      return isValid.data?.valid;
     }
   } catch (err) {
     return undefined;
