@@ -39,7 +39,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (session && personId) {
     return {
       redirect: {
-        destination: `/dashboard/tree/${personId}`,
+        destination: `/`,
         permanent: false,
       },
     };

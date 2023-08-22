@@ -13,8 +13,8 @@ import { toast } from "react-toastify";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const SignUpForm = () => {
-  const [ isLoading, setIsLoading ] = useState(false);
-  const [ isGoogleLoading, setIsGoogleLoading ] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const { data: session, status, update } = useSession();
   const router = useRouter();
 
@@ -26,7 +26,7 @@ const SignUpForm = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `${ process.env.NEXT_PUBLIC_API_BASE_URL }/auth/register`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/register`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -39,7 +39,7 @@ const SignUpForm = () => {
       if (res && res.ok) {
         toast.success("Sign up successful");
 
-        router.push(`/auth/verify?email=${ email }`);
+        router.push(`/auth/verify?email=${email}`);
       }
     } catch (error) {
       /**
@@ -56,7 +56,7 @@ const SignUpForm = () => {
     setIsGoogleLoading(true);
     try {
       const res = await fetch(
-        `${ process.env.NEXT_PUBLIC_API_BASE_URL }/auth/google`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`,
         {
           method: "POST",
           body: JSON.stringify({ token: authToken }),
@@ -75,7 +75,7 @@ const SignUpForm = () => {
           },
         });
 
-        router.push(`/auth/verify?email=${ session?.user.email }`);
+        router.push(`/auth/verify?email=${session?.user.email}`);
       }
     } catch (error) {
       toast.error("Something went wrong");
@@ -94,7 +94,7 @@ const SignUpForm = () => {
       const googleAuthToken = session.user.accessToken;
       handleGoogleSignIn(googleAuthToken);
     }
-  }, [ status ]);
+  }, [status]);
   return (
     <>
       <div>
@@ -108,7 +108,14 @@ const SignUpForm = () => {
         onSubmit={handleSignUp}
         validationSchema={AuthSchema}
       >
-        {({ handleSubmit, handleChange, values, handleBlur, errors, touched }) => (
+        {({
+          handleSubmit,
+          handleChange,
+          values,
+          handleBlur,
+          errors,
+          touched,
+        }) => (
           <form
             onSubmit={handleSubmit}
             className="mt-4 flex flex-col gap-4 space-y-1"
@@ -133,7 +140,9 @@ const SignUpForm = () => {
                 password
                 name="password"
                 type="password"
-                hint={touched.password && errors.password ? errors.password : ""}
+                hint={
+                  touched.password && errors.password ? errors.password : ""
+                }
                 isError={!!(errors.password && touched.password)}
                 onBlur={handleBlur}
                 onChange={handleChange}

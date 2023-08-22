@@ -8,12 +8,17 @@ import MultiPageHeader from "@/components/molecules/UpdateProfile/MultiPageHeade
 import FirstForm from "@/components/molecules/AlmostThere/AlmostThereForms/FirstForm";
 import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
 import SuccessModal from "@/components/molecules/SuccessModal";
+import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next";
 
 const Steps = ["bio-data", "suggestion", "relationship", "complete"] as const;
 
 type StepsQuery = (typeof Steps)[number];
 
-const AddMember = () => {
+interface AddMemberPageProps {
+  personId: string;
+}
+const AddMember = ({ personId }: AddMemberPageProps) => {
   const router = useRouter();
 
   const { query } = router;
@@ -57,7 +62,7 @@ const AddMember = () => {
               <SuccessModal
                 btnText="Continue to family tree"
                 text="Relative Added"
-                onAccept={() => router.push("/dashboard")}
+                onAccept={() => router.push(`/dashboard/tree/${personId}`)}
               />
             </div>
           </div>
@@ -92,6 +97,28 @@ const AddMember = () => {
       </section>
     </AppLayout>
   );
+};
+
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getSession(context);
+  const { personId } = session?.user ?? {};
+
+  if (!personId) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      personId,
+    },
+  };
 };
 
 export default AddMember;

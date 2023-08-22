@@ -14,7 +14,7 @@ const Verify = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   console.log(":::::::::::;; in verify");
-  
+
   const handleResendEmail = async () => {
     setIsLoading(true);
     try {
@@ -73,22 +73,18 @@ const Verify = () => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
-  const { personId } = session?.user ?? {};
-  console.log("::::::::::::::::::::: in verify props");
-  
+
   if (session) {
     return {
       redirect: {
-        destination: `/dashboard/tree/${personId}`,
+        destination: `/`,
         permanent: false,
       },
     };
   }
 
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 }
 export default Verify;

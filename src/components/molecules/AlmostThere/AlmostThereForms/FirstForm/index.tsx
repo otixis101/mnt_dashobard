@@ -59,7 +59,7 @@ const checkboxFields = [
     ],
   },
 ] as const;
-type RadioFields = (typeof checkboxFields)[ number ][ "name" ];
+type RadioFields = (typeof checkboxFields)[number]["name"];
 
 const FirstForm = () => {
   const [status, setStatus] = useState("Living");
@@ -92,13 +92,13 @@ const FirstForm = () => {
   const { query } = router;
 
   const handleRadioOnChange = (key: RadioFields, value: string) => {
-    setRadioValues((prev) => ({ ...prev, [ key ]: value }));
+    setRadioValues((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
-    console.log(files?.[ 0 ]);
+    console.log(files?.[0]);
     if (files) {
       setFile(files[0]);
       const reader = new FileReader();
@@ -116,7 +116,7 @@ const FirstForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((c) => ({ ...c, [ name ]: value }));
+    setFormData((c) => ({ ...c, [name]: value }));
   };
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -148,13 +148,17 @@ const FirstForm = () => {
       try {
         const res = await Axios.post(`/person/family/add`, formDataPayload, {
           headers: {
-            Authorization: `Bearer ${ user.accessToken }`,
+            Authorization: `Bearer ${user.accessToken}`,
           },
         });
 
         if (res) {
           toast.success("User profile updated successfully");
-          router.push(`/dashboard/tree/${ user.personId }`);
+          router.push({
+            query: {
+              step: "success",
+            },
+          });
         }
       } catch (error) {
         toast.error(String(error));
@@ -172,7 +176,7 @@ const FirstForm = () => {
         <div className="grid grid-cols-1 gap-4 gap-x-8 sm:mb-4 sm:grid-cols-2">
           <Radio
             label=" Life status"
-            options={[ "Living", "Deceased" ]}
+            options={["Living", "Deceased"]}
             value={status}
             onValueChange={setStatus}
             className="capitalize"
@@ -186,7 +190,7 @@ const FirstForm = () => {
                   label={label}
                   parentClass="w-full"
                   options={options}
-                  value={radioValues[ name ]}
+                  value={radioValues[name]}
                   onValueChange={(val) => handleRadioOnChange(name, val)}
                 />
               </fieldset>
@@ -204,7 +208,7 @@ const FirstForm = () => {
             <Input
               {...opt}
               key={opt.name}
-              value={formData[ opt.name ]}
+              value={formData[opt.name]}
               onChange={handleChange}
             />
           ))}
@@ -222,25 +226,25 @@ const FirstForm = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
+                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
                   >
                     <Input
                       disabled
                       placeholder="Date of birth"
-                      value={date ? `${ format(date, "PPP") }` : ""}
+                      value={date ? `${format(date, "PPP")}` : ""}
                       label=""
                       parentClass="w-full"
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0 bg-white">
+                <PopoverContent align="start" className="w-auto bg-white p-0">
                   <DayPickerCalendar
                     // block user's from selecting a future date
                     toDate={new Date()}
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="border rounded-md"
+                    className="rounded-md border"
                   />
                 </PopoverContent>
               </Popover>
