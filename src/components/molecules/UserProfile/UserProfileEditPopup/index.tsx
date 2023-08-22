@@ -151,7 +151,7 @@ const UserProfileEditPopup = ({
           <div className="flex flex-col items-center">
             <div className="relative h-36 w-32 overflow-hidden rounded-lg md:h-52 md:w-48">
               {imgSrc ? (
-                <Image src={imgSrc} alt="user" width="100" height="100" />
+                <Image src={imgSrc} alt="user" fill />
               ) : (
                 <Avatar
                   name={{

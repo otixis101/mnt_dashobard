@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 
 import Popup from "@/components/atoms/Popup";
 import Button from "@/components/atoms/Button";
+import { useSWRConfig } from "swr";
 import UserProfileDropBox from "../UserProfileDropBox";
 
 interface Props {
@@ -27,6 +28,7 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
   const [openModal, setOpenModal] = useState(mode);
   const [authToken, setauthToken] = useState("");
   const [openPicker, authRes] = GoogleDrivePicker();
+  const { mutate } = useSWRConfig();
 
   const { data: session } = useSession();
 
@@ -55,7 +57,11 @@ const UserProfileSettingPopup = ({ mode, onChange, personId }: Props) => {
       if (res && res.ok) {
         toast.success("Profile Photo Updated successful");
 
-        setOpenModal((prevState) => !prevState);
+        await mutate(`person?personId=${personId}`);
+
+        setTimeout(() => {
+          setOpenModal((prevState) => !prevState);
+        }, 3000);
       }
     } catch (err) {
       toast.error("Something went wrong");

@@ -182,8 +182,6 @@ const FamilyTree = () => {
     }
   }, [data]);
 
-  // console.log(treeData);
-
   const config = {
     pageFitMode: PageFitMode.AutoSize,
     enableMatrixLayout: true,

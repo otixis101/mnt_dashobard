@@ -16,8 +16,8 @@ const SearchCard = ({ title, image, userId }: SearchCardProps) => (
     {image ? (
       <Image fill src={image} alt={`${title}'s image`} className="" />
     ) : (
-      <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-primary/40 text-6xl text-white">
-        {getUserInitials(title)}
+      <div className="absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-primary/40 text-6xl uppercase text-white">
+        {getUserInitials(title ?? "")}
       </div>
     )}
 
