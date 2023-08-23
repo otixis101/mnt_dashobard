@@ -17,16 +17,18 @@ const DayPickerCalendar = ({
 }: DayPickerCalendarProps) => (
   <DayPicker
     showOutsideDays={showOutsideDays}
+    captionLayout="dropdown-buttons"
     className={clsx("p-3", className)}
     classNames={{
       months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
       month: "space-y-4",
-      caption: "flex justify-center pt-1 relative items-center",
-      caption_label: "text-sm font-medium",
-      caption_dropdowns: "flex text-sm",
-      dropdown_month: "",
-      dropdown_year: "",
+      caption: "flex justify-between pt-1 relative items-center",
+      caption_label: "hidden text-sm font-medium",
+      caption_dropdowns: "flex gap-x-1 text-sm",
+      dropdown_month: "flex",
+      dropdown_year: "flex",
       vhidden: "hidden",
+      dropdown: "focus:outline-none",
       nav: "space-x-1 flex items-center",
       nav_button: clsx(
         "h-7 w-7 bg-transparent border inline-flex rounded-md  items-center justify-center p-0 opacity-50 hover:opacity-100"
