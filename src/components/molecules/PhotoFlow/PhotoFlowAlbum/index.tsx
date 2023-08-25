@@ -1,43 +1,22 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 import { AiFillEye, AiOutlineDelete } from "react-icons/ai";
 
 import { cn } from "@/base/utils";
-import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
-import { useRouter } from "next/router";
 import PhotoFlowLoader from "../PhotoFlowLoader";
 
-type ImgJson = {
+export type ImgJson = {
   url: string;
   aspect_ratio: string;
 }[];
 
-// interface Props {
-//   mode?: boolean;
-// }
+interface PhotoFlowAlbumProps {
+  images?: ImgJson;
+  loading?: boolean;
+}
 
-const PhotoFlowAlbum = () => {
-  const router = useRouter();
-  const { personId } = router.query;
-  const [galleryImages, setgalleryImages] = useState<ImgJson>([]);
-
-  const { data, isLoading } = useFetchPerson(personId as string);
-
-  console.log(data);
-
-  useEffect(() => {
-    if (data && data.images.length > 0) {
-      const imgsJson: ImgJson = [];
-      const imgs = data.images;
-
-      if (imgs.length > 0) {
-        imgs.map((img: string) => imgsJson.push(JSON.parse(img)));
-        setgalleryImages(imgsJson);
-      }
-    }
-  }, [data]);
-
+const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
   const convertToFraction = (aspectRatio: string) => {
     const [numerator, denominator] = aspectRatio.split(":").map(Number);
     return `${numerator}/${denominator}`;
@@ -48,14 +27,14 @@ const PhotoFlowAlbum = () => {
       <h3 className="text-2xl font-medium capitalize text-black">
         Your Photos
       </h3>
-      {isLoading && <PhotoFlowLoader />}
-      {galleryImages.length > 0 && (
+      {loading && <PhotoFlowLoader />}
+      {images && images.length > 0 && (
         <div
           className={cn(
             "grid  grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2 md:grid-cols-3"
           )}
         >
-          {galleryImages.map(({ url, aspect_ratio }, i) => (
+          {images.map(({ url, aspect_ratio }, i) => (
             <figure
               key={i}
               className={cn(

@@ -11,14 +11,14 @@ import dropBox from "public/assets/icon/dropbox.png";
 import Popup from "@/components/atoms/Popup";
 import Button from "@/components/atoms/Button";
 import { useRouter } from "next/router";
-import { useSWRConfig } from "swr";
 import PhotoFlowDropBox from "../PhotoFlowDropBox";
 
 interface Props {
   onChange: (e?: boolean) => void;
+  refreshCallback?: () => void;
 }
 
-const PhotoFlowPopup = ({ onChange }: Props) => {
+const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const { data: session } = useSession();
   const [fileName, setFileName] = useState<DropboxFile[]>([]);
   const [uploadStep, setUploadStep] = useState(false);
@@ -27,8 +27,6 @@ const PhotoFlowPopup = ({ onChange }: Props) => {
   const [file, setFile] = useState<File | string>();
   const router = useRouter();
   const { pathname } = router;
-  const { personId } = router.query;
-  const { mutate } = useSWRConfig();
   const [openModal] = useState<boolean>(pathname.includes("add"));
 
   const imageUpload = async (imgFile?: string) => {
@@ -59,9 +57,7 @@ const PhotoFlowPopup = ({ onChange }: Props) => {
 
       if (res && res.ok) {
         toast.success("Photo Updated successful");
-        mutate(`/person?personId=${personId}`);
-
-        router.push(`/user/${personId}/gallery`);
+        await refreshCallback?.();
       }
     } catch (err) {
       toast.error("Something went wrong");
