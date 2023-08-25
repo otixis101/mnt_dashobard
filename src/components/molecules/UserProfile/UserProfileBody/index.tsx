@@ -17,6 +17,7 @@ import { cn, getAgeByDate, getRandomClass } from "@/base/utils";
 import Avatar from "@/components/atoms/Avatar";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import useStore from "@/base/store";
+import useFetchImmediateFamily from "@/base/hooks/api/useFetchImmediateFamily";
 import UserProfileAlbums from "../UserProfileAlbums";
 import UserProfileEditPopup from "../UserProfileEditPopup";
 import UserProfileSettingPopup from "../UserProfileSettingPopup";
@@ -28,9 +29,21 @@ const Index = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { data: session } = useSession();
+  const { personId } = session?.user ?? {};
 
-  const { data, isLoading } = useFetchPerson(session?.user.personId ?? "");
+  const { data, isLoading } = useFetchPerson(personId ?? "");
+  const { data: immediateFamilies } = useFetchImmediateFamily(personId ?? "");
   const { setUser } = useStore();
+
+  const { children, spouse, parents, siblings } = immediateFamilies ?? {};
+
+  const peopleCount =
+    Number(children?.length) +
+    Number(spouse?.length) +
+    Number(parents?.length) +
+    Number(siblings?.length);
+
+  const mediaCount = data?.images.length ?? 0;
 
   const getFullName = () => {
     if (data?.firstName && data?.lastName) {
@@ -160,8 +173,8 @@ const Index = () => {
                     <span className="my-1 text-xl font-medium capitalize text-primary">
                       julian family tree
                     </span>
-                    <span>people: 12</span>
-                    <span>media: 450</span>
+                    <span>people: {peopleCount}</span>
+                    <span>media: {mediaCount}</span>
                   </div>
                   <Image
                     src={TreeIcon}
