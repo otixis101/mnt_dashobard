@@ -112,6 +112,12 @@ const FamilyTree = () => {
           ownerSpouse.length > 0 ? [ownerSpouse[0].id] : [data.user.personId],
       }));
 
+      const ownerChildrenSpouse = data.relationship.links.filter((node) => {
+        const ownerChildrenIds = ownerChildren.map((child) => child.id);
+
+        return ownerChildrenIds.includes(node.spouseId);
+      });
+
       if (!ownerSpouse.length) {
         nodes = [...nodes, emptySpouse];
       } else {
@@ -120,14 +126,36 @@ const FamilyTree = () => {
           { ...ownerSpouse[0], parents: [data.user.personId] },
         ];
       }
-
+      const dataWithoutChildren = dataWithoutSpouse.filter(
+        (node) => node.parents?.[0] !== data.user.personId
+      );
       if (ownerChildren.length > 0 && ownerSpouse.length > 0) {
-        const dataWithoutChildren = dataWithoutSpouse.filter(
-          (node) => node.parents?.[0] !== data.user.personId
-        );
-
         nodes = [
           ...dataWithoutChildren,
+          { ...ownerSpouse[0], parents: [data.user.personId] },
+          ...libraryFormattedOwnerChildren,
+        ];
+      }
+
+      if (ownerChildrenSpouse.length > 0) {
+        const libraryFormattedOwnerChildrenSpouse = ownerChildrenSpouse.map(
+          (child) => ({
+            ...child,
+            parents: [child.spouseId],
+          })
+        );
+
+        const dataWithoutChildrenSpouse = dataWithoutChildren.filter((node) => {
+          const ownerChildrenSpouseIds = ownerChildrenSpouse.map(
+            (child) => child.id
+          );
+
+          return !ownerChildrenSpouseIds.includes(node.id);
+        });
+
+        nodes = [
+          ...dataWithoutChildrenSpouse,
+          ...libraryFormattedOwnerChildrenSpouse,
           { ...ownerSpouse[0], parents: [data.user.personId] },
           ...libraryFormattedOwnerChildren,
         ];

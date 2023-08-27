@@ -3,7 +3,6 @@ import Input from "@/components/atoms/Input";
 import { Formik, FormikHelpers } from "formik";
 import Link from "next/link";
 import GoogleLogo from "public/assets/icon/google.svg";
-// import PasswordInput from "@/components/atoms/PasswordInput";
 import CustomAuthButton from "@/components/atoms/CustomAuthButton";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Logincredentials } from "@/pages/api/auth/[...nextauth]";
@@ -11,7 +10,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AuthSchema } from "@/base/helpers/FormValidationSchemas";
 import { toast } from "react-toastify";
-// import { GetServerSidePropsContext } from "next";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -35,6 +33,7 @@ const LoginForm = () => {
 
       if (res && res.status === 200) {
         toast.success("Login successful");
+        router.push("/");
       } else {
         toast.error(res?.error);
       }
@@ -94,16 +93,6 @@ const LoginForm = () => {
       handleGoogleSignIn(googleAuthToken);
     }
   }, [status]);
-
-  useEffect(() => {
-    if (session && status === "authenticated") {
-      if (session.user.personId) {
-        router.push(`/dashboard/tree/${session.user.personId}`);
-      } else {
-        router.push("/user/profile/update?step=moreinfo");
-      }
-    }
-  }, [session]);
 
   useEffect(() => {
     const verifyUser = async () => {

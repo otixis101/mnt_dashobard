@@ -50,7 +50,7 @@ const TreeCard = ({
             >
               <FaPlus className="text-2xl text-[#898989]" />
             </button>
-            <span className="text-[9px]">Add siblings</span>
+            <span className="text-[9px]">Add Member</span>
           </div>
         )}
         <div className="relative flex h-full w-full cursor-pointer flex-col items-center justify-end overflow-hidden rounded-lg p-2 ">
