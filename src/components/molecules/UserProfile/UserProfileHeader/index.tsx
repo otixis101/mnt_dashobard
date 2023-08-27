@@ -17,14 +17,7 @@ const Index = () => {
         <Input label="" parentClass="w-[90%]" />
         <Button className="ml-[-10.2rem] mt-2 w-[10rem] md:h-12">Search</Button>
       </form>
-      <nav className="flex items-center justify-between">
-        <h3 className="flex items-center font-medium max-md:mb-10 md:text-xl">
-          Dashboard
-          <span>
-            <RxCaretRight />
-          </span>
-          <span className="capitalize">your account</span>
-        </h3>
+      <nav className="flex items-center justify-start gap-x-2">
         <button
           onClick={() => router.back()}
           type="button"
@@ -32,6 +25,13 @@ const Index = () => {
         >
           <BiArrowBack className="h-8 w-12 cursor-pointer md:h-12 md:w-14" />
         </button>
+        <h3 className="flex items-center font-medium max-md:mb-10 md:text-xl">
+          Dashboard
+          <span>
+            <RxCaretRight />
+          </span>
+          <span className="capitalize">your account</span>
+        </h3>
       </nav>
     </header>
   );

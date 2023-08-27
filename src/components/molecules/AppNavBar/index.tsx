@@ -41,10 +41,14 @@ const AppNavBar = (props: AppNavBarProps) => {
   const router = useRouter();
   const { showUser, name = "N/A" } = props;
   const [changeLogo, setChangeLogo] = useState(false);
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const { personId } = router.query;
 
   const { data } = useFetchPerson((session?.user?.personId || `${personId}`) ?? "");
+
+  if(!session?.user?.personId && personId){
+    update({...session, user: { ...session?.user, personId}});
+  }
 
   const ref = useMenuOnScroll({
     effect: () => setChangeLogo(true),
