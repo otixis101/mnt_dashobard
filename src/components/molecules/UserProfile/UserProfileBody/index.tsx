@@ -94,8 +94,9 @@ const Index = () => {
                   <Image
                     src={data.profilePhotoUrl ?? User}
                     fill
+                    style={{objectFit: "contain"}}
                     alt="user profile photo"
-                    className="md:h-68 mx-auto md:w-[60rem]"
+                    // className="md:h-68 mx-auto md:w-[60rem]"
                   />
                 ) : (
                   <Avatar name={getFullName()} />
