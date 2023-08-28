@@ -160,7 +160,11 @@ const FamilyTree = () => {
       }
 
       // add empty placeholder parent if the current user has just one parent
-      if (currentPerson && currentPerson.parents.length === 1) {
+      if (
+        currentPerson &&
+        currentPerson.parents &&
+        currentPerson.parents.length === 1
+      ) {
         const emptyParent = emptyTreePresetData[0];
         // update the currentperson's parent array with the empty parent id
         const currentPersonParentId = [

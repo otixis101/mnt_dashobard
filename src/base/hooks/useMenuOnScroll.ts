@@ -15,7 +15,7 @@ const useMenuOnScroll = (props?: Props) => {
 
     const header = ref.current;
 
-    const CLASS_LIST = ["bg-black/[0.75]", "backdrop-blur-[2px]"];
+    const CLASS_LIST = ["bg-white", "shadow-md"];
 
     const handleScrollNavigation = () => {
       const SCROLL_HEIGHT = window.scrollY;
