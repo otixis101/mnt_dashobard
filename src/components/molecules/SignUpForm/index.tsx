@@ -64,7 +64,6 @@ const SignUpForm = () => {
         }
       );
       if (res && res.ok) {
-        toast.success("Login successful");
         const { data: user } = await res.json();
 
         update({
@@ -75,6 +74,7 @@ const SignUpForm = () => {
           },
         });
 
+        toast.success("Login successful");
         router.push(`/auth/verify?email=${session?.user.email}`);
       }
     } catch (error) {

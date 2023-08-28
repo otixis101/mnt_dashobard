@@ -301,7 +301,7 @@ const FamilyTree = () => {
           />
         </div>
         {/* Dashboard Header Section */}
-        <div className="z-10 flex w-full justify-between">
+        <div className="z-10 flex w-full flex-col justify-between gap-3 md:flex-row md:gap-0">
           <h1 className="mt-5 text-center text-2xl font-normal text-slate-700">
             Your Family Tree
           </h1>
