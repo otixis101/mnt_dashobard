@@ -72,6 +72,11 @@ const FamilyTree = () => {
       parents: emptyTreePresetData.map((item) => item.id),
     };
 
+    const emptySpouse = {
+      isEmpty: true,
+      id: "empty-spouse",
+      parents: [data.user.personId],
+    };
     if (data && data.relationship) {
       const currentPerson = data.relationship.links.find(
         (item) => item.id === data.user.personId
@@ -88,12 +93,6 @@ const FamilyTree = () => {
           node.description !==
           `Spouse: ${data.user.firstName} ${data.user.lastName}`
       );
-
-      const emptySpouse = {
-        isEmpty: true,
-        id: "empty-spouse",
-        parents: [data.user.personId],
-      };
 
       const ownerSpouse = data.relationship.links.filter(
         (node) =>
@@ -178,7 +177,7 @@ const FamilyTree = () => {
 
       return nodes;
     }
-    return [...emptyTreePresetData, ownerObject];
+    return [...emptyTreePresetData, ownerObject, emptySpouse];
   };
 
   const handleClickToZoom = (type) => {
