@@ -57,8 +57,6 @@ const FamilyTree = () => {
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
-  console.log(data);
-
   const parentsIds =
     data && data.relationship
       ? data.relationship.links
@@ -123,7 +121,7 @@ const FamilyTree = () => {
       } else {
         nodes = [
           ...dataWithoutSpouse,
-          { ...ownerSpouse[0], parents: [data.user.personId] },
+          { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
         ];
       }
       const dataWithoutChildren = dataWithoutSpouse.filter(
@@ -132,7 +130,7 @@ const FamilyTree = () => {
       if (ownerChildren.length > 0 && ownerSpouse.length > 0) {
         nodes = [
           ...dataWithoutChildren,
-          { ...ownerSpouse[0], parents: [data.user.personId] },
+          { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
           ...libraryFormattedOwnerChildren,
         ];
       }
@@ -142,6 +140,7 @@ const FamilyTree = () => {
           (child) => ({
             ...child,
             parents: [child.spouseId],
+            isSpouse: true,
           })
         );
 
@@ -156,7 +155,7 @@ const FamilyTree = () => {
         nodes = [
           ...dataWithoutChildrenSpouse,
           ...libraryFormattedOwnerChildrenSpouse,
-          { ...ownerSpouse[0], parents: [data.user.personId] },
+          { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
           ...libraryFormattedOwnerChildren,
         ];
       }
@@ -223,7 +222,7 @@ const FamilyTree = () => {
     hasSelectorCheckbox: Enabled.False,
     normalLevelShift: 40,
     lineLevelShift: 25,
-    normalItemsInterval: 300,
+    normalItemsInterval: 250,
     lineItemsInterval: 30,
     enablePanning: true,
     defaultTemplateName: "info",
@@ -259,12 +258,10 @@ const FamilyTree = () => {
 
           return (
             <TreeCard
-              hasAddButton={
-                itemConfig.id === personId && itemConfig.parents.length > 0
-              }
+              hasAddButton={!(itemConfig.isSpouse || itemConfig.isEmpty)}
               onPlusClick={() =>
                 router.push(
-                  `/dashboard/tree/member/add?step=bio-data&ref=${personId}`
+                  `/dashboard/tree/member/add?step=bio-data&ref=${itemConfig.id}`
                 )
               }
               identity={
