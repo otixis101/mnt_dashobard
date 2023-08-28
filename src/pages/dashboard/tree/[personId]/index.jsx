@@ -122,13 +122,49 @@ const FamilyTree = () => {
 
         return ownerChildrenIds.includes(node.spouseId);
       });
+      const emptyParent = emptyTreePresetData[0];
+
+      const currentPersonParentId = currentPerson.parents && [
+        ...currentPerson.parents,
+        emptyParent.id,
+      ];
 
       if (!ownerSpouse.length) {
         nodes = [...nodes, emptySpouse];
+      } else if (currentPerson && !currentPerson.parents) {
+        nodes = [
+          ...dataWithoutOwnerAndSpouse,
+          ownerObject,
+          {
+            ...ownerSpouse[0],
+            parents: [data.user.personId],
+            isSpouse: true,
+          },
+          ...emptyTreePresetData,
+        ];
+      } else if (
+        currentPerson &&
+        currentPerson.parents &&
+        currentPerson.parents.length === 1
+      ) {
+        nodes = [
+          ...dataWithoutOwnerAndSpouse,
+          {
+            ...ownerSpouse[0],
+            parents: [data.user.personId],
+            isSpouse: true,
+          },
+          { ...ownerObject, parents: currentPersonParentId },
+          emptyTreePresetData[0],
+        ];
       } else {
         nodes = [
           ...dataWithoutSpouse,
-          { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
+          {
+            ...ownerSpouse[0],
+            parents: [data.user.personId],
+            isSpouse: true,
+          },
         ];
       }
       const dataWithoutChildren = dataWithoutSpouse.filter(
@@ -173,12 +209,8 @@ const FamilyTree = () => {
         currentPerson.parents &&
         currentPerson.parents.length === 1
       ) {
-        const emptyParent = emptyTreePresetData[0];
         // update the currentperson's parent array with the empty parent id
-        const currentPersonParentId = [
-          ...currentPerson.parents,
-          emptyParent.id,
-        ];
+
         if (ownerSpouse.length > 0) {
           return [
             ...dataWithoutOwnerAndSpouse,
