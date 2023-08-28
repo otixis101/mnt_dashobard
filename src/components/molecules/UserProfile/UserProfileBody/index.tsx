@@ -8,7 +8,7 @@ import { RxDotFilled } from "react-icons/rx";
 import { GoShieldCheck } from "react-icons/go";
 import { AiFillStar } from "react-icons/ai";
 
-import User from "public/assets/user-1.png";
+// import User from "public/assets/user-profile.svg";
 import TreeIcon from "public/assets/icon/tree-icon.png";
 
 import { format } from "date-fns";
@@ -92,10 +92,11 @@ const Index = () => {
               <div className="relative h-52 w-48 !overflow-hidden rounded-xl md:h-64 md:w-60">
                 {data?.profilePhotoUrl ? (
                   <Image
-                    src={data.profilePhotoUrl ?? User}
+                    src={data.profilePhotoUrl}
                     fill
+                    style={{objectFit: "contain"}}
                     alt="user profile photo"
-                    className="md:h-68 mx-auto md:w-[60rem]"
+                    // className="md:h-68 mx-auto md:w-[60rem]"
                   />
                 ) : (
                   <Avatar name={getFullName()} />
