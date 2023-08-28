@@ -10,7 +10,7 @@ const PaymentCard = () => (
       </div>
       <div>
         {/* <StripeProvider> */}
-        <PaymentCardDetails />
+        <PaymentCardDetails onSubmit={() => {}} />
         {/* </StripeProvider> */}
       </div>
     </div>

@@ -1,197 +1,298 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Image from "next/image";
-
-import User from "public/assets/user-1.png";
-
-// icons
 import { AiFillStar } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
-
-import ToggleBtn from "@/components/atoms/ToggleBtn";
-
-// for api
+import Link from "next/link";
+import { cn } from "@/base/utils";
 import { useSession, signOut } from "next-auth/react";
 import useFetchPersonSetting from "@/base/hooks/api/useFetchPersonSetting";
+import Avatar from "@/components/atoms/Avatar";
+import CardDetails from "@/components/atoms/CardDetails";
+import Button from "@/components/atoms/Button";
+import Axios from "@/base/axios";
+import { toast } from "react-toastify";
+import useFetchUserSubscription from "@/base/hooks/api/useFetchUserSubscription";
+import PhotoFlowLoader from "../../PhotoFlow/PhotoFlowLoader";
+import { SwitchThumb, SwitchWrapper } from "../../Switch";
+
+interface Props {
+  onChange(checked: boolean): void;
+  value: boolean;
+  label: string;
+}
+
+const Switcher = ({ onChange, value, label }: Props) => (
+  <div className="flex items-center justify-center gap-4 text-custom-black sm:text-xl">
+    <SwitchWrapper
+      onCheckedChange={onChange}
+      checked={value}
+      label={label}
+      className="h-5 w-full max-w-[56px] data-[state=checked]:bg-[#9A7CF4] sm:w-14"
+      class="w-full justify-between text-left text-sm text-black sm:text-base"
+    >
+      <SwitchThumb className="h-6 w-6 -translate-y-[2px] translate-x-0 bg-primary data-[state=checked]:translate-x-[35px]" />
+    </SwitchWrapper>
+  </div>
+);
+
+const SubscriptionDetails = ({ className }: { className?: string }) => (
+  <p
+    className={cn(
+      "font-normal leading-[2] md:text-lg md:leading-[2]",
+      className
+    )}
+  >
+    Premium Membership: USD $10/mo <br />
+    Renewed: <span className="font-medium text-primary">April 10,2023</span>
+  </p>
+);
+
+interface IProfileHeader {
+  email: string;
+  name: string;
+  membership?: boolean;
+  className?: string;
+}
+
+const ProfileHeader = ({
+  email,
+  name,
+  membership = false,
+  className,
+}: IProfileHeader) => (
+  <div className={cn("mb-3", className)}>
+    <div className="flex items-center gap-2">
+      <h5 className="text-2xl font-medium capitalize text-primary md:whitespace-nowrap md:text-3xl">
+        {name}
+      </h5>
+
+      <div className="mt-1 flex items-center gap-1.5">
+        <span role="img" className="rounded-full bg-black p-1 text-sm" />
+        <p className="capitalize text-black">
+          {membership ? "Premium" : "Free"}
+        </p>
+        {membership && <AiFillStar size={24} className="text-yellow-500" />}
+      </div>
+    </div>
+    <div className="text-sm">{email}</div>
+  </div>
+);
+
+const options = [
+  { label: "Make family tree private", name: "isTreePrivate" },
+  {
+    label: "Get notified about new family members",
+    name: "recieveNotification",
+  },
+  { label: "Show profile in public search", name: "showInPublicSearch" },
+] as const;
+
+type FormKey = (typeof options)[number];
 
 const UserProfileBody = () => {
-  const [mode, setMode] = useState<boolean>(false);
+  const [formData, setFormData] = useState<Record<FormKey["name"], boolean>>({
+    showInPublicSearch: false,
+    isTreePrivate: false,
+    recieveNotification: false,
+  });
+  const [loading, setLoading] = useState(false);
 
-  const { data: session } = useSession();
-  const { data } = useFetchPersonSetting(session?.user?.personId ?? "");
+  const { data: session, update } = useSession();
+  const { data, isError, isLoading, mutate } = useFetchPersonSetting(
+    session?.user?.personId ?? ""
+  );
 
-  console.log(data);
+  const { data: subscriptionPlan } = useFetchUserSubscription();
 
-  const [treePrivate, setTreePrivate] = useState<boolean>(false);
-  const [changePublicProfileSearch, setChangePublicProfileSearch] =
-    useState<boolean>(false);
+  const handleSwitcherChange = (name: FormKey["name"]) => {
+    setFormData((d) => ({ ...d, [name]: !d[name] }));
+  };
 
-  const payload = {
-    userSettingId: session?.user?.personId,
+  const onPrivacyUpdate = async () => {
+    setLoading(true);
+    try {
+      await Axios.patch(`settings/${data?.personId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${session?.user.accessToken}`,
+        },
+      });
+      toast.success("Privacy settings updated successfully");
+      mutate();
+    } catch (err) {
+      toast.error(String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    if (session) {
+      setLoading(true);
+      try {
+        const url = `stripe-payment/cancel/${subscriptionPlan?.id}`;
+        const payload = {};
+        await Axios.post(url, payload, {
+          headers: {
+            Authorization: `Bearer ${session?.user.accessToken}`,
+          },
+        });
+        const updatedSession = {
+          ...session,
+          user: {
+            ...session.user,
+            isSubscribed: false,
+          },
+        };
+
+        update(updatedSession);
+        toast.success("Subscription cancelled");
+      } catch (error) {
+        toast.error(String(error));
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      toast.error("Please login");
+    }
   };
 
   useEffect(() => {
-    if (data?.isTreePrivate !== undefined) {
-      setTreePrivate(data.isTreePrivate);
-    }
-    if (data?.showInPublicSearch) {
-      setChangePublicProfileSearch(data.showInPublicSearch);
+    if (data) {
+      const { isTreePrivate, showInPublicSearch, recieveNotification } = data;
+      setFormData({ isTreePrivate, showInPublicSearch, recieveNotification });
     }
   }, [data]);
 
-  const updatePersonSettings = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/settings/${payload.userSettingId}`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            showInPublicSearch: changePublicProfileSearch,
-            isTreePrivate: treePrivate,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session?.user.accessToken}`,
-          },
-        }
-      );
-      if (response) {
-        const dataUpdate = await response.json();
-        console.log(dataUpdate);
-      }
-    } catch (error) {
-      console.error("Error updating person settings:", error);
-    }
-  };
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center">
+        <PhotoFlowLoader className="" />
+      </div>
+    );
 
-  const onChangePrivateTree = () => {
-    setTreePrivate((prevMode: boolean) => !prevMode);
-    setMode(false);
-  };
-  const onChangePublicProfileSearch = () => {
-    setChangePublicProfileSearch((prevMode: boolean) => !prevMode);
-  };
+  if (!data && isError) return <pre>An error occurred while fetching</pre>;
 
-  useEffect(() => {
-    updatePersonSettings();
-  }, [treePrivate, changePublicProfileSearch]);
+  if (!data) return <div />;
+
+  const { person } = data;
 
   return (
-    <div className="mt-3.5 pb-[96px]">
-      <div className="mb-[15px]">
-        <Image
-          src={data?.profilePhotoUrl ?? User}
-          width="100"
-          height="100"
-          alt="user"
-          className="mx-auto h-56 w-56 rounded-lg lg:mx-0"
-        />
-      </div>
-      <div className="flex w-full flex-shrink-0 flex-grow-0 flex-wrap rounded-lg bg-[#EEE] p-6 md:w-[56vw]">
-        <div className="m-1 w-[50%] flex-shrink-0 flex-grow-0">
-          <div className="mb-3 flex flex-col leading-6">
-            <span className="flex items-center">
-              <h5 className="mr-2 whitespace-nowrap text-[2rem] font-bold capitalize text-primary">
-                {`${data?.firstName} ${data?.lastName}`}
-              </h5>
-              <span className="flex items-center">
-                <span
-                  role="img"
-                  className="mr-0.5 rounded-full bg-black p-1 text-sm"
-                />
-                <span className="text-black">{data?.membership}</span>
-                <AiFillStar className="text-yellow-500" />
-              </span>
-            </span>
-            <span className="text-gray-950">{data?.email}</span>
+    <Fragment>
+      {loading && (
+        <div className="fixed inset-0 z-10 grid place-items-center bg-white/70">
+          <PhotoFlowLoader />
+        </div>
+      )}
+      <div className="my-10">
+        <div className="mb-8 space-y-4">
+          <div className="relative h-56 w-56 overflow-hidden rounded-lg max-md:mx-auto">
+            {person?.profilePhotoUrl ? (
+              <Image
+                src={person?.profilePhotoUrl}
+                fill
+                alt={person.firstName}
+              />
+            ) : (
+              <Avatar
+                name={{
+                  firstName: person.firstName,
+                  lastName: person.lastName,
+                }}
+              />
+            )}
           </div>
-          <div className="mb-3">
-            <h3 className="mb-[13px] text-lg font-semibold capitalize text-primary lg:mb-[9px]">
-              Privary settings
-            </h3>
-            <div className="w-[298px] rounded-2xl bg-[#fff] p-4 lg:w-[381px]">
-              <ul>
-                <li className="my-4">
-                  <ToggleBtn
-                    labelClass="mr-auto font-medium capitalize"
-                    label="Make Family tree private"
-                    onChangeState={onChangePrivateTree}
-                    state={treePrivate}
-                  />
-                </li>
-                <li className="my-4">
-                  <ToggleBtn
-                    labelClass="mr-auto font-medium capitalize"
-                    label="get notified about new member"
-                    // onChangeState={onChangeMode}
-                    state={mode}
-                  />
-                </li>
-                <li className="my-4">
-                  <ToggleBtn
-                    labelClass="mr-auto font-medium capitalize"
-                    label="show profile in public search"
-                    onChangeState={onChangePublicProfileSearch}
-                    state={changePublicProfileSearch}
-                  />
-                </li>
-              </ul>
+          <ProfileHeader
+            name={`${person.firstName} ${person.lastName}`}
+            email={data.email}
+            membership={session?.user.isSubscribed}
+            className="mx-auto w-fit text-center md:hidden"
+          />
+        </div>
+        <div className="flex w-full max-w-5xl flex-shrink-0 flex-col gap-5 gap-y-8 rounded-2xl bg-[#EEE]  p-6 md:flex-row">
+          <div className="w-full">
+            <ProfileHeader
+              name={`${person.firstName} ${person.lastName}`}
+              email={data.email}
+              membership={session?.user.isSubscribed}
+              className="max-md:hidden"
+            />
+            <div className="mb-3">
+              <h3 className="mb-[13px] text-lg font-medium capitalize text-primary lg:mb-[9px]">
+                Privacy settings
+              </h3>
+              <div className="w-full -translate-x-2 rounded-md bg-[#fff] px-4 py-5 md:max-w-md">
+                <ul className="space-y-4">
+                  {options.map(({ label, name }) => (
+                    <li key={name}>
+                      <Switcher
+                        label={label}
+                        value={formData[name]}
+                        onChange={() => handleSwitcherChange(name)}
+                      />
+                    </li>
+                  ))}
+                  <Button
+                    onClick={() => onPrivacyUpdate()}
+                    className="ml-auto max-w-full translate-y-2 md:max-w-full"
+                  >
+                    Update Preference
+                  </Button>
+                </ul>
+              </div>
+            </div>
+            <div className="mb-4 translate-y-2 space-y-2 font-medium text-primary md:text-lg">
+              <Link href="/auth/resetpassword">Change Password</Link>
+              <p>Manage Subscription</p>
+            </div>
+            <SubscriptionDetails className="pt-2 md:hidden" />
+          </div>
+          <div className="w-full">
+            <h4 className="mb-2 font-semibold text-black">Billed with:</h4>
+            <CardDetails
+              cardLastNumber={
+                data?.cardLastNumber ?? <span className="mb-1">----</span>
+              }
+              cardName={
+                data?.cardName ?? <span className="text-sm">No card found</span>
+              }
+            />
+            <div className="mt-3 space-y-3 md:pl-2">
+              <SubscriptionDetails className="max-md:hidden" />
+              <p className="font-medium capitalize text-[#5724EB] md:text-lg">
+                Update payment method
+              </p>
+
+              <div className="flex flex-col justify-between gap-4 max-md:pt-3 md:flex-row md:items-center">
+                {session?.user.isSubscribed ? (
+                  <button
+                    type="button"
+                    onClick={handleCancelSubscription}
+                    className="block text-sm capitalize text-black"
+                  >
+                    Cancel subscription
+                  </button>
+                ) : (
+                  <Link
+                    href="/user/subscribe"
+                    className="block capitalize text-black md:text-lg"
+                  >
+                    Subscribe to premium
+                  </Link>
+                )}
+                <button
+                  onClick={() => signOut()}
+                  type="button"
+                  className="flex cursor-pointer items-center gap-2 text-sm text-black"
+                >
+                  <FiLogOut className="text-lg" />
+                  <span>Log Out</span>
+                </button>
+              </div>
             </div>
           </div>
-          <span className="mb-2 block text-lg font-medium text-primary">
-            Change Password
-          </span>
-          <span className="mb-2 block text-lg font-medium text-primary">
-            Manage Subscription
-          </span>
-          <h5 className="mb-2 block text-black">
-            Premium Membership: USD $10/mo
-          </h5>
-          <h5 className="capitalize text-black">
-            renewed:{" "}
-            <span className="text-lg font-medium text-primary">
-              April 10,2023
-            </span>
-          </h5>
-        </div>
-        <div className="m-1 flex-1">
-          <h4 className="mb-2 font-semibold text-black">Billed with:</h4>
-          <div className="relative m-2 flex items-center overflow-hidden rounded-3xl bg-[#5724EB] py-10 text-[#FFFFFF] before:absolute before:bottom-[-7rem] before:right-[-6rem] before:h-[10rem] before:w-[10rem] before:rounded-full before:bg-[#EAE5FB] before:content-[''] ">
-            <div className="flex w-[70%] flex-col p-4">
-              <span className="mb-6 capitalize">Card details</span>
-              <span className="mb-4">
-                <span className="mr-3">Mastercard</span>
-                <span>**** 6756</span>
-              </span>
-              <span className="mb-2 flex">
-                <span className="mr-auto capitalize">
-                  {data?.firstName} {data?.lastName}
-                </span>
-                <span>12/26</span>
-              </span>
-            </div>
-            <div className="mx-auto h-[4rem] w-[4rem] rounded-xl bg-[#EAE5FB]" />
-          </div>
-          <h4 className="my-2 text-lg font-medium capitalize text-[#5724EB]">
-            update payment method
-          </h4>
-          <span className="my-1 mb-3 block text-sm capitalize text-black">
-            Cancel subscription
-          </span>
-          <div className="flex cursor-pointer items-center text-black">
-            <span>
-              <FiLogOut className="mr-2 text-lg" />
-            </span>
-            <button
-              onClick={() => signOut()}
-              type="button"
-              className="text-sm capitalize"
-            >
-              Log out
-            </button>
-          </div>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 export default UserProfileBody;

@@ -1,15 +1,21 @@
 import useSWR from "swr";
 
-interface PersonSetting {
-  data: DbPerson;
-  showInPublicSearch: boolean;
-  isTreePrivate: boolean;
+interface PersonSetting extends DbPrivacySettings {
+  person: DbPerson;
+  email: string;
+  membership: string;
+  personId: string;
+  cardLastNumber?: string;
+  cardName?: string;
 }
 
+type TData = APIResponse<PersonSetting>;
+
 const useFetchPersonSetting = (personId: string) => {
-  const { data, error, mutate } = useSWR<PersonSetting, Error>(
-    personId ? `person?personId=${personId}` : null
-  );
+  const url = `settings/${personId}`;
+
+  const { data, error, mutate } = useSWR<TData, Error>(url);
+
   return {
     data: data?.data,
     isLoading: !error && !data,

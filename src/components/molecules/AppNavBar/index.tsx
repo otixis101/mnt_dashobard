@@ -24,30 +24,23 @@ const navLinks = [
   { name: "About", url: "/about" },
 ];
 
-interface User {
-  name: string;
-  image: string;
-  showUser: true;
-}
-
-interface NoUser {
-  showUser?: never;
-  name?: never;
-}
-
-export type AppNavBarProps = User | NoUser;
+export type AppNavBarProps = {
+  showUser?: boolean;
+};
 
 const AppNavBar = (props: AppNavBarProps) => {
   const router = useRouter();
-  const { showUser, name = "N/A" } = props;
+  const { showUser } = props;
   const [changeLogo, setChangeLogo] = useState(false);
   const { data: session, update } = useSession();
   const { personId } = router.query;
 
-  const { data } = useFetchPerson((session?.user?.personId || `${personId}`) ?? "");
+  const { data, isLoading } = useFetchPerson(
+    (session?.user?.personId || `${personId}`) ?? ""
+  );
 
-  if(!session?.user?.personId && personId){
-    update({...session, user: { ...session?.user, personId}});
+  if (!session?.user?.personId && personId) {
+    update({ ...session, user: { ...session?.user, personId } });
   }
 
   const ref = useMenuOnScroll({
@@ -103,46 +96,48 @@ const AppNavBar = (props: AppNavBarProps) => {
         ) : (
           <Popover>
             <PopoverTrigger asChild>
-              <div className="flex cursor-pointer items-center gap-4">
-                <div className="rounded-full bg-primary/40 p-1.5">
-                  {data && (
-                    <div>
-                      {data.profilePhotoUrl ? (
-                        <>
-                          {/* Desktop image */}
-                          <Image
-                            src={data?.profilePhotoUrl ?? ""}
-                            width={50}
-                            height={50}
-                            priority
-                            alt={name}
-                            className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
-                          />
+              {!isLoading ? (
+                <div className="flex cursor-pointer items-center gap-4">
+                  <div className="rounded-full bg-primary/40 p-1.5">
+                    {data && (
+                      <div>
+                        {data.profilePhotoUrl ? (
+                          <>
+                            {/* Desktop image */}
+                            <Image
+                              src={data?.profilePhotoUrl ?? ""}
+                              width={50}
+                              height={50}
+                              priority
+                              alt={data?.firstName ?? ""}
+                              className="hidden h-[50px] w-[50px] rounded-full object-cover md:block"
+                            />
 
-                          {/* Mobile image */}
-                          <Image
-                            src={data?.profilePhotoUrl ?? ""}
-                            width={40}
-                            height={40}
-                            priority
-                            alt={name}
-                            className="block h-[40px] w-[40px] rounded-full object-cover md:hidden"
-                          />
-                        </>
-                      ) : (
-                        <div className=" flex h-[40px] w-[40px] items-center justify-center text-2xl text-white">
-                          {getUserInitials(
-                            `${data?.firstName} ${data?.lastName}`
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                            {/* Mobile image */}
+                            <Image
+                              src={data?.profilePhotoUrl ?? ""}
+                              width={40}
+                              height={40}
+                              priority
+                              alt={data?.firstName ?? ""}
+                              className="block h-[40px] w-[40px] rounded-full object-cover md:hidden"
+                            />
+                          </>
+                        ) : (
+                          <div className=" flex h-[40px] w-[40px] items-center justify-center text-2xl uppercase text-white">
+                            {getUserInitials(
+                              `${data?.firstName} ${data?.lastName}`
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <span className="hidden font-extrabold capitalize md:block">
+                    Hi, {data?.firstName}
+                  </span>
                 </div>
-                <span className="hidden font-extrabold capitalize md:block">
-                  Hi, {data?.firstName}
-                </span>
-              </div>
+              ) : null}
             </PopoverTrigger>
             <PopoverContent className="w-40 rounded-lg bg-[#EFEFEF] p-1.5">
               <ul className="space-y-3 px-1">
@@ -154,7 +149,7 @@ const AppNavBar = (props: AppNavBarProps) => {
                         width={20}
                         height={20}
                         priority
-                        alt={name}
+                        alt={data.firstName}
                         className="hidden rounded-full object-cover md:block"
                       />
                     ) : (

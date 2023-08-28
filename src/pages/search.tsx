@@ -48,7 +48,7 @@ const SearchResultPage = () => {
   console.log(data);
 
   return (
-    <AppLayout hideSpirals showUser name="" image="" type="website">
+    <AppLayout hideSpirals showUser>
       <div className="mx-auto mt-5 w-full md:w-2/4">
         <SearchBar
           value={searchValue}

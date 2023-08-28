@@ -47,13 +47,19 @@ export const InviteFamilyMemberSchema = Yup.array()
 
 export const CardFormValidationSchema = Yup.object().shape({
   nameOnCard: Yup.string().required("Name on card is required"),
-  cardNumber: Yup.string()
-    .required("Card number is required")
-    .matches(/^[0-9]{16}$/, "Card number must be 16 digits"),
-  // expireDate: Yup.string()
-  //   .required("Expiration date is required")
-  //   .matches(/^(0[1-9]|1[0-2])\/[0-9]{2}$/, "Invalid expiration date (DD/MM)"),
-  cvv: Yup.string()
-    .required("CVV is required")
-    .matches(/^[0-9]{3}$/, "CVV must be 3 digits"),
 });
+
+/** 
+ *  number: Yup.string()
+    .required("Card number is required")
+    .matches(/^\d{16}$/, "Card number must be a 16-digit number"),
+  exp_month: Yup.string()
+    .required("Month is required")
+    .matches(/^(0[1-9]|1[0-2])$/, "Month must be a valid two-digit month"),
+  exp_year: Yup.string()
+    .required("Year is required")
+    .matches(/^\d{4}$/, "Year must be a valid four-digit year"),
+  cvc: Yup.string()
+    .required("CVC is required")
+    .matches(/^\d{3,4}$/, "CVC must be a 3 or 4-digit number"),
+ */

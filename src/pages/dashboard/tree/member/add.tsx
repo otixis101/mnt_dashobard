@@ -79,7 +79,7 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
   };
 
   return (
-    <AppLayout hideSpirals showUser image="/assets/user-1.png" name="Hi, Amara">
+    <AppLayout hideSpirals showUser>
       <section className="bg-white pt-20 min-h-app">
         <div className="w-full space-y-10">
           <MultiPageHeader

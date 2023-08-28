@@ -7,13 +7,16 @@ export type Logincredentials = {
   email: string;
   password: string;
 };
+
 type UserResponse = {
   email: string;
   role: string;
   id: string;
   accessToken: string;
   personId?: string;
+  isSubscribed: boolean;
 };
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -47,6 +50,8 @@ export const authOptions: NextAuthOptions = {
             id: data.id,
             accessToken: data.accessToken,
             personId: data.personId ?? null,
+            isSubscribed: data?.isSubscribed ?? false,
+            stripeCustomerId: data?.stripeCustomerId ?? null,
           };
           return user;
         }
@@ -79,6 +84,8 @@ export const authOptions: NextAuthOptions = {
         token.email = session.user.email;
         token.role = session.user.role;
         token.personId = session.user.personId;
+        token.isSubscribed = session.user.isSubscribed;
+        token.stripeCustomerId = session.user.stripeCustomerId;
       }
       if (user) {
         if (account && account.provider === "google") {
@@ -89,6 +96,8 @@ export const authOptions: NextAuthOptions = {
           token.email = user.email;
           token.role = user.role;
           token.personId = user.personId;
+          token.isSubscribed = user.isSubscribed;
+          token.stripeCustomerId = user.stripeCustomerId;
         } else {
           token.id = user.id;
           token.email = user.email;
@@ -96,6 +105,8 @@ export const authOptions: NextAuthOptions = {
           token.role = user.role;
           token.channel = "credentials";
           token.personId = user.personId;
+          token.isSubscribed = user.isSubscribed;
+          token.stripeCustomerId = user.stripeCustomerId;
         }
       }
       return token;
@@ -108,6 +119,8 @@ export const authOptions: NextAuthOptions = {
         session.user.accessToken = token.accessToken;
         session.user.channel = token.channel;
         session.user.personId = token.personId;
+        session.user.isSubscribed = token.isSubscribed;
+        session.user.stripeCustomerId = token.stripeCustomerId;
       } else {
         session.user.channel = token.channel;
         session.user.accessToken = token.accessToken;
@@ -115,8 +128,9 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id;
         session.user.idToken = token.idToken;
         session.user.personId = token.personId;
+        session.user.isSubscribed = token.isSubscribed;
+        session.user.stripeCustomerId = token.stripeCustomerId;
       }
-
       return session;
     },
   },

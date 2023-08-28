@@ -8,7 +8,6 @@ import { RxDotFilled } from "react-icons/rx";
 import { GoShieldCheck } from "react-icons/go";
 import { AiFillStar } from "react-icons/ai";
 
-// import User from "public/assets/user-profile.svg";
 import TreeIcon from "public/assets/icon/tree-icon.png";
 
 import { format } from "date-fns";
@@ -94,7 +93,7 @@ const Index = () => {
                   <Image
                     src={data.profilePhotoUrl}
                     fill
-                    style={{objectFit: "contain"}}
+                    style={{ objectFit: "contain" }}
                     alt="user profile photo"
                     // className="md:h-68 mx-auto md:w-[60rem]"
                   />
@@ -118,8 +117,12 @@ const Index = () => {
                   </h4>
                   <div className="flex items-center text-gray-700">
                     <RxDotFilled className="text-xl text-black" />
-                    <span className="text-black">Premium</span>
-                    <AiFillStar className="text-yellow-500" />
+                    <span className="text-black">
+                      {session?.user.isSubscribed ? "Premium" : "Free"}
+                    </span>
+                    {session?.user.isSubscribed ? (
+                      <AiFillStar className="text-yellow-500" />
+                    ) : null}
                   </div>
                 </span>
                 <span className="mb-2 block text-lg font-medium capitalize text-gray-600 md:text-xl">

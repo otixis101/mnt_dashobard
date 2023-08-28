@@ -11,7 +11,7 @@ const Page = () => {
   const { page } = router.query;
 
   return (
-    <AppLayout hideSpirals showUser image="/assets/user-1.png" name="Hi, Amara">
+    <AppLayout hideSpirals showUser>
       {page === "almost" && <AlmostFirstPage />}
       {page === "final" && <AlmostFinalPage />}
     </AppLayout>

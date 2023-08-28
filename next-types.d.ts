@@ -36,9 +36,9 @@ interface DbPerson {
   readonly stateOfOrigin: string;
   readonly countryOfOrigin: string;
   readonly dateOfBirth: string;
-  readonly showInPublicSearch: boolean;
-  readonly isTreePrivate: boolean;
-  readonly membership: string;
+  // readonly showInPublicSearch: boolean;
+  // readonly isTreePrivate: boolean;
+  // readonly membership: string;
   readonly isTreePrivate: boolean;
   readonly personId: string;
 }
@@ -102,4 +102,54 @@ interface DbLinks {
 interface DbRelationship {
   links: DbLinks[];
   nodes: DbPerson[];
+}
+
+type DbRoot = Root2[];
+
+interface DbSubscriptionPlans {
+  product: DbProduct;
+  prices: DbPrice[];
+}
+
+interface DbProduct {
+  id: string;
+  object: string;
+  active: boolean;
+  created: number;
+  default_price: string;
+  description: string;
+  images: string[];
+  livemode: boolean;
+  name: string;
+  type: string;
+  updated: number;
+}
+
+interface DbPrice {
+  id: string;
+  object: string;
+  active: boolean;
+  billing_scheme: string;
+  created: number;
+  currency: string;
+  livemode: boolean;
+  nickname?: string;
+  product: string;
+  recurring: DbRecurring;
+  tax_behavior: string;
+  type: string;
+  unit_amount: number;
+  unit_amount_decimal: string;
+}
+
+interface DbRecurring {
+  interval: string;
+  interval_count: number;
+  usage_type: string;
+}
+
+interface DbPrivacySettings {
+  isTreePrivate: boolean;
+  showInPublicSearch: boolean;
+  recieveNotification: boolean;
 }

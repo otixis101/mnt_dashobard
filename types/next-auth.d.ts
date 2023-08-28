@@ -12,6 +12,8 @@ declare module "next-auth" {
     idToken: string;
     firstName: string;
     lastName: string;
+    isSubscribed: boolean;
+    stripeCustomerId: string | null;
   }
   interface Session {
     user: User;
@@ -30,5 +32,7 @@ declare module "next-auth/jwt" {
     refreshToken: string;
     idToken: string;
     channel: "credentials" | "google";
+    isSubscribed: boolean;
+    stripeCustomerId: string | null;
   }
 }

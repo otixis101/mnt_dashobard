@@ -1,32 +1,141 @@
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import Image from "next/image";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import { CardFormValidationSchema } from "@/base/helpers/FormValidationSchemas";
-import cardImage from "../../../../../public/assets/card img.png";
-// import useStripeService from "@/base/hooks/api/stripePayment";
+import cardImage from "public/assets/card img.png";
+import { cn } from "@/base/utils";
+import StripeCardElement from "@/components/atoms/StripeCardElement";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import Axios from "@/base/axios";
+import { useSession } from "next-auth/react";
 
-const PaymentCardDetails = () => {
-  // const stripeService = useStripeService();
+interface FormPayload {
+  nameOnCard: string;
+  // number: string;
+  /** convert to number */
+  // exp_month: string;
+  /** convert to number */
+  // exp_year: string;
+  // cvc: string;
+}
+
+interface Options {
+  name: keyof FormPayload;
+  placeholder: string;
+  label: string;
+  className?: string;
+}
+
+export const options: Options[] = [
+  {
+    name: "nameOnCard",
+    placeholder: "Enter Name on card",
+    label: "Name on card",
+  },
+];
+
+interface Props {
+  hideShadows?: true;
+  className?: string;
+  onSubmit(data: FormPayload): Promise<void> | void;
+}
+
+const showMessage = (msg?: string, type: "error" | "success" = "error") => {
+  toast[type](
+    msg ?? "An error occurred while making payment, please try again"
+  );
+};
+
+const PaymentCardDetails = ({ hideShadows, className, onSubmit }: Props) => {
+  const [completed, setCompleted] = useState(false);
+  const { data: session, update } = useSession();
+
+  const stripe = useStripe();
+  const elements = useElements();
+
   const handleCardDetailsSubmit = async (
-    values: {
-      nameOnCard: string;
-      cardNumber: string;
-      expireDate: string;
-      cvv: string;
-    }
-    // formikHelpers: FormikHelpers<typeof values>
+    values: FormPayload
   ): Promise<void> => {
-    console.log("submitted", values);
-    // You can use formikHelpers to perform actions like setting form submission status, resetting form, etc.
+    if (!completed) {
+      showMessage("Please enter card details");
+      return;
+    }
+
+    if (!stripe || !elements) {
+      showMessage();
+      return;
+    }
+
+    const card = elements.getElement(CardElement);
+
+    if (!card) {
+      showMessage();
+      return;
+    }
+
+    const { paymentMethod, error: stripeError } =
+      await stripe.createPaymentMethod({
+        type: "card",
+        card,
+        billing_details: {
+          name: values.nameOnCard,
+        },
+      });
+
+    if (stripeError) {
+      showMessage(stripeError?.message);
+      return;
+    }
+
+    try {
+      const payload = {
+        paymentMethodId: paymentMethod.id,
+        cardLastNumber: paymentMethod.card?.last4 ?? "N/A",
+        cardName: values.nameOnCard,
+      };
+
+      const res = await Axios.post("stripe-payment/save-card", payload, {
+        headers: {
+          authorization: `Bearer ${session?.user.accessToken}`,
+        },
+      });
+
+      if (res.data) {
+        const { setupIntent, error: setupError } =
+          await stripe.confirmCardSetup(res.data.data.client_secret, {
+            payment_method: { card },
+          });
+
+        if (setupIntent) {
+          update({
+            ...session,
+            user: {
+              ...session?.user,
+              stripeCustomerId: res.data.data.customer,
+            },
+          });
+          await onSubmit(values);
+        } else {
+          showMessage(setupError?.message);
+        }
+      }
+    } catch (error) {
+      showMessage(String(error));
+    }
   };
-  // const handleCardDetailsSubmit = async (values: string): void => {
-  //   console.log("submitted", values);
-  // };
 
   return (
-    <div className="flex w-[84vw] items-center justify-center rounded-3xl pl-[38px] pr-[36px] pt-[31px] shadow-[0px_0px_8px_3px_#0000001F] md:h-[581px] md:w-[58vw] md:pl-[8px] md:pr-[0px] md:pt-[0px] lg:w-[47vw] lg:pl-[45px]">
-      <div>
+    <div
+      className={cn(
+        "flex max-w-[670px] items-center justify-center gap-x-1 gap-y-4 rounded-3xl py-16 max-md:px-4 xs:gap-x-5 md:gap-x-10 md:pl-10 md:pr-0",
+        !hideShadows && "shadow-[0px_0px_8px_3px_#0000001F]",
+        className
+      )}
+    >
+      <div className="w-full">
         <div>
           <h2 className="mb-2 text-xl font-extrabold text-gray-900 md:text-[32px]">
             Enter card details
@@ -34,95 +143,53 @@ const PaymentCardDetails = () => {
         </div>
         <Formik
           initialValues={{
+            cvc: "",
+            exp_month: "",
+            exp_year: "",
             nameOnCard: "",
-            cardNumber: "",
-            expireDate: "",
-            cvv: "",
+            number: "",
           }}
           onSubmit={handleCardDetailsSubmit}
           validationSchema={CardFormValidationSchema}
         >
-          {({ handleChange, values, handleBlur }) => (
-            <Form className="mt-4 flex flex-col gap-4 space-y-1">
-              <fieldset>
-                <Input
-                  required
-                  name="nameOnCard"
-                  type="text"
-                  label="Name on card"
-                  placeholder="Enter name on card"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.nameOnCard}
-                />
-                <ErrorMessage
-                  name="nameOnCard"
-                  component="div"
-                  className="error"
-                />
-              </fieldset>
-              <fieldset>
-                <Input
-                  required
-                  name="cardNumber"
-                  type="number"
-                  label="Card number"
-                  placeholder="0000 0000 0000 0000"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.cardNumber}
-                />
-                <ErrorMessage
-                  name="cardNumber"
-                  component="div"
-                  className="error"
-                />
-              </fieldset>
-              <div className="flex justify-between">
-                <div className="mr-14">
-                  <fieldset>
+          {({
+            handleChange,
+            values,
+            handleBlur,
+            touched,
+            errors,
+            isSubmitting,
+          }) => (
+            <Form className="mt-10 space-y-5">
+              <div className="grid grid-cols-1">
+                {options.map(({ className: cName, name, ...item }) => (
+                  <fieldset key={name} className={cName}>
                     <Input
                       required
-                      name="expireDate"
-                      type="number"
-                      label="Expire Date"
-                      placeholder="DD/MM"
+                      type="text"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      value={values.expireDate}
-                    />
-                    <ErrorMessage
-                      name="expireDate"
-                      component="div"
-                      className="error"
-                    />
-                  </fieldset>
-                </div>
-                <div>
-                  <fieldset>
-                    <Input
-                      required
-                      name="cvv"
-                      type="number"
-                      label="CVV"
-                      placeholder="***"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.cvv}
-                    />
-                    <ErrorMessage
-                      name="cvv"
-                      component="div"
-                      className="error"
+                      value={values[name]}
+                      isError={!!(touched[name] && errors[name])}
+                      hint={touched[name] && errors[name] ? errors[name] : ""}
+                      {...item}
+                      id={name}
+                      hintClass={cn("text-xs")}
                     />
                   </fieldset>
-                </div>
+                ))}
               </div>
-              <div className="pb-[40px] pt-[20px] md:pb-[0px] md:pt-[20px] lg:pt-[27px]">
+              <StripeCardElement
+                label="Enter Card Details"
+                id="XXX"
+                hintClass="text-xs"
+                onChange={setCompleted}
+              />
+              <div>
                 <Button
+                  loading={isSubmitting}
                   type="submit"
                   className="max-w-full md:max-w-full"
-                  // disabled={isSubmitting}
                 >
                   Pay
                 </Button>
@@ -131,11 +198,11 @@ const PaymentCardDetails = () => {
           )}
         </Formik>
       </div>
-      <div>
+      <div className="hidden h-60 w-full max-w-[200px] md:block">
         <Image
           src={cardImage}
           alt="mask"
-          className="hidden lg:block lg:h-[205px] lg:w-[280px]"
+          className=" h-60 w-auto object-contain"
         />
       </div>
     </div>
