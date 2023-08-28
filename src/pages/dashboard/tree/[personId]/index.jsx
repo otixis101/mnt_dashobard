@@ -57,6 +57,8 @@ const FamilyTree = () => {
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
+  console.log(treeData);
+
   const parentsIds =
     data && data.relationship
       ? data.relationship.links
@@ -89,6 +91,12 @@ const FamilyTree = () => {
       );
 
       const dataWithoutSpouse = nodes.filter(
+        (node) =>
+          node.description !==
+          `Spouse: ${data.user.firstName} ${data.user.lastName}`
+      );
+
+      const dataWithoutOwnerAndSpouse = dataWithoutOwner.filter(
         (node) =>
           node.description !==
           `Spouse: ${data.user.firstName} ${data.user.lastName}`
@@ -171,6 +179,18 @@ const FamilyTree = () => {
           ...currentPerson.parents,
           emptyParent.id,
         ];
+        if (ownerSpouse.length > 0) {
+          return [
+            ...dataWithoutOwnerAndSpouse,
+            emptyParent,
+            { ...ownerObject, parents: currentPersonParentId },
+            {
+              ...ownerSpouse[0],
+              parents: [data.user.personId],
+              isSpouse: true,
+            },
+          ];
+        }
 
         return [
           ...dataWithoutOwner,
