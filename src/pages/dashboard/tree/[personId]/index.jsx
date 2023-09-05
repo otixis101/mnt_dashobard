@@ -255,6 +255,26 @@ const FamilyTree = () => {
     }
   }, [data]);
 
+  // Get the identity of the node temporarily until the backend implements it
+  const getIdentity = (itemConfig) => {
+    if (itemConfig.id === personId) {
+      return "you";
+    }
+    if (itemConfig.parents?.includes(parentsIds[0])) {
+      return "siblings";
+    }
+    if (itemConfig.parents?.includes(personId)) {
+      return "child";
+    }
+    if (itemConfig.id === ownerSpouseId[0]) {
+      return "Spouse";
+    }
+    if (parentsIds[0].includes(itemConfig.id)) {
+      return "Parent";
+    }
+    return "Member";
+  };
+
   const config = {
     pageFitMode: PageFitMode.AutoSize,
     enableMatrixLayout: true,
@@ -310,19 +330,7 @@ const FamilyTree = () => {
                   `/dashboard/tree/member/add?step=bio-data&ref=${itemConfig.id}`
                 )
               }
-              identity={
-                itemConfig.id === personId
-                  ? "you"
-                  : itemConfig.parents?.includes(parentsIds[0])
-                  ? "siblings"
-                  : itemConfig.parents?.includes(personId)
-                  ? "child"
-                  : itemConfig.id === ownerSpouseId[0]
-                  ? "Spouse"
-                  : parentsIds[0].includes(itemConfig.id)
-                  ? "Parent"
-                  : "Member"
-              }
+              identity={getIdentity(itemConfig)}
               id={itemConfig.id}
               imageSrc={
                 itemConfig.id === personId
