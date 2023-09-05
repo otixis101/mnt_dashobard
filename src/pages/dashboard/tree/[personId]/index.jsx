@@ -288,7 +288,7 @@ const FamilyTree = () => {
     hasSelectorCheckbox: Enabled.False,
     normalLevelShift: 40,
     lineLevelShift: 25,
-    normalItemsInterval: 200,
+    normalItemsInterval: 150,
     lineItemsInterval: 30,
     enablePanning: true,
     defaultTemplateName: "info",
