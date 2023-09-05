@@ -24,8 +24,9 @@ const SuggestionsPage = (props: Props) => {
   const { data: session } = useSession();
 
   console.log(createPersonData);
+  console.log(session);
 
-  const { nextPath = { step: "about" }, isUser = true } = props;
+  const { nextPath = { step: "relationship" }, isUser = true } = props;
 
   if (!createPersonData || !createPersonData.hasSugestion)
     return (
@@ -48,7 +49,7 @@ const SuggestionsPage = (props: Props) => {
 
   const {
     contributor,
-    person: { firstName, lastName, homeTown, userId },
+    person: { firstName, lastName, homeTown, userId, profilePhotoUrl },
   } = suggestions[selected];
 
   const handlePersonAccept = async () => {
@@ -88,7 +89,7 @@ const SuggestionsPage = (props: Props) => {
       setSelected((c) => c + 1);
     } else {
       toast.info("You are all caught up, proceed to the next step");
-      router.push({ query: { step: "about" } });
+      router.push({ query: { step: "relationship" } });
     }
   };
 
@@ -116,8 +117,10 @@ const SuggestionsPage = (props: Props) => {
           key={firstName}
           addedBy={{
             name: `${contributor.firstName} ${contributor.lastName}`,
+            image: contributor.profilePhotoUrl,
           }}
           name={`${firstName} ${lastName}`}
+          profileImage={profilePhotoUrl}
           state={homeTown}
           onAccept={handlePersonAccept}
           onReject={handlePersonReject}

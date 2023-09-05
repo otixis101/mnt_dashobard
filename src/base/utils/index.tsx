@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { ClassValue, clsx } from "clsx";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { Fetcher } from "swr";
 import { twMerge } from "tailwind-merge";
 
@@ -19,6 +19,12 @@ export const apiFetcher: Fetcher = async (apiUrl: string) => {
       Authorization: `Bearer ${sessionToken}`,
     },
   });
+
+  if (res.status === 401) {
+    signOut({
+      callbackUrl: "/auth/signin",
+    });
+  }
 
   if (!res.ok) {
     const error = new Error("HttpError");

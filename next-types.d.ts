@@ -36,9 +36,8 @@ interface DbPerson {
   readonly stateOfOrigin: string;
   readonly countryOfOrigin: string;
   readonly dateOfBirth: string;
-  // readonly showInPublicSearch: boolean;
-  // readonly isTreePrivate: boolean;
-  // readonly membership: string;
+  readonly showInPublicSearch: boolean;
+  readonly membership: string;
   readonly isTreePrivate: boolean;
   readonly personId: string;
 }
@@ -86,6 +85,7 @@ interface DbSuggestionPerson {
   contibutorId: string;
   stateOfOrigin: string;
   countryOfOrigin: string;
+  profilePhotoUrl: string;
   __v: number;
 }
 

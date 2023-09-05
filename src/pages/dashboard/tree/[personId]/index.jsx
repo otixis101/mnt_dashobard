@@ -57,13 +57,18 @@ const FamilyTree = () => {
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
 
-  console.log(treeData);
-
   const parentsIds =
     data && data.relationship
       ? data.relationship.links
           .filter((node) => node.id === personId)
           .map((person) => person.parents)
+      : [];
+
+  const ownerSpouseId =
+    data && data.relationship
+      ? data.relationship.links
+          .filter((node) => node.spouseId === personId)
+          .map((person) => person.id)
       : [];
 
   const getTreeDataPreset = () => {
@@ -108,20 +113,20 @@ const FamilyTree = () => {
           `Spouse: ${data.user.firstName} ${data.user.lastName}`
       );
 
-      const ownerChildren = data.relationship.links.filter(
-        (node) => node.parents?.[0] === data.user.personId
-      );
-      const libraryFormattedOwnerChildren = ownerChildren.map((child) => ({
-        ...child,
-        parents:
-          ownerSpouse.length > 0 ? [ownerSpouse[0].id] : [data.user.personId],
-      }));
+      // const ownerChildren = data.relationship.links.filter(
+      //   (node) => node.parents?.[0] === data.user.personId
+      // );
+      // const libraryFormattedOwnerChildren = ownerChildren.map((child) => ({
+      //   ...child,
+      //   parents:
+      //     ownerSpouse.length > 0 ? [ownerSpouse[0].id] : [data.user.personId],
+      // }));
 
-      const ownerChildrenSpouse = data.relationship.links.filter((node) => {
-        const ownerChildrenIds = ownerChildren.map((child) => child.id);
+      // const ownerChildrenSpouse = data.relationship.links.filter((node) => {
+      //   const ownerChildrenIds = ownerChildren.map((child) => child.id);
 
-        return ownerChildrenIds.includes(node.spouseId);
-      });
+      //   return ownerChildrenIds.includes(node.spouseId);
+      // });
       const emptyParent = emptyTreePresetData[0];
 
       const currentPersonParentId = currentPerson.parents && [
@@ -131,17 +136,18 @@ const FamilyTree = () => {
 
       if (!ownerSpouse.length) {
         nodes = [...nodes, emptySpouse];
-      } else if (currentPerson && !currentPerson.parents) {
-        nodes = [
-          ...dataWithoutOwnerAndSpouse,
-          ownerObject,
-          {
-            ...ownerSpouse[0],
-            parents: [data.user.personId],
-            isSpouse: true,
-          },
-          ...emptyTreePresetData,
-        ];
+        // } else if (currentPerson && !currentPerson.parents) {
+        //   nodes = [
+        //     ...dataWithoutOwnerAndSpouse,
+        //     ownerObject,
+        //     {
+        //       ...ownerSpouse[0],
+        //       parents: [data.user.personId],
+        //       isSpouse: true,
+        //     },
+        //     ...emptyTreePresetData,
+        //   ];
+        //
       } else if (
         currentPerson &&
         currentPerson.parents &&
@@ -162,44 +168,29 @@ const FamilyTree = () => {
           ...dataWithoutSpouse,
           {
             ...ownerSpouse[0],
-            parents: [data.user.personId],
             isSpouse: true,
           },
         ];
       }
-      const dataWithoutChildren = dataWithoutSpouse.filter(
-        (node) => node.parents?.[0] !== data.user.personId
-      );
-      if (ownerChildren.length > 0 && ownerSpouse.length > 0) {
-        nodes = [
-          ...dataWithoutChildren,
-          { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
-          ...libraryFormattedOwnerChildren,
-        ];
-      }
+      // const dataWithoutChildren = dataWithoutSpouse.filter(
+      //   (node) => node.parents?.[0] !== data.user.personId
+      // );
+      // if (ownerChildren.length > 0 && ownerSpouse.length > 0) {
+      //   nodes = [
+      //     ...dataWithoutChildren,
+      //     { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
+      //     ...libraryFormattedOwnerChildren,
+      //   ];
+      // }
 
-      if (ownerChildrenSpouse.length > 0) {
-        const libraryFormattedOwnerChildrenSpouse = ownerChildrenSpouse.map(
-          (child) => ({
-            ...child,
-            parents: [child.spouseId],
-            isSpouse: true,
-          })
-        );
-
-        const dataWithoutChildrenSpouse = dataWithoutChildren.filter((node) => {
-          const ownerChildrenSpouseIds = ownerChildrenSpouse.map(
-            (child) => child.id
-          );
-
-          return !ownerChildrenSpouseIds.includes(node.id);
-        });
-
-        nodes = [
-          ...dataWithoutChildrenSpouse,
-          ...libraryFormattedOwnerChildrenSpouse,
-          { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
-          ...libraryFormattedOwnerChildren,
+      if (!currentPerson.parents && !ownerSpouse.length) {
+        return [
+          ...dataWithoutOwner,
+          emptySpouse,
+          {
+            ...ownerObject,
+            parents: emptyTreePresetData.map((item) => item.id),
+          },
         ];
       }
 
@@ -211,18 +202,18 @@ const FamilyTree = () => {
       ) {
         // update the currentperson's parent array with the empty parent id
 
-        if (ownerSpouse.length > 0) {
-          return [
-            ...dataWithoutOwnerAndSpouse,
-            emptyParent,
-            { ...ownerObject, parents: currentPersonParentId },
-            {
-              ...ownerSpouse[0],
-              parents: [data.user.personId],
-              isSpouse: true,
-            },
-          ];
-        }
+        // if (ownerSpouse.length > 0) {
+        //   return [
+        //     ...dataWithoutOwnerAndSpouse,
+        //     emptyParent,
+        //     { ...ownerObject, parents: currentPersonParentId },
+        //     {
+        //       ...ownerSpouse[0],
+        //       parents: [data.user.personId],
+        //       isSpouse: true,
+        //     },
+        //   ];
+        // }
 
         return [
           ...dataWithoutOwner,
@@ -277,7 +268,7 @@ const FamilyTree = () => {
     hasSelectorCheckbox: Enabled.False,
     normalLevelShift: 40,
     lineLevelShift: 25,
-    normalItemsInterval: 250,
+    normalItemsInterval: 200,
     lineItemsInterval: 30,
     enablePanning: true,
     defaultTemplateName: "info",
@@ -304,7 +295,7 @@ const FamilyTree = () => {
                 </div>
                 <p className="text-[10px] text-[#212121]">
                   {itemConfig.id === "empty-spouse"
-                    ? "Add Member"
+                    ? "Add Spouse"
                     : "Add Parent"}
                 </p>
               </Link>
@@ -325,8 +316,12 @@ const FamilyTree = () => {
                   : itemConfig.parents?.includes(parentsIds[0])
                   ? "siblings"
                   : itemConfig.parents?.includes(personId)
-                  ? "spouse"
-                  : "parent"
+                  ? "child"
+                  : itemConfig.id === ownerSpouseId[0]
+                  ? "Spouse"
+                  : parentsIds[0].includes(itemConfig.id)
+                  ? "Parent"
+                  : "Member"
               }
               id={itemConfig.id}
               imageSrc={
@@ -335,8 +330,6 @@ const FamilyTree = () => {
                   : itemConfig.image
               }
               personName={itemConfig.title}
-              // dob="Wed Jul 12 2023"
-              // age={20}
             />
           );
         },
@@ -344,6 +337,8 @@ const FamilyTree = () => {
     ],
     items: treeData,
   };
+
+  console.log(treeData);
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
