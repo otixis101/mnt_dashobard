@@ -15,7 +15,9 @@ import { emptyTreePresetData } from "@/components/constants";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 import Link from "next/link";
 import PhotoFlowLoader from "@/components/molecules/PhotoFlow/PhotoFlowLoader";
+import DashboardPhotoAlbum from "@/components/molecules/TreeMember/DashboardTreeAlbum";
 import { cn } from "@/base/utils";
+import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
@@ -56,6 +58,7 @@ const FamilyTree = () => {
   const { personId } = router.query;
 
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
+  const { data: loggedInUser } = useFetchPerson(personId);
 
   const parentsIds =
     data && data.relationship
@@ -113,20 +116,6 @@ const FamilyTree = () => {
           `Spouse: ${data.user.firstName} ${data.user.lastName}`
       );
 
-      // const ownerChildren = data.relationship.links.filter(
-      //   (node) => node.parents?.[0] === data.user.personId
-      // );
-      // const libraryFormattedOwnerChildren = ownerChildren.map((child) => ({
-      //   ...child,
-      //   parents:
-      //     ownerSpouse.length > 0 ? [ownerSpouse[0].id] : [data.user.personId],
-      // }));
-
-      // const ownerChildrenSpouse = data.relationship.links.filter((node) => {
-      //   const ownerChildrenIds = ownerChildren.map((child) => child.id);
-
-      //   return ownerChildrenIds.includes(node.spouseId);
-      // });
       const emptyParent = emptyTreePresetData[0];
 
       const currentPersonParentId = currentPerson.parents && [
@@ -136,18 +125,6 @@ const FamilyTree = () => {
 
       if (!ownerSpouse.length) {
         nodes = [...nodes, emptySpouse];
-        // } else if (currentPerson && !currentPerson.parents) {
-        //   nodes = [
-        //     ...dataWithoutOwnerAndSpouse,
-        //     ownerObject,
-        //     {
-        //       ...ownerSpouse[0],
-        //       parents: [data.user.personId],
-        //       isSpouse: true,
-        //     },
-        //     ...emptyTreePresetData,
-        //   ];
-        //
       } else if (
         currentPerson &&
         currentPerson.parents &&
@@ -172,16 +149,6 @@ const FamilyTree = () => {
           },
         ];
       }
-      // const dataWithoutChildren = dataWithoutSpouse.filter(
-      //   (node) => node.parents?.[0] !== data.user.personId
-      // );
-      // if (ownerChildren.length > 0 && ownerSpouse.length > 0) {
-      //   nodes = [
-      //     ...dataWithoutChildren,
-      //     { ...ownerSpouse[0], parents: [data.user.personId], isSpouse: true },
-      //     ...libraryFormattedOwnerChildren,
-      //   ];
-      // }
 
       if (!currentPerson.parents && !ownerSpouse.length) {
         return [
@@ -201,19 +168,6 @@ const FamilyTree = () => {
         currentPerson.parents.length === 1
       ) {
         // update the currentperson's parent array with the empty parent id
-
-        // if (ownerSpouse.length > 0) {
-        //   return [
-        //     ...dataWithoutOwnerAndSpouse,
-        //     emptyParent,
-        //     { ...ownerObject, parents: currentPersonParentId },
-        //     {
-        //       ...ownerSpouse[0],
-        //       parents: [data.user.personId],
-        //       isSpouse: true,
-        //     },
-        //   ];
-        // }
 
         return [
           ...dataWithoutOwner,
@@ -330,7 +284,11 @@ const FamilyTree = () => {
                   `/dashboard/tree/member/add?step=bio-data&ref=${itemConfig.id}`
                 )
               }
-              identity={getIdentity(itemConfig)}
+              identity={
+                itemConfig.id === personId
+                  ? "You"
+                  : itemConfig.description || getIdentity(itemConfig)
+              }
               id={itemConfig.id}
               imageSrc={
                 itemConfig.id === personId
@@ -424,6 +382,14 @@ const FamilyTree = () => {
           )}
         </div>
       </section>
+
+      {loggedInUser && (
+        <DashboardPhotoAlbum
+          imagesUrls={loggedInUser.images
+            .map((photo) => JSON.parse(photo).url)
+            .slice(0, 3)}
+        />
+      )}
     </AppLayout>
   );
 };

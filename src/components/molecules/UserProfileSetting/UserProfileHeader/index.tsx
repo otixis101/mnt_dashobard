@@ -1,7 +1,7 @@
 import React from "react";
 // icons
 import { RxCaretRight } from "react-icons/rx";
-import { BiArrowBack } from "react-icons/bi";
+import BackArrow from "@/components/atoms/BackButton";
 
 const UserProfileHeader = () => (
   <header>
@@ -17,9 +17,7 @@ const UserProfileHeader = () => (
         </span>
         <span className="capitalize">Settings</span>
       </h3>
-      <span>
-        <BiArrowBack className="h-12 w-14 cursor-pointer" />
-      </span>
+      <BackArrow />
     </nav>
   </header>
 );
