@@ -11,12 +11,12 @@ import {
   PopoverContent,
 } from "@/components/atoms/Popover";
 import { DayPickerCalendar } from "@/components/molecules/Calendar/CalendarDayPicker";
-import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Axios from "@/base/axios";
 import { cn } from "@/base/utils";
 import useStore from "@/base/store";
+import { useInput } from "react-day-picker";
 import AlmostThereDropBox from "../../AlmostThereDropBox";
 
 const relationships = [
@@ -66,7 +66,7 @@ const FirstForm = () => {
   const [file, setFile] = useState<File>();
   const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
   const [facts, setFacts] = useState<string[]>([]);
-  const [date, setDate] = useState<Date>();
+  const [calenderOpen, setCalenderOpen] = useState(false);
   const [formData, setFormData] = useState({
     placeOfBirth: "",
     sex: "",
@@ -74,6 +74,7 @@ const FirstForm = () => {
     address: "",
     relationship: "",
   });
+  const calendarRef = React.useRef<HTMLInputElement>(null);
 
   const { createPersonData } = useStore();
 
@@ -90,6 +91,13 @@ const FirstForm = () => {
   const router = useRouter();
 
   const { query } = router;
+
+  const { inputProps, dayPickerProps } = useInput({
+    defaultSelected: new Date(),
+    fromYear: 1900,
+    toYear: new Date().getFullYear(),
+    required: true,
+  });
 
   const handleRadioOnChange = (key: RadioFields, value: string) => {
     setRadioValues((prev) => ({ ...prev, [key]: value }));
@@ -135,7 +143,6 @@ const FirstForm = () => {
       formDataPayload.append("profilePhoto", file as File);
       formDataPayload.append("placeOfBirth", formData.placeOfBirth);
       formDataPayload.append("facts", facts.join(","));
-      formDataPayload.append("deathOfDeath", date ? String(date) : "");
       formDataPayload.append("sex", formData.sex);
       formDataPayload.append("occupation", formData.occupation);
       formDataPayload.append("address", formData.address);
@@ -146,6 +153,13 @@ const FirstForm = () => {
       formDataPayload.append("relativeId", relative?.personId ?? "");
       formDataPayload.append("reference", String(query.reference));
       formDataPayload.append("maritalStatus", radioValues.maritalStatus);
+
+      if (status === "Deceased") {
+        formDataPayload.append(
+          "dateOfDeath",
+          `${new Date(inputProps.value as string)}`
+        );
+      }
       setLoading(true);
       try {
         const res = await Axios.post(`/person/family/add`, formDataPayload, {
@@ -225,16 +239,18 @@ const FirstForm = () => {
           {status === "Deceased" && (
             <div>
               <span>Enter Date of death</span>
-              <Popover>
+              <Popover
+                onOpenChange={(prevValue) => setCalenderOpen(!prevValue)}
+                defaultOpen={calenderOpen}
+              >
                 <PopoverTrigger asChild>
                   <button
                     type="button"
                     className="text-light-slate-9 flex w-full items-center gap-4 text-base"
                   >
                     <Input
-                      disabled
-                      placeholder="Date of birth"
-                      value={date ? `${format(date, "PPP")}` : ""}
+                      ref={calendarRef}
+                      {...inputProps}
                       label=""
                       parentClass="w-full"
                     />
@@ -242,11 +258,8 @@ const FirstForm = () => {
                 </PopoverTrigger>
                 <PopoverContent align="start" className="w-auto bg-white p-0">
                   <DayPickerCalendar
-                    // block user's from selecting a future date
-                    toDate={new Date()}
                     mode="single"
-                    selected={date}
-                    onSelect={setDate}
+                    {...dayPickerProps}
                     className="rounded-md border"
                   />
                 </PopoverContent>

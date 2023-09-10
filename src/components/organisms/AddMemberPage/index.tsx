@@ -154,8 +154,6 @@ const AddMemberPage = () => {
     }
   }, [calenderOpen]);
 
-  console.log(":::::::::: inputProps:", new Date(inputProps.value as unknown as string));
-
   useEffect(() => {
     if (selectedCountry) {
       const filteredCountry = countryArrray.filter(
@@ -222,7 +220,7 @@ const AddMemberPage = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className="flex items-center w-full gap-4 text-base text-light-slate-9"
+                    className="text-light-slate-9 flex w-full items-center gap-4 text-base"
                   >
                     <Input
                       ref={calendarRef}
@@ -232,7 +230,7 @@ const AddMemberPage = () => {
                     />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-auto p-0 bg-white">
+                <PopoverContent align="start" className="w-auto bg-white p-0">
                   <DayPickerCalendar
                     // block user's from selecting a future date
 
@@ -241,7 +239,7 @@ const AddMemberPage = () => {
                     {...dayPickerProps}
                     // selected={date}
                     // onSelect={setDate}
-                    className="border rounded-md"
+                    className="rounded-md border"
                   />
                 </PopoverContent>
               </Popover>
