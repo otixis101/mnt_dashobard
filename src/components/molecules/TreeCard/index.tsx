@@ -35,7 +35,7 @@ const TreeCard = ({
     <HoverCardTrigger
       className={cn(
         "relative flex h-[118px]  w-24 items-center  rounded-xl ",
-        identity === "you" &&
+        identity === "You" &&
           " translate-y-2 scale-[1.15] rounded-xl border-[3.5px] border-green-500"
       )}
       asChild
@@ -74,7 +74,9 @@ const TreeCard = ({
           </div>
           <div className="z-10 mx-auto flex w-max -translate-y-1 items-center gap-1 rounded-full bg-stone-300 px-1">
             <div className="h-2 w-2 rounded-full border bg-green-500 " />
-            <p className="text-[8px] capitalize">{identity}</p>
+            <p className="text-[8px] capitalize">
+              {truncateString(identity ?? "", 14)}
+            </p>
           </div>
         </div>
       </div>
