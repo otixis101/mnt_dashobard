@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { ChangeEvent, useState } from "react";
 import Button from "@/components/atoms/Button";
 import ComboBox from "@/components/atoms/ComboBox";
@@ -79,7 +80,6 @@ const FirstForm = () => {
   const { createPersonData } = useStore();
 
   // This is temporary to remove typescript error message
-  const relative = createPersonData as DbPersonWithOutSuggestion;
 
   const [loading, setLoading] = useState(false);
   const [radioValues, setRadioValues] = useState<Record<RadioFields, string>>({
@@ -120,6 +120,13 @@ const FirstForm = () => {
     }
   };
 
+  const relative = createPersonData as DbPersonWithOutSuggestion;
+
+  const suggestedRelative =
+    query.isSuggestion === "true"
+      ? (createPersonData as DbPersonWithSuggestion)
+      : ([] as unknown as DbPersonWithSuggestion);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -150,7 +157,12 @@ const FirstForm = () => {
         "relationship",
         formData.relationship.toLowerCase()
       );
-      formDataPayload.append("relativeId", relative?.personId ?? "");
+      formDataPayload.append(
+        "relativeId",
+        query.isSuggestion === "true"
+          ? suggestedRelative.suggestions[0].person._id
+          : relative?.personId ?? ""
+      );
       formDataPayload.append("reference", String(query.reference));
       formDataPayload.append("maritalStatus", radioValues.maritalStatus);
 

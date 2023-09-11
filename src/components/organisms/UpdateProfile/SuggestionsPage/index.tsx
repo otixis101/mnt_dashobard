@@ -49,8 +49,10 @@ const SuggestionsPage = (props: Props) => {
 
   const {
     contributor,
-    person: { firstName, lastName, homeTown, userId, profilePhotoUrl },
+    person: { firstName, lastName, homeTown, _id, profilePhotoUrl },
   } = suggestions[selected];
+
+  console.log(_id);
 
   const handlePersonAccept = async () => {
     if (session) {
@@ -58,7 +60,7 @@ const SuggestionsPage = (props: Props) => {
       setLoading(true);
       const payload = {
         _tempDataId: _tempProfileId,
-        acceptedPersonId: userId,
+        acceptedPersonId: _id,
         acceptedSuggestion: "true",
         isUser,
       };
@@ -73,7 +75,9 @@ const SuggestionsPage = (props: Props) => {
         setPersonData({ ...createPersonData, _tempProfileId: res.data.data });
 
         toast.success("User updated");
-        router.push({ query: { ...router.query, ...nextPath } });
+        router.push({
+          query: { ...router.query, ...nextPath, isSuggestion: "true" },
+        });
       } catch (error) {
         toast.error(String(error));
       } finally {

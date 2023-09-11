@@ -106,8 +106,6 @@ const AddMemberPage = () => {
       isUser: false,
     };
 
-    console.log("::::::::::: date date", inputProps.value);
-
     try {
       setLoading(true);
 
@@ -129,7 +127,7 @@ const AddMemberPage = () => {
         setPersonData(person.data);
 
         if (person.data.hasSugestion) {
-          router.push({ query: { step: "suggestion" } });
+          router.push({ query: { step: "suggestion", reference: ref } });
         } else {
           router.push({
             query: {

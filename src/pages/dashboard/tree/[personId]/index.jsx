@@ -304,7 +304,6 @@ const FamilyTree = () => {
     items: treeData,
   };
 
-  console.log(treeData);
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
