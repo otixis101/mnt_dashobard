@@ -40,7 +40,7 @@ const TreeCard = ({
     <Popover>
       <div
         className={cn(
-          "relative flex h-[118px] w-24 items-center rounded-xl",
+          "relative flex h-[118px] w-24 items-center rounded-xl bg-white",
           identity === "You" &&
             " translate-y-2 scale-[1.15] rounded-xl border-[3.5px] border-green-500"
         )}
