@@ -74,26 +74,17 @@ const FamilyTree = () => {
           .map((person) => person.id)
       : [];
 
-  const siblingsIds =
-    data && data.relationship
-      ? data.relationship.links
-          .filter((node) => node.description === "Sibling")
-          .map((person) => person.id)
-      : [];
-
   const getRelativePresets = (id) => {
-    if (siblingsIds.includes(id)) {
-      return ["Spouse", "Child"];
+    if (id === personId) {
+      return ["Father", "Mother", "Child", "Sibling", "Spouse"];
     }
     if (parentsIds[0].includes(id)) {
       return ["Spouse"];
     }
 
-    return ["Father", "Mother", "Child", "Sibling", "Spouse"];
+    return ["Spouse", "Child"];
   };
 
-  console.log(siblingsIds);
-  console.log(data);
   const getTreeDataPreset = () => {
     const ownerObject = {
       id: data?.user.personId,
