@@ -79,7 +79,7 @@ const FamilyTree = () => {
       return ["Father", "Mother", "Child", "Brother", "Sister", "Spouse"];
     }
     if (parentsIds[0].includes(id)) {
-      return ["Spouse"];
+      return ["Father", "Mother"];
     }
 
     return ["Spouse", "Child"];
