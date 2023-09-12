@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import React, { ChangeEvent, useState } from "react";
 import Button from "@/components/atoms/Button";
-import ComboBox from "@/components/atoms/ComboBox";
 import Radio from "@/components/atoms/Input/Radio";
 import Input from "@/components/atoms/Input";
 import SeparatorInput from "@/components/atoms/Input/SeparatorInput";
@@ -20,14 +19,14 @@ import useStore from "@/base/store";
 import { useInput } from "react-day-picker";
 import AlmostThereDropBox from "../../AlmostThereDropBox";
 
-const relationships = [
-  { name: "Mother", value: "mother" },
-  { name: "Father", value: "father" },
-  { name: "Spouse", value: "Spouse" },
-  { name: "Child", value: "Child" },
-  { name: "Brother", value: "brother" },
-  { name: "Sister", value: "sister" },
-];
+// const relationships = [
+//   { name: "Mother", value: "mother" },
+//   { name: "Father", value: "father" },
+//   { name: "Spouse", value: "spouse" },
+//   { name: "Child", value: "Child" },
+//   { name: "Brother", value: "brother" },
+//   { name: "Sister", value: "sister" },
+// ];
 
 const additionalFields = [
   {
@@ -73,7 +72,6 @@ const FirstForm = () => {
     sex: "",
     occupation: "",
     address: "",
-    relationship: "",
   });
   const calendarRef = React.useRef<HTMLInputElement>(null);
 
@@ -91,6 +89,8 @@ const FirstForm = () => {
   const router = useRouter();
 
   const { query } = router;
+
+  console.log(query.relationship);
 
   const { inputProps, dayPickerProps } = useInput({
     defaultSelected: new Date(),
@@ -155,7 +155,7 @@ const FirstForm = () => {
       formDataPayload.append("address", formData.address);
       formDataPayload.append(
         "relationship",
-        formData.relationship.toLowerCase()
+        (query.relationship as string) ?? ""
       );
       formDataPayload.append(
         "relativeId",
@@ -172,6 +172,7 @@ const FirstForm = () => {
           `${new Date(inputProps.value as string)}`
         );
       }
+
       setLoading(true);
       try {
         const res = await Axios.post(`/person/family/add`, formDataPayload, {
@@ -225,14 +226,14 @@ const FirstForm = () => {
               </fieldset>
             )
           )}
-          <ComboBox
+          {/* <ComboBox
             label="Relationship"
             data={relationships}
             onSelect={(val) =>
               setFormData((c) => ({ ...c, relationship: val }))
             }
             defaultValue={formData.relationship || "Choose Relationship"}
-          />
+          /> */}
           {additionalFields.map((opt) => (
             <Input
               {...opt}

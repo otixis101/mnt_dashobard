@@ -74,6 +74,26 @@ const FamilyTree = () => {
           .map((person) => person.id)
       : [];
 
+  const siblingsIds =
+    data && data.relationship
+      ? data.relationship.links
+          .filter((node) => node.description === "Sibling")
+          .map((person) => person.id)
+      : [];
+
+  const getRelativePresets = (id) => {
+    if (siblingsIds.includes(id)) {
+      return ["Spouse", "Child"];
+    }
+    if (parentsIds[0].includes(id)) {
+      return ["Spouse"];
+    }
+
+    return ["Father", "Mother", "Child", "Sibling", "Spouse"];
+  };
+
+  console.log(siblingsIds);
+  console.log(data);
   const getTreeDataPreset = () => {
     const ownerObject = {
       id: data?.user.personId,
@@ -279,11 +299,7 @@ const FamilyTree = () => {
           return (
             <TreeCard
               hasAddButton={!(itemConfig.isSpouse || itemConfig.isEmpty)}
-              onPlusClick={() =>
-                router.push(
-                  `/dashboard/tree/member/add?step=bio-data&ref=${itemConfig.id}`
-                )
-              }
+              relationships={getRelativePresets(itemConfig.id)}
               identity={
                 itemConfig.id === personId
                   ? "You"
@@ -362,7 +378,7 @@ const FamilyTree = () => {
           </div>
         </div>
 
-        <div className="flex h-[calc(100vh-20px)] items-start justify-center overflow-hidden py-8">
+        <div className="flex h-[calc(100vh-20px)] items-start justify-center !overflow-visible py-8">
           {isLoading && <PhotoFlowLoader />}
           {data && (
             <div

@@ -25,7 +25,9 @@ const DashboardPhotoAlbum = ({ imagesUrls }: DashboardPhotoAlbumProps) => {
             i === 2 && "-top-1 z-[51] -scale-[85%] bg-gray-600"
           )}
         >
-          {imagesUrls && <Image src={imagesUrls[i]} fill alt="album" />}
+          {imagesUrls && imagesUrls[i] !== undefined && (
+            <Image src={imagesUrls[i]} fill alt="album" />
+          )}
         </div>
       ))}
       <Button

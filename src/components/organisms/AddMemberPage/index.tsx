@@ -65,7 +65,7 @@ const AddMemberPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const calendarRef = React.useRef<HTMLInputElement>(null);
-  const { ref } = router.query;
+  const { ref, relationship } = router.query;
   const [phoneNumber, setPhoneNumber] = useState<E164Number>();
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -127,12 +127,19 @@ const AddMemberPage = () => {
         setPersonData(person.data);
 
         if (person.data.hasSugestion) {
-          router.push({ query: { step: "suggestion", reference: ref } });
+          router.push({
+            query: {
+              step: "suggestion",
+              reference: ref,
+              relationship,
+            },
+          });
         } else {
           router.push({
             query: {
               step: "relationship",
               reference: ref,
+              relationship,
             },
           });
         }

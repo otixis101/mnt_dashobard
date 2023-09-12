@@ -23,9 +23,6 @@ const SuggestionsPage = (props: Props) => {
   const { createPersonData, setPersonData } = useStore();
   const { data: session } = useSession();
 
-  console.log(createPersonData);
-  console.log(session);
-
   const { nextPath = { step: "relationship" }, isUser = true } = props;
 
   if (!createPersonData || !createPersonData.hasSugestion)
