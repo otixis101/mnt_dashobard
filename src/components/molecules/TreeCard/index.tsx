@@ -61,25 +61,15 @@ const TreeCard = ({
           <PopoverContent className="bg-slate-100">
             <h3>Select Relationship:</h3>
             <div className="mt-4 flex flex-col gap-2">
-              {relationships?.length === 1
-                ? relationships?.map((relationship) => (
-                  <Link
-                    key={`${id}-${relationship}`}
-                    href={`/dashboard/tree/member/add?step=bio-data&ref=${id}&relationship=${relationship.toLowerCase()}`}
-                    className="mt-auto h-max rounded-lg bg-primary px-5 py-1 capitalize text-white"
-                  >
-                    {relationship}
-                  </Link>
-                ))
-                : relationships?.map((relationship) => (
-                  <Link
-                    key={`${id}-${relationship}`}
-                    href={`/dashboard/tree/member/add?step=bio-data&ref=${id}&relationship=${relationship.toLowerCase()}`}
-                    className="mt-auto h-max rounded-lg bg-primary px-5 py-1 capitalize text-white"
-                  >
-                    {relationship}
-                  </Link>
-                ))}
+              {relationships?.map((relationship) => (
+                <Link
+                  key={`${id}-${relationship}`}
+                  href={`/dashboard/tree/member/add?step=bio-data&ref=${id}&relationship=${relationship.toLowerCase()}`}
+                  className="mt-auto h-max rounded-lg bg-primary px-5 py-1 capitalize text-white"
+                >
+                  {relationship}
+                </Link>
+              ))}
             </div>
           </PopoverContent>
 

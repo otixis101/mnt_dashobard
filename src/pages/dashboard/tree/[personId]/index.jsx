@@ -76,7 +76,7 @@ const FamilyTree = () => {
 
   const getRelativePresets = (id) => {
     if (id === personId) {
-      return ["Father", "Mother", "Child", "Sibling", "Spouse"];
+      return ["Father", "Mother", "Child", "Brother", "Sister", "Spouse"];
     }
     if (parentsIds[0].includes(id)) {
       return ["Spouse"];
@@ -183,6 +183,7 @@ const FamilyTree = () => {
         return [
           ...dataWithoutOwner,
           emptyParent,
+          emptySpouse,
           { ...ownerObject, parents: currentPersonParentId },
         ];
       }
@@ -219,6 +220,8 @@ const FamilyTree = () => {
       setTreeData(treeDataPreset);
     }
   }, [data]);
+
+  console.log(data);
 
   // Get the identity of the node temporarily until the backend implements it
   const getIdentity = (itemConfig) => {
@@ -273,7 +276,9 @@ const FamilyTree = () => {
                 className={cn(
                   "flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
                 )}
-                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}`}
+                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}&relationship=${
+                  itemConfig.id === "empty-spouse" ? "spouse" : "father"
+                }`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#212121]">
                   <FaPlus className="text-xl text-[#212121]" />
