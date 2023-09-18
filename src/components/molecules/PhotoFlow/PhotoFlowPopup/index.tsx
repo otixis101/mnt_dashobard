@@ -54,15 +54,19 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const imageUpload = async (imgFile?: remoteImgObject) => {
     const formData = new FormData();
     const personID = session?.user.personId;
-
+    let payload = {};
     console.log(imgFile);
 
     if (!imgFile) {
       formData.append("files", file as File | string);
+      formData.append("personId", String(personID));
     } else {
-      formData.append("documents", JSON.stringify(imgFile));
+      payload = {
+        personId: personID,
+        documents: imgFile,
+      };
     }
-    formData.append("personId", String(personID));
+
     setIsLoading(true);
 
     const customRequest = {
@@ -70,7 +74,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
       headers: {
         authorization: `Bearer ${session?.user.accessToken}`,
       },
-      body: formData,
+      body: !imgFile ? formData : JSON.stringify(payload),
     };
 
     const apiPath = imgFile ? "google-drive" : "browse-file";

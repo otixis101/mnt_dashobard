@@ -157,6 +157,11 @@ const FirstForm = () => {
         "relationship",
         (query.relationship as string) ?? ""
       );
+
+      if (query.reference2) {
+        formDataPayload.append("reference2", query.reference2 as string);
+      }
+
       formDataPayload.append(
         "relativeId",
         query.isSuggestion === "true"
@@ -226,14 +231,7 @@ const FirstForm = () => {
               </fieldset>
             )
           )}
-          {/* <ComboBox
-            label="Relationship"
-            data={relationships}
-            onSelect={(val) =>
-              setFormData((c) => ({ ...c, relationship: val }))
-            }
-            defaultValue={formData.relationship || "Choose Relationship"}
-          /> */}
+
           {additionalFields.map((opt) => (
             <Input
               {...opt}

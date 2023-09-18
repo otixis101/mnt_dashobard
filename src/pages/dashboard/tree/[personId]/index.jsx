@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable indent */
 // @ts-ignore
 import { useGesture } from "@use-gesture/react";
@@ -70,7 +71,7 @@ const FamilyTree = () => {
   const ownerSpouseId =
     data && data.relationship
       ? data.relationship.links
-          .filter((node) => node.spouseId === personId)
+          .filter((node) => node.spouseId && node.spouseId.includes(personId))
           .map((person) => person.id)
       : [];
 
@@ -91,6 +92,7 @@ const FamilyTree = () => {
       title: `${data?.user.firstName} ${data?.user.lastName}`,
       image: data?.user.profilePhotoUrl,
       parents: emptyTreePresetData.map((item) => item.id),
+      spouseId: ownerSpouseId,
     };
 
     const emptySpouse = {
@@ -110,21 +112,15 @@ const FamilyTree = () => {
       );
 
       const dataWithoutSpouse = nodes.filter(
-        (node) =>
-          node.description !==
-          `Spouse: ${data.user.firstName} ${data.user.lastName}`
+        (node) => node.spouseId && !node.spouseId.includes(data.user.personId)
       );
 
       const dataWithoutOwnerAndSpouse = dataWithoutOwner.filter(
-        (node) =>
-          node.description !==
-          `Spouse: ${data.user.firstName} ${data.user.lastName}`
+        (node) => node.spouseId && !node.spouseId.includes(data.user.personId)
       );
 
       const ownerSpouse = data.relationship.links.filter(
-        (node) =>
-          node.description ===
-          `Spouse: ${data.user.firstName} ${data.user.lastName}`
+        (node) => node.spouseId && node.spouseId.includes(data.user.personId)
       );
 
       const emptyParent = emptyTreePresetData[0];
@@ -134,7 +130,7 @@ const FamilyTree = () => {
         emptyParent.id,
       ];
 
-      if (!ownerSpouse.length) {
+      if (ownerSpouse.length === 0) {
         nodes = [...nodes, emptySpouse];
       } else if (
         currentPerson &&
@@ -172,11 +168,24 @@ const FamilyTree = () => {
         ];
       }
 
+      if (!currentPerson.parents && ownerSpouse.length > 0) {
+        return [
+          ...dataWithoutOwner,
+          ...emptyTreePresetData,
+          {
+            ...ownerObject,
+            parents: emptyTreePresetData.map((item) => item.id),
+          },
+        ];
+      }
+
       // add empty placeholder parent if the current user has just one parent
+
       if (
         currentPerson &&
         currentPerson.parents &&
-        currentPerson.parents.length === 1
+        currentPerson.parents.length === 1 &&
+        ownerSpouse.length === 0
       ) {
         // update the currentperson's parent array with the empty parent id
 
@@ -184,6 +193,21 @@ const FamilyTree = () => {
           ...dataWithoutOwner,
           emptyParent,
           emptySpouse,
+          { ...ownerObject, parents: currentPersonParentId },
+        ];
+      }
+
+      if (
+        currentPerson &&
+        currentPerson.parents &&
+        currentPerson.parents.length === 1 &&
+        ownerSpouse.length > 0
+      ) {
+        // update the currentperson's parent array with the empty parent id
+
+        return [
+          ...dataWithoutOwner,
+          emptyParent,
           { ...ownerObject, parents: currentPersonParentId },
         ];
       }
@@ -221,7 +245,7 @@ const FamilyTree = () => {
     }
   }, [data]);
 
-  console.log(data);
+  console.log(treeData);
 
   // Get the identity of the node temporarily until the backend implements it
   const getIdentity = (itemConfig) => {
@@ -294,7 +318,14 @@ const FamilyTree = () => {
 
           return (
             <TreeCard
-              hasAddButton={!(itemConfig.isSpouse || itemConfig.isEmpty)}
+              hasAddButton={
+                !(
+                  itemConfig.isSpouse ||
+                  itemConfig.isEmpty ||
+                  (itemConfig.spouseIdm && itemConfig.spouseId.legth === 0)
+                )
+              }
+              spouseIds={itemConfig.spouseId}
               relationships={getRelativePresets(itemConfig.id)}
               identity={
                 itemConfig.id === personId
@@ -396,9 +427,7 @@ const FamilyTree = () => {
 
       {loggedInUser && (
         <DashboardPhotoAlbum
-          imagesUrls={loggedInUser.images
-            .map((photo) => JSON.parse(photo).url)
-            .slice(0, 3)}
+          imagesUrls={loggedInUser.images.map((photo) => photo.url).slice(0, 3)}
         />
       )}
     </AppLayout>
