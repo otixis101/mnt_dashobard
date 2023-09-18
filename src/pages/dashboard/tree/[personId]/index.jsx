@@ -76,10 +76,10 @@ const FamilyTree = () => {
 
   const getRelativePresets = (id) => {
     if (id === personId) {
-      return ["Father", "Mother", "Child", "Brother", "Sister", "Spouse"];
+      return ["Parent", "Child", "Sibling", "Spouse"];
     }
     if (parentsIds[0].includes(id)) {
-      return ["Father", "Mother"];
+      return ["Parent"];
     }
 
     return ["Spouse", "Child"];

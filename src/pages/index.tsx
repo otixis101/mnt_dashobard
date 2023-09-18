@@ -40,36 +40,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// export async function getServerSideProps(context: GetServerSidePropsContext) {
-//   const userSession = await getSession(context);
-//   const { personId: id, accessToken } = userSession?.user ?? {};
-
-//   if (userSession) {
-//     const isValidToken = await validateAuthToken(accessToken ?? "");
-
-//     if (!isValidToken) {
-//       signOut({
-//         callbackUrl: "/auth/signin",
-//       });
-//       return {
-//         redirect: {
-//           destination: `/auth/signin`,
-//           permanent: false,
-//         },
-//       };
-//     }
-//     return {
-//       props: {
-//         personId: id ?? null,
-//         session: userSession ?? null,
-//       },
-//     };
-//   }
-//   return {
-//     redirect: {
-//       destination: `/auth/signin`,
-//       permanent: false,
-//     },
-//   };
-// }

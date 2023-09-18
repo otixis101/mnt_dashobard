@@ -25,14 +25,19 @@ const Main = () => {
   }, [pathname]);
   useEffect(() => {
     if (data && data.images.length > 0) {
-      const imgsJson: ImgJson = [];
       const imgs = data.images;
 
       if (imgs.length > 0) {
-        imgs.map((img: string) => imgsJson.push(JSON.parse(img)));
-        setgalleryImages(imgsJson);
+        setgalleryImages(
+          imgs.map((img) => ({
+            url: img.url,
+            aspect_ratio: img.aspectRatio,
+          }))
+        );
       }
+      console.log(imgs);
     }
+    console.log(data);
   }, [data]);
 
   const onChange = (_?: any) => {

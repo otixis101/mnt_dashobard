@@ -1,7 +1,8 @@
 /* eslint-disable react/button-has-type */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
+import GoogleDrivePicker from "google-drive-picker";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 
@@ -18,27 +19,50 @@ interface Props {
   refreshCallback?: () => void;
 }
 
+interface GoogleDriveFileObject {
+  description: string;
+  iconUrl: string;
+  id: string;
+  lastEditedUtc: number;
+  mimeType: string;
+  name: string;
+  thumbnailUrl: string;
+  type: string;
+  url: string;
+}
+
 const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const { data: session } = useSession();
-  const [fileName, setFileName] = useState<DropboxFile[]>([]);
+  const [, setFileName] = useState<DropboxFile[]>([]);
   const [uploadStep, setUploadStep] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | string>();
   const router = useRouter();
   const { pathname } = router;
-  const [openModal] = useState<boolean>(pathname.includes("add"));
+  const [openModal, setOpenModal] = useState<boolean>(
+    !!pathname.includes("add")
+  );
+  const [authTocken, setauthTocken] = useState("");
+  const [openPicker, authRes] = GoogleDrivePicker();
 
-  const imageUpload = async (imgFile?: string) => {
+  type remoteImgObject = {
+    name: string;
+    url: string;
+    filetype: string | undefined;
+  }[];
+  const imageUpload = async (imgFile?: remoteImgObject) => {
     const formData = new FormData();
     const personID = session?.user.personId;
 
+    console.log(imgFile);
+
     if (!imgFile) {
-      formData.append("images", file as File | string);
+      formData.append("files", file as File | string);
     } else {
-      formData.append("images", imgFile as string);
+      formData.append("documents", JSON.stringify(imgFile));
     }
-    formData.append("personId", personID as string);
+    formData.append("personId", String(personID));
     setIsLoading(true);
 
     const customRequest = {
@@ -49,9 +73,11 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
       body: formData,
     };
 
+    const apiPath = imgFile ? "google-drive" : "browse-file";
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/image-upload/browse-file`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/document/${apiPath}`,
         customRequest
       );
 
@@ -66,6 +92,11 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     }
   };
 
+  useEffect(() => {
+    if (authRes) {
+      setauthTocken(authRes as unknown as string);
+    }
+  }, [authRes]);
   const onHandleImagePicker = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -84,13 +115,55 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     setUploadStep(true);
     setIsDisabled(false);
 
-    const [dropImg] = fileName;
-    const imgLink = dropImg?.link;
+    const imgObject = files.map((_file) => ({
+      name: _file.name,
+      url: _file.link,
+      filetype: _file.name.split(".").pop(),
+    }));
 
-    imageUpload(imgLink);
+    imageUpload(imgObject);
   };
 
+  const onGoogleSuccess = async (files: GoogleDriveFileObject[]) => {
+    const imgObject = files.map((_file) => ({
+      name: _file.name,
+      url: _file.url,
+      filetype: _file.name.split(".").pop(),
+    }));
+
+    imageUpload(imgObject);
+  };
+
+  useEffect(() => {
+    if (pathname.includes("add")) {
+      setOpenModal(true);
+    }
+  }, [pathname]);
   const imageUploadToApi = async () => imageUpload();
+
+  const handleGooglePickerOpen = () => {
+    openPicker({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID as string,
+      developerKey: process.env.NEXT_PUBLIC_GOOGLE_DEVELOPER_KEY as string,
+      viewId: "DOCS",
+      token: authTocken,
+      showUploadView: true,
+      showUploadFolders: true,
+      supportDrives: true,
+      multiselect: false,
+      // customScopes:['https://www.googleapis.com/auth/drive.readonly'],
+      // setParentFolder:"Your-Folder-ID",
+      // Other configuration options...
+      callbackFunction: (data) => {
+        if (data.action === "cancel") {
+          console.log("User clicked cancel/close button");
+        } else if (data.docs && data.docs.length > 0) {
+          console.log("User selected file:", data.docs[0]);
+          onGoogleSuccess(data.docs as unknown as GoogleDriveFileObject[]);
+        }
+      },
+    });
+  };
 
   return (
     <Popup open={openModal} onChangeState={onChange}>
@@ -108,7 +181,11 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
         </span>
         <h6 className="capitalize text-gray-800">Upload from</h6>
         <div className="mx-auto mb-3 flex items-center gap-2">
-          <button>
+          <button
+            onClick={() => {
+              handleGooglePickerOpen();
+            }}
+          >
             <Image
               width={120}
               src={googleDrive}
