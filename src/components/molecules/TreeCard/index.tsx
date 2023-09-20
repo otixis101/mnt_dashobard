@@ -47,7 +47,11 @@ const TreeCard = ({
   const [selectedRelationship, setRelationship] = useState("");
 
   return (
-    <Dialog open={openDialog} onOpenChange={(value) => setOpenDialog(value)}>
+    <Dialog
+      modal={false}
+      open={openDialog}
+      onOpenChange={(value) => setOpenDialog(value)}
+    >
       <HoverCard>
         <Popover>
           <div
@@ -216,19 +220,20 @@ const SpouseCard = (props: { id: string; link: string }) => {
   const { data } = useFetchPerson(id);
 
   return (
-    <div>
+    <div className="mb-2">
       {data && (
         <Link
           href={`${link}&ref2=${id}`}
           className="flex items-center gap-4 rounded-md bg-white"
         >
-          <Image
-            width={40}
-            height={40}
-            className="rounded-md"
-            src={data?.profilePhotoUrl ?? ""}
-            alt="spouse"
-          />
+          <div className="relative h-10 w-10">
+            <Image
+              fill
+              className="rounded-md"
+              src={data?.profilePhotoUrl ?? ""}
+              alt="spouse"
+            />
+          </div>
           <p className="text-lg text-black">{`${data.firstName} ${data.lastName}`}</p>
         </Link>
       )}
