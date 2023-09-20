@@ -111,10 +111,6 @@ const FamilyTree = () => {
         (node) => node.id !== data.user.personId
       );
 
-      const dataWithoutSpouse = nodes.filter(
-        (node) => node.spouseId && !node.spouseId.includes(data.user.personId)
-      );
-
       const dataWithoutOwnerAndSpouse = dataWithoutOwner.filter(
         (node) => node.spouseId && !node.spouseId.includes(data.user.personId)
       );
@@ -147,16 +143,7 @@ const FamilyTree = () => {
           { ...ownerObject, parents: currentPersonParentId },
           emptyTreePresetData[0],
         ];
-      } else {
-        nodes = [
-          ...dataWithoutSpouse,
-          {
-            ...ownerSpouse[0],
-            isSpouse: true,
-          },
-        ];
       }
-
       if (!currentPerson.parents && !ownerSpouse.length) {
         return [
           ...dataWithoutOwner,
@@ -301,7 +288,7 @@ const FamilyTree = () => {
                   "flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
                 )}
                 href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}&relationship=${
-                  itemConfig.id === "empty-spouse" ? "spouse" : "father"
+                  itemConfig.id === "empty-spouse" ? "spouse" : "parent"
                 }`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#212121]">
