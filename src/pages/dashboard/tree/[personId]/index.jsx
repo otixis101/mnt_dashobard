@@ -312,7 +312,7 @@ const FamilyTree = () => {
                   (itemConfig.spouseIdm && itemConfig.spouseId.legth === 0)
                 )
               }
-              spouseIds={itemConfig.spouseId}
+              spouseIds={itemConfig.spouseId ?? []}
               relationships={getRelativePresets(itemConfig.id)}
               identity={
                 itemConfig.id === personId
@@ -334,10 +334,12 @@ const FamilyTree = () => {
     items: treeData,
   };
 
+  // console.log(data);
+
   return (
     <AppLayout hideSpirals showUser image="" name="Jane Doe">
       <section className="container min-h-screen">
-        <div className="mx-auto mt-5 w-full md:w-2/4">
+        <div className="z-50 mx-auto mt-5 w-full md:w-2/4">
           <SearchBar
             value={searchTerms}
             onChange={(value) => setSearchTerms(value)}
@@ -392,7 +394,7 @@ const FamilyTree = () => {
           </div>
         </div>
 
-        <div className="flex h-[calc(100vh-20px)] items-start justify-center !overflow-visible py-8">
+        <div className="flex h-[calc(100vh-20px)] items-start justify-center !overflow-x-visible py-8">
           {isLoading && <PhotoFlowLoader />}
           {data && (
             <div
