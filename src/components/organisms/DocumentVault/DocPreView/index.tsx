@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import React from "react";
 
@@ -10,7 +9,7 @@ const DocPreView = () => (
         <p className="text-sm">Birth Certificate.PDF</p>
       </div>
       <button type="button" className="bg-[#F3F3F3] border-2  border-gray-500 font-base  px-7 py-1 rounded-md w-auto text-black">
-                    Rename
+                Rename
       </button>
     </div>
 
@@ -29,16 +28,16 @@ const DocPreView = () => (
         <p className="font-xs">created</p>
         <p className="font-medium ">10 July 2023</p>
 
-                    ImagI</div>
+                ImagI</div>
 
       <div className="flex justify-between w-full mt-4 pl-4 items-center">
         <div className="flex gap-2">
 
           <button type="button" className="bg-[#F3F3F3] border-2  border-gray-500 font-base  px-7 py-1 rounded-md w-auto text-black">
-                            Open
+                        Open
           </button>
           <button type="button" className="bg-[#F3F3F3] border-2  border-gray-500 font-bas    e  px-7 py-1 rounded-md w-auto text-black">
-                            Share
+                        Share
           </button>
         </div>
         <button type="button">

@@ -1,11 +1,13 @@
+/* eslint-disable import/no-named-as-default */
 
 import SearchBar from "@/components/molecules/SearchBar";
 import router from "next/router";
 import UploadVault from "@/components/organisms/DocumentVault/UploadVault";
-import VaultsRecentUpload from "@/components/organisms/DocumentVault/VaultsRecentUpload";
+
 import AppLayout from "@/components/Layouts/AppLayout";
 import VaultBackArrow from "@/components/organisms/DocumentVault/BackArrow";
 import DocPreView from "@/components/organisms/DocumentVault/DocPreView";
+import VaultsRecentUpload from "@/components/organisms/DocumentVault/VaultsRecentUpload";
 
 
 
