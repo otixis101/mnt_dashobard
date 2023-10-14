@@ -70,6 +70,15 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
 
     setIsLoading(true);
 
+    const customRequest = {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${session?.user.accessToken}`,
+      },
+      body: !imgFile ? formData : JSON.stringify(payload),
+      "Content-Type": !imgFile ? "multipart/form-data" : "application/json",
+    };
+
     const apiPath = imgFile ? "google-drive" : "browse-file";
 
     try {
@@ -198,6 +207,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
           <DropboxChooser
             appKey={process.env.NEXT_PUBLIC_DROPBOX_API_KEY as string}
             success={(files: DropboxFile[]) => onSuccess(files)}
+            linkType="direct"
             multiselect={false}
           >
             <button className="mt-2">
