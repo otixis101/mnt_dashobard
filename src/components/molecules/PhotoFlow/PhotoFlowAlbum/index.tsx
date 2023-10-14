@@ -18,8 +18,8 @@ interface PhotoFlowAlbumProps {
 
 const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
   const convertToFraction = (aspectRatio: string) => {
-    const [numerator, denominator] = aspectRatio.split(":").map(Number);
-    return `${numerator}/${denominator}`;
+    // const [numerator, denominator] = aspectRatio?.split(":")?.map(Number);
+    return `${ 1000 }/${ 100 }`;
   };
 
   return (
@@ -48,7 +48,7 @@ const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
               >
                 <img
                   src={url}
-                  alt={`gallery-${i + 1}`}
+                  alt={`gallery-${ i + 1 }`}
                   className={cn("gallery_img", "flex  rounded-xl")}
                 />
                 <figcaption
