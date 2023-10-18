@@ -17,10 +17,7 @@ interface PhotoFlowAlbumProps {
 }
 
 const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
-  const convertToFraction = (aspectRatio: string) => {
-    // const [numerator, denominator] = aspectRatio?.split(":")?.map(Number);
-    return `${ 1000 }/${ 100 }`;
-  };
+  const convertToFraction = () => `${ 1000 }/${ 100 }`;
 
   return (
     <div className="my-6">
@@ -34,7 +31,7 @@ const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
             "grid  grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-2 md:grid-cols-3"
           )}
         >
-          {images.map(({ url, aspect_ratio }, i) => (
+          {images.map(({ url }, i) => (
             <figure
               key={i}
               className={cn(
@@ -44,7 +41,7 @@ const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
             >
               <picture
                 className="relative flex items-center justify-between"
-                style={{ aspectRatio: convertToFraction(aspect_ratio) }}
+                style={{ aspectRatio: convertToFraction() }}
               >
                 <img
                   src={url}
