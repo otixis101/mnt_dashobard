@@ -71,20 +71,26 @@ const fields = [
     Component: Input,
   },
 ] as const;
-interface Props {
-  // firstName: string,
-  // lastName: string,
-  // dateOfBirth: string,
-  // placeOfBirth: string,
-  // maidenName: string,
-  // gender: string,
-  // fact: string[],
-  // relationship: string,
-  // placeOfDeath: string,
-  // lifeStatus: string,
-  // profileImage: string | File,
 
-  onFormUpdate: (key: string, value: any) => void;
+interface Person {
+  firstName?: string,
+  lastName?: string,
+  dateOfBirth?: Date,
+  placeOfBirth?: string,
+  homeTown?: string,
+  mothersMaidenName?: string,
+  gender?: string,
+  facts?: string,
+  relationship?: string,
+  placeOfDeath?: string,
+  lifeStatus?: string,
+  profilePhoto?: File,
+  isUser?: boolean
+}
+
+interface Props {
+
+  onFormUpdate: (details: Person) => void;
 }
 
 const AddMemberPage = ({ onFormUpdate }: Props) => {
@@ -125,13 +131,14 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
       return;
     }
 
-    const personPayload = {
+    const personPayload: Person = {
       firstName,
       lastName,
       // middleName,
       dateOfBirth: new Date(inputProps.value as string),
       mothersMaidenName: mothersName,
       homeTown,
+      gender,
       // phoneNumber,
       // countryOfOrigin: selectedCountry,
       // stateOfOrigin: selectedState,
@@ -139,13 +146,14 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
     };
 
     //  update formData
+    onFormUpdate(personPayload);
 
-    onFormUpdate("dateOfBirth", new Date(inputProps.value as string));
-    onFormUpdate("gender", gender);
-    onFormUpdate("mothersMaidenName", mothersName);
-    onFormUpdate("homeTown", homeTown);
-    onFormUpdate("lastName", lastName);
-    onFormUpdate("firstName", firstName);
+    // onFormUpdate("gender", gender);
+    // onFormUpdate("mothersMaidenName", mothersName);
+    // onFormUpdate("homeTown", homeTown);
+    // onFormUpdate("lastName", lastName);
+    // onFormUpdate("firstName", firstName);
+    // onFormUpdate("dateOfBirth", new Date(inputProps.value as string));
 
 
 
@@ -226,7 +234,7 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
         lastName: "",
         mothersName: "",
         homeTown: "",
-        middleName: "",
+        // middleName: "",
         dateOfBirth: "",
         gender: "",
       }}

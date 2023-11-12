@@ -71,16 +71,33 @@ const getToastMessage = (arg: unknown, msg: string) => {
   return false;
 };
 
+interface Person {
+  firstName?: string,
+  lastName?: string,
+  dateOfBirth?: Date,
+  placeOfBirth?: string,
+  homeTown?: string,
+  mothersMaidenName?: string,
+  gender?: string,
+  facts?: string,
+  relationship?: string,
+  placeOfDeath?: string,
+  dateOfDeath?: Date,
+  lifeStatus?: string,
+  profilePhoto?: File,
+  isUser: boolean
+}
+
 interface Props {
   onPrevClick(): void;
   // onNextClick?(): void;
-  onFormUpdate: (key: string, value: any) => void;
+  onFormUpdate: (person: Person) => void;
 }
 
 
 
 const FirstForm = (props: Props) => {
-  const { onPrevClick } =
+  const { onPrevClick, onFormUpdate } =
     props;
 
   const [status, setStatus] = useState("Living");
@@ -90,11 +107,10 @@ const FirstForm = (props: Props) => {
   const [facts, setFacts] = useState<string[]>([]);
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [formData, setFormData] = useState({
-    placeOfBirth: "",
     placeOfDeath: "",
-    sex: "",
-    occupation: "",
-    address: "",
+    dateOfDeath: "",
+    relationship: "",
+    facts: "",
   });
   const calendarRef = React.useRef<HTMLInputElement>(null);
 
@@ -113,7 +129,7 @@ const FirstForm = (props: Props) => {
 
   const { query } = router;
 
-  console.log(query.relationship);
+  // console.log(query.relationship);
 
   const { inputProps, dayPickerProps } = useInput({
     defaultSelected: new Date(),
@@ -178,18 +194,26 @@ const FirstForm = (props: Props) => {
         }
       }
 
+      const personPayload: Person = {
+        profilePhoto: file as File,
+        facts: facts.join(","),
+        relationship: relation,
+        lifeStatus: status,
+        isUser: false,
+      };
+
       const formDataPayload = new FormData();
 
       formDataPayload.append("profilePhoto", file as File);
-      formDataPayload.append("placeOfDeath", formData.placeOfDeath);
       formDataPayload.append("facts", facts.join(","));
-      formDataPayload.append("sex", formData.sex);
-      // formDataPayload.append("occupation", formData.occupation);
-      // formDataPayload.append("address", formData.address);
-      formDataPayload.append(
-        "relationship",
-        (query.relationship as string) ?? ""
-      );
+      // formDataPayload.append("dateOfDeath", formData.dateOfDeath);
+      formDataPayload.append("relationship", relation);
+      // formDataPayload.append(
+      //   "relationship",
+      //   (query.relationship as string) ?? ""
+      // );
+
+
 
       if (query.reference2) {
         formDataPayload.append("reference2", query.reference2 as string);
@@ -205,11 +229,20 @@ const FirstForm = (props: Props) => {
       // formDataPayload.append("maritalStatus", radioValues.maritalStatus);
 
       if (status === "Deceased") {
+        formDataPayload.append("placeOfDeath", formData.placeOfDeath);
         formDataPayload.append(
           "dateOfDeath",
           `${new Date(inputProps.value as string)}`
         );
+
+        personPayload.placeOfDeath = formData.placeOfDeath;
+        personPayload.dateOfDeath = new Date(inputProps.value as string);
+
       }
+
+      // Update FormData
+
+      onFormUpdate(personPayload);
 
       setLoading(true);
       try {

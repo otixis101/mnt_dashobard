@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 /* eslint-disable default-case */
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import AppLayout from "@/components/Layouts/AppLayout";
 import AddMemberPage from "@/components/organisms/AddMemberPage";
@@ -24,21 +24,23 @@ interface AddMemberPageProps {
 
 const AddMember = ({ personId }: AddMemberPageProps) => {
 
-  // const [formData, setFormData] = useState({
-  //   firstName: "",
-  //   lastName: "",
-  //   dateOfBirth: "",
-  //   placeOfBirth: "",
-  //   maidenName: "",
-  //   gender: "",
-  //   fact: [],
-  //   relationship: "",
-  //   placeOfDeath: "",
-  //   lifeStatus: "",
-  //   profileImage: File
-  // });
+  interface Person {
+    firstName?: string,
+    lastName?: string,
+    dateOfBirth?: Date,
+    placeOfBirth?: string,
+    homeTown?: string,
+    maidenName?: string,
+    gender?: string,
+    facts?: string,
+    relationship?: string,
+    placeOfDeath?: string,
+    dateOfDeath?: Date,
+    lifeStatus?: string,
+    profilePhoto?: File
+  }
 
-  const [getUserForm, setUserForm] = useState([]);
+  const [getUserForm, setUserForm] = useState({});
 
   const router = useRouter();
 
@@ -50,6 +52,12 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
     () => !Steps.includes(step as StepsQuery),
     [step]
   );
+
+  useEffect(() => {
+    console.log("user info");
+    // console.log(getUserForm);
+
+  }, [getUserForm]);
 
   if (notValidStep || !step)
     return (
@@ -74,15 +82,18 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
     }
   };
 
-  const handleFormUpdate = (key: string, newValue: any) => {
-    const newUserForm = { ...getUserForm } as any;
-    newUserForm[key] = newValue;
+  const handleFormUpdate = (person: Person) => {
+    // const newUserForm = { ...getUserForm } as any;
+    // newUserForm[key] = newValue;
+    // console.log({ ...getUserForm }, key + " - " + newValue);
+    // console.log(details);
 
-    setUserForm(newUserForm);
-    console.log("user info");
+
+    setUserForm((old) => ({ ...old, person }));
     console.log(getUserForm);
-
   };
+
+
 
   const renderSelection = (selected: StepsQuery): JSX.Element => {
     switch (selected) {
