@@ -1,8 +1,14 @@
 import AboutProfileForm from "@/components/molecules/UpdateProfile/AboutProfileForm";
 
-const AboutPage = () => (
+interface Props {
+  onPrevClick(): void;
+  // onNextClick?(): void;
+}
+const AboutPage = ({ onPrevClick }: Props) => (
   <div className="mx-auto max-w-[90%] sm:max-w-full md:max-w-2xl">
-    <AboutProfileForm />
+    <AboutProfileForm
+      onPrevClick={onPrevClick}
+    />
   </div>
 );
 

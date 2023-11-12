@@ -1,24 +1,45 @@
 /* eslint-disable consistent-return */
 /* eslint-disable default-case */
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import AppLayout from "@/components/Layouts/AppLayout";
 import AddMemberPage from "@/components/organisms/AddMemberPage";
+import FinallyPage from "@/components/organisms/FinallyPage";
 import MultiPageHeader from "@/components/molecules/UpdateProfile/MultiPageHeader";
 import FirstForm from "@/components/molecules/AlmostThere/AlmostThereForms/FirstForm";
-import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
+// import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
 import SuccessModal from "@/components/molecules/SuccessModal";
 import { getSession } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
 
-const Steps = ["bio-data", "suggestion", "relationship", "complete"] as const;
+const Steps = ["bio-data", "relationship", "finally", "complete"] as const;
 
 type StepsQuery = (typeof Steps)[number];
 
 interface AddMemberPageProps {
   personId: string;
 }
+
+
+
 const AddMember = ({ personId }: AddMemberPageProps) => {
+
+  // const [formData, setFormData] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   dateOfBirth: "",
+  //   placeOfBirth: "",
+  //   maidenName: "",
+  //   gender: "",
+  //   fact: [],
+  //   relationship: "",
+  //   placeOfDeath: "",
+  //   lifeStatus: "",
+  //   profileImage: File
+  // });
+
+  const [getUserForm, setUserForm] = useState([]);
+
   const router = useRouter();
 
   const { query } = router;
@@ -45,16 +66,33 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
 
   const currentStep = Steps.indexOf(dummyStep);
 
+  const handleNavigation = (action: "prev" | "next") => {
+    if (action === "prev") {
+      router.push({ query: { ...router.query, step: Steps[currentStep - 1] } });
+    } else {
+      router.push({ query: { ...router.query, step: Steps[currentStep + 1] } });
+    }
+  };
+
+  const handleFormUpdate = (key: string, newValue: any) => {
+    const newUserForm = { ...getUserForm } as any;
+    newUserForm[key] = newValue;
+
+    setUserForm(newUserForm);
+    console.log("user info");
+    console.log(getUserForm);
+
+  };
+
   const renderSelection = (selected: StepsQuery): JSX.Element => {
     switch (selected) {
       case "bio-data":
-        return <AddMemberPage />;
-      case "suggestion":
-        return (
-          <SuggestionsPage nextPath={{ step: "relationship" }} isUser={false} />
-        );
+        return <AddMemberPage onFormUpdate={handleFormUpdate} />;
       case "relationship":
-        return <FirstForm />;
+        return <FirstForm onFormUpdate={handleFormUpdate} onPrevClick={() => handleNavigation("prev")} />;
+      case "finally":
+        return <FinallyPage onPrevClick={() => handleNavigation("prev")} />;
+
       case "complete":
         return (
           <div className="fixed inset-0 flex items-center justify-center bg-white">
@@ -70,13 +108,7 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
     }
   };
 
-  const handleNavigation = (action: "prev" | "next") => {
-    if (action === "prev") {
-      router.push({ query: { ...router.query, step: Steps[currentStep - 1] } });
-    } else {
-      router.push({ query: { ...router.query, step: Steps[currentStep + 1] } });
-    }
-  };
+
 
   return (
     <AppLayout hideSpirals showUser>
@@ -86,8 +118,8 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
             text="Add a member to the family tree"
             steps={Steps.length}
             currentStep={currentStep + 1}
-            onNextClick={() => handleNavigation("next")}
-            onPrevClick={() => handleNavigation("prev")}
+            // onNextClick={() => handleNavigation("next")}
+            // onPrevClick={() => handleNavigation("prev")}
             className="w-full max-w-xl text-left"
           />
           <div className="mx-auto max-w-[90%] md:max-w-2xl">

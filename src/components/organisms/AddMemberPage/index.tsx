@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Input from "@/components/atoms/Input";
-import ComboBox, { DataProps } from "@/components/atoms/ComboBox";
-import PhoneInput from "@/components/atoms/PhoneInput";
+// import ComboBox, { DataProps } from "@/components/atoms/ComboBox";
+// import PhoneInput from "@/components/atoms/PhoneInput";
 import Button from "@/components/atoms/Button";
-import { countryArrray } from "@/components/constants";
+// import { countryArrray } from "@/components/constants";
 import {
   Popover,
   PopoverContent,
@@ -18,12 +18,23 @@ import { useRouter } from "next/router";
 import { DayPickerCalendar } from "@/components/molecules/Calendar/CalendarDayPicker";
 import { useInput } from "react-day-picker";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+
 interface FormUserInfo {
   firstName: string;
   lastName: string;
   mothersName: string;
   homeTown: string;
-  middleName: string;
+  dateOfBirth: string;
+  gender: string;
+  // middleName: string;
 }
 
 const fields = [
@@ -39,13 +50,13 @@ const fields = [
     placeholder: "Last Name",
     Component: Input,
   },
-  {
-    label: "Enter Middle name",
-    name: "middleName",
-    placeholder: "Middle Name",
-    className: "sm:col-span-2",
-    Component: Input,
-  },
+  // {
+  //   label: "Enter Middle name",
+  //   name: "middleName",
+  //   placeholder: "Middle Name",
+  //   className: "sm:col-span-2",
+  //   Component: Input,
+  // },
   {
     label: "Enter Home Town",
     name: "homeTown",
@@ -60,22 +71,40 @@ const fields = [
     Component: Input,
   },
 ] as const;
+interface Props {
+  // firstName: string,
+  // lastName: string,
+  // dateOfBirth: string,
+  // placeOfBirth: string,
+  // maidenName: string,
+  // gender: string,
+  // fact: string[],
+  // relationship: string,
+  // placeOfDeath: string,
+  // lifeStatus: string,
+  // profileImage: string | File,
 
-const AddMemberPage = () => {
+  onFormUpdate: (key: string, value: any) => void;
+}
+
+const AddMemberPage = ({ onFormUpdate }: Props) => {
   const { data: session } = useSession();
   const router = useRouter();
   const calendarRef = React.useRef<HTMLInputElement>(null);
   const { ref, relationship, ref2 } = router.query;
-  const [phoneNumber, setPhoneNumber] = useState<E164Number>();
+
+  const [gender, setGender] = useState<string | null>("");
+
+  // const [phoneNumber, setPhoneNumber] = useState<E164Number>();
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedCountry, setSelctedCountry] = useState("");
-  const [selectedState, setSelectedState] = useState("");
-  const [states, setStates] = useState<DataProps[]>([]);
-  const countries = countryArrray.map(({ country }) => ({
-    name: country,
-    value: country,
-  }));
+  // const [selectedCountry, setSelctedCountry] = useState("");
+  // const [selectedState, setSelectedState] = useState("");
+  // const [states, setStates] = useState<DataProps[]>([]);
+  // const countries = countryArrray.map(({ country }) => ({
+  //   name: country,
+  //   value: country,
+  // }));
 
   const { inputProps, dayPickerProps } = useInput({
     defaultSelected: new Date(),
@@ -87,24 +116,38 @@ const AddMemberPage = () => {
   const { setPersonData } = useStore();
 
   const handleFormSubmit = async (values: FormUserInfo) => {
-    const { firstName, lastName, mothersName, homeTown, middleName } = values;
-    if (!phoneNumber || !selectedCountry || !selectedState) {
-      toast.error("Please fill all fields");
+    const {
+      firstName, lastName, mothersName, homeTown,
+      //  middleName
+    } = values;
+    if (!gender) {
+      toast.error("Please select a gender");
       return;
     }
 
     const personPayload = {
       firstName,
       lastName,
-      middleName,
+      // middleName,
       dateOfBirth: new Date(inputProps.value as string),
       mothersMaidenName: mothersName,
       homeTown,
-      phoneNumber,
-      countryOfOrigin: selectedCountry,
-      stateOfOrigin: selectedState,
+      // phoneNumber,
+      // countryOfOrigin: selectedCountry,
+      // stateOfOrigin: selectedState,
       isUser: false,
     };
+
+    //  update formData
+
+    onFormUpdate("dateOfBirth", new Date(inputProps.value as string));
+    onFormUpdate("gender", gender);
+    onFormUpdate("mothersMaidenName", mothersName);
+    onFormUpdate("homeTown", homeTown);
+    onFormUpdate("lastName", lastName);
+    onFormUpdate("firstName", firstName);
+
+
 
     try {
       setLoading(true);
@@ -161,20 +204,20 @@ const AddMemberPage = () => {
     }
   }, [calenderOpen]);
 
-  useEffect(() => {
-    if (selectedCountry) {
-      const filteredCountry = countryArrray.filter(
-        ({ country }) => country === selectedCountry
-      );
+  // useEffect(() => {
+  //   if (selectedCountry) {
+  //     const filteredCountry = countryArrray.filter(
+  //       ({ country }) => country === selectedCountry
+  //     );
 
-      const filteredState = filteredCountry[0].states.map((state) => ({
-        name: state,
-        value: state,
-      }));
+  //     const filteredState = filteredCountry[0].states.map((state) => ({
+  //       name: state,
+  //       value: state,
+  //     }));
 
-      setStates(filteredState);
-    }
-  }, [selectedCountry]);
+  //     setStates(filteredState);
+  //   }
+  // }, [selectedCountry]);
 
   return (
     <Formik
@@ -184,6 +227,8 @@ const AddMemberPage = () => {
         mothersName: "",
         homeTown: "",
         middleName: "",
+        dateOfBirth: "",
+        gender: "",
       }}
       validationSchema={CreateUserSchema}
       onSubmit={handleFormSubmit}
@@ -251,7 +296,20 @@ const AddMemberPage = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            <ComboBox
+            <div className="space-y-1">
+              <label htmlFor="gender" className="font-medium text-sm">Gender</label>
+              <Select onValueChange={(value: string) => setGender(value)}>
+                <SelectTrigger id="gender" className="dark:bg-white h-fit focus:outline-none border-2 p-4">
+                  <SelectValue placeholder="Select Gender" className=" p-4" />
+                </SelectTrigger>
+                <SelectContent className="dark:bg-white">
+                  <SelectItem className="dark:bg-white text-black" value="m">Male</SelectItem>
+                  <SelectItem className="dark:bg-white text-black" value="f">Female</SelectItem>
+                  <SelectItem className="dark:bg-white text-black" value="o">Others</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {/* <ComboBox
               onSelect={(value) => {
                 setSelctedCountry(value);
               }}
@@ -264,15 +322,15 @@ const AddMemberPage = () => {
                 setSelectedState(value);
               }}
               label="Select state of origin "
-            />
-            <PhoneInput
+            /> */}
+            {/* <PhoneInput
               label="Enter your phone number"
               placeholder="(999) 999-9999"
               value={phoneNumber}
               onChange={setPhoneNumber}
-            />
+            /> */}
           </div>
-          <Button loading={loading} className="mx-auto mt-8" type="submit">
+          <Button loading={loading} className="ml-auto my-8" type="submit">
             Continue
           </Button>
         </form>
