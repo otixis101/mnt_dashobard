@@ -11,9 +11,6 @@ import VaultsRecentUpload from "@/components/organisms/DocumentVault/VaultsRecen
 
 
 
-
-
-
 const Index = () => (
 
   < AppLayout hideSpirals showUser>
@@ -26,7 +23,6 @@ const Index = () => (
           placeholder="Search for people "
         />
       </div>
-
       <VaultBackArrow />
       <main className="lg:grid grid-cols-12 my-10 gap-4 ">
         <UploadVault />

@@ -14,7 +14,7 @@ const Main = () => {
 
   const [mode, setMode] = useState<boolean>(false);
   const [galleryImages, setgalleryImages] = useState<ImgJson>([]);
-  const { data, isLoading, mutate } = useFetchPerson(personId as string);
+  const { data, isLoading, mutate, } = useFetchPerson(personId as string);
 
   useEffect(() => {
     if (pathname.includes("add")) {
