@@ -26,9 +26,7 @@ const Index = () => (
       <main className="lg:grid grid-cols-12 my-10 gap-4 ">
         <UploadVault />
         <VaultsRecentUpload />
-        <div className="hidden">
-          <DocPreView />
-        </div>
+        <DocPreView />
       </main>
     </section >
   </ AppLayout>

@@ -15,14 +15,14 @@ const VaultsRecentUpload: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(" ");
+        const response = await fetch("http://localhost/api/document/person/64b5d382dc28b12eca84ab25");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
 
         const result = await response.json();
         setDocuments(result);
-      } catch (error) {
+      } catch (error: any) {
         setError(error.message);
       }
     };
