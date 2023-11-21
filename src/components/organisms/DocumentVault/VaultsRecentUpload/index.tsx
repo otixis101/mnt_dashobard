@@ -17,45 +17,8 @@ const VaultsRecentUpload = () => (
         <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
         <p className="lg:text-xs text-[11px]">Birth Certificate.PDF</p>
       </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
-      <button type="button" className="flex flex-col gap-1 items-center " >
-        <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
-        <p className=" md:text-xs text-[11px]">Birth Certificate.PDF</p>
-      </button>
 
     </div>
-
   </div>
 
 

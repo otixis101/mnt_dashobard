@@ -12,8 +12,7 @@ import VaultsRecentUpload from "@/components/organisms/DocumentVault/VaultsRecen
 
 
 const Index = () => (
-
-  < AppLayout hideSpirals showUser>
+  <AppLayout hideSpirals showUser>
     <section className="container min-h-screen">
       <div className="z-50 mx-auto mt-5 w-full md:w-2/4">
         <SearchBar
@@ -27,7 +26,9 @@ const Index = () => (
       <main className="lg:grid grid-cols-12 my-10 gap-4 ">
         <UploadVault />
         <VaultsRecentUpload />
-        <DocPreView />
+        <div className="hidden">
+          <DocPreView />
+        </div>
       </main>
     </section >
   </ AppLayout>
