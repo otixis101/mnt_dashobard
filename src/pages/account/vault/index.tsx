@@ -1,5 +1,4 @@
-/* eslint-disable indent */
-import React from "react";
+/* eslint-disable import/no-named-as-default */
 
 import SearchBar from "@/components/molecules/SearchBar";
 import router from "next/router";
@@ -15,27 +14,27 @@ import DocPreView from "@/components/organisms/DocumentVault/DocPreView";
 
 const Index = () => (
 
-    <AppLayout hideSpirals showUser>
-        <section className="container min-h-screen">
-            <div className="z-50 mx-auto mt-5 w-full md:w-2/4">
-                <SearchBar
-                    value=""
-                    onChange={(value) => (value)}
-                    onSearch={(value) => router.push(`/search?q=${value}`)}
-                    placeholder="Search for people "
-                />
-            </div>
+  <AppLayout hideSpirals showUser>
+    <section className="container min-h-screen">
+      <div className="z-50 mx-auto mt-5 w-full md:w-2/4">
+        <SearchBar
+          value=""
+          onChange={(value) => (value)}
+          onSearch={(value) => router.push(`/search?q=${ value }`)}
+          placeholder="Search for people "
+        />
+      </div>
 
-            <VaultBackArrow />
-            <main className="lg:grid grid-cols-12 my-10 gap-4 ">
-                <UploadVault />
-                <VaultsRecentUpload />
-                <DocPreView />
+      <VaultBackArrow />
+      <main className="lg:grid grid-cols-12 my-10 gap-4 ">
+        <UploadVault />
+        <VaultsRecentUpload />
+        <DocPreView />
 
-            </main>
+      </main>
 
-        </section >
-    </AppLayout >
+    </section >
+  </AppLayout >
 );
 
 export default Index;

@@ -1,20 +1,30 @@
+import Button from "@/components/atoms/Button";
+import PhotoFlowPopup from "@/components/molecules/PhotoFlow/PhotoFlowPopup";
 import React, { useEffect, useState } from "react";
-import PhotoFlowHeader from "@/components/molecules/PhotoFlow/PhotoFlowHeader";
-import PhotoFlowAlbum, {
+import { AiOutlinePlus } from "react-icons/ai";
+import { useRouter } from "next/router";
+import {
   ImgJson,
 } from "@/components/molecules/PhotoFlow/PhotoFlowAlbum";
-import PhotoFlowPopup from "@/components/molecules/PhotoFlow/PhotoFlowPopup";
-import { useRouter } from "next/router";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
+// import PhotoFlowHeader from "@/components/molecules/PhotoFlow/PhotoFlowHeader";
 
-const Main = () => {
+
+const UploadButton = () => {
+
   const router = useRouter();
   const { pathname } = router;
   const { personId } = router.query;
 
   const [mode, setMode] = useState<boolean>(false);
   const [galleryImages, setgalleryImages] = useState<ImgJson>([]);
-  const { data, isLoading, mutate, } = useFetchPerson(personId as string);
+
+
+  const { data } = useFetchPerson(personId as string);
+  // eslint-disable-next-line no-underscore-dangle
+  const newPersonId = data?._id;
+  console.log(data);
+
 
   useEffect(() => {
     if (pathname.includes("add")) {
@@ -40,14 +50,16 @@ const Main = () => {
     console.log(data);
   }, [data]);
 
+
   const onChange = (_?: any) => {
     setMode((prevState) => !prevState);
     if (mode) {
-      router.push(`/user/${personId}/gallery/add`);
+      router.push(`/user/${newPersonId}`);
     } else {
-      router.push(`/user/${personId}/gallery`);
+      router.push(`/user/${newPersonId}`);
     }
   };
+
 
   const handleUploadSuccess = () => {
     mutate();
@@ -55,17 +67,22 @@ const Main = () => {
   };
 
   return (
-    <section className="container">
+    <section>
       {mode && (
         <PhotoFlowPopup
           refreshCallback={handleUploadSuccess}
           onChange={onChange}
         />
       )}
-      <PhotoFlowHeader onChange={onChange} />
-      <PhotoFlowAlbum loading={isLoading} images={galleryImages} />
+      <Button className="w-auto px-3 text-sm  flex justify-center " onClick={onChange}>
+        <AiOutlinePlus /> Upload File
+      </Button>
+
+      {/* <PhotoFlowHeader onChange={onChange} /> */}
+
     </section>
   );
+
 };
 
-export default Main;
+export default UploadButton;

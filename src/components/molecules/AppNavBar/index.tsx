@@ -155,7 +155,6 @@ const AppNavBar = (props: AppNavBarProps) => {
                     ) : (
                       <RxAvatar className="text-xl" />
                     )}
-
                     <span>Profile</span>
                   </Link>
                 </li>
