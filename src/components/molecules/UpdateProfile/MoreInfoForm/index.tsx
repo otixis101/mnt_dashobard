@@ -64,7 +64,7 @@ const fields = [
 const MoreInfoForm: FC = () => {
   const { data: session, update } = useSession();
   const router = useRouter();
-  
+
 
   const dateInputRef = React.useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
@@ -260,9 +260,9 @@ const MoreInfoForm: FC = () => {
               }}
               label="Location (State) "
             />
-            
+
           </div>
-          <Button loading={loading} className="ml-auto my-8" type="submit">
+          <Button loading={loading} className="ml-auto my-8" disabled={loading} type="submit">
             Continue
           </Button>
         </form>

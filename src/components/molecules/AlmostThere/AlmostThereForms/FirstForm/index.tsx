@@ -432,7 +432,7 @@ const FirstForm = (props: Props) => {
         <Button className="lg:px-0 lg:w-fit border lg:border-none border-primary bg-transparent text-black" onClick={onPrevClick}>
           <ArrowLeftIcon className="w-4 h-4" /> Back
         </Button>
-        <Button loading={loading} className="" type="submit">
+        <Button loading={loading} className="" disabled={loading} type="submit">
           Continue
         </Button>
 

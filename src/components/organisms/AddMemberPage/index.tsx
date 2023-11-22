@@ -349,7 +349,7 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
               onChange={setPhoneNumber}
             /> */}
           </div>
-          <Button loading={loading} className="ml-auto my-8" type="submit">
+          <Button loading={loading} className="ml-auto my-8" disabled={loading} type="submit">
             Continue
           </Button>
         </form>
