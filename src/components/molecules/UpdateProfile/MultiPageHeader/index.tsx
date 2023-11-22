@@ -44,15 +44,15 @@ const MultiPageHeader = (props: Props) => {
         </div> */}
         <section className="flex gap-0 text-center mb-4" >
           <div className="flex flex-col gap-3 items-center" >
-            <p className="w-10 p-2 aspect-square rounded-full bg-primary text-white" >1</p>
+            <p className="w-10 p-2 aspect-square rounded-full bg-primary text-white">1</p>
           </div>
           <span className="bg-gray-300 h-[6px] grow my-5" />
           <div className="flex flex-col gap-3 items-center" >
-            <p className={cn("w-10 p-2 aspect-square rounded-full text-white", currentStep > 1 ? "bg-primary" : "bg-gray-400")}>2</p>
+            <p className={cn("w-10 p-2 aspect-square rounded-full text-white", currentStep > 2 ? "bg-primary" : "bg-gray-400")}>2</p>
           </div>
           <span className="bg-gray-300 h-[6px] grow my-5" />
           <div className="flex flex-col gap-3 items-center">
-            <p className={cn("w-10 p-2 aspect-square rounded-full text-white", currentStep > 2 ? "bg-primary" : "bg-gray-400")}>3</p>
+            <p className={cn("w-10 p-2 aspect-square rounded-full text-white", currentStep > 3 ? "bg-primary" : "bg-gray-400")}>3</p>
           </div>
         </section>
       </div>

@@ -20,6 +20,15 @@ import DashboardPhotoAlbum from "@/components/molecules/TreeMember/DashboardTree
 import { cn } from "@/base/utils";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 
+
+import {
+  Dialog,
+  DialogContent
+} from "@/components/ui/dialog";
+
+
+
+
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
   const [crop, setCrop] = useState({
@@ -396,7 +405,7 @@ const FamilyTree = () => {
 
         <div className="flex h-[calc(100vh-20px)] items-start justify-center !overflow-x-visible py-8">
           {isLoading && <PhotoFlowLoader />}
-          {data && (
+          {data ? (
             <div
               {...bind()}
               className="relative cursor-pointer"
@@ -408,17 +417,35 @@ const FamilyTree = () => {
                 touchAction: "none",
               }}
             >
-              <FamDiagram cursorItem={null} centerOnCursor config={config} />
+              <h1>Testing</h1>
+              <FamDiagram cursorItem={null} centerOnCursor  config={config} />
             </div>
-          )}
+          )
+          :(
+            <Dialog defaultOpen>
+              <DialogContent className="sm:max-w-[525px] dark:bg-white dark:text-gray-800">
+                <div className="flex flex-col items-center gap-12 px-8 py-24">
+                  <h1 className="text-3xl font-medium text-center">
+                  Kindly add your profile to access your family tree.
+                  </h1>
+                  <Link href="/user/profile/update?step=moreinfo" className="w-fit px-24 py-4 text-center rounded-lg bg-primary text-white">Add Your Profile</Link>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )
+          }
         </div>
       </section>
 
-      {loggedInUser && (
+        <DashboardPhotoAlbum
+          imagesUrls={loggedInUser?.images.map((photo) => photo.url).slice(0, 3)}
+        />
+
+      {/* {loggedInUser && (
         <DashboardPhotoAlbum
           imagesUrls={loggedInUser.images.map((photo) => photo.url).slice(0, 3)}
         />
-      )}
+      )} */}
     </AppLayout>
   );
 };

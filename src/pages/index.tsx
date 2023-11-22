@@ -26,11 +26,12 @@ const Home = () => {
   useEffect(() => {
     if (session) {
       validateToken(accessToken ?? "");
-      if (personId) {
-        router.push(`/dashboard/tree/${personId}`);
-      } else {
-        router.push(`/user/profile/update?step=moreinfo`);
-      }
+      router.push(`/dashboard/tree/${personId}`);
+      // if (personId) {
+      //   router.push(`/dashboard/tree/${personId}`);
+      // } else {
+      //   router.push(`/user/profile/update?step=moreinfo`);
+      // }
     } else {
       router.push("/auth/signin");
     }

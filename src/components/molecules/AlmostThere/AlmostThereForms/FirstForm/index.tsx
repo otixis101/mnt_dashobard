@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "@/components/atoms/Button";
 // import Radio from "@/components/atoms/Input/Radio";
 import Input from "@/components/atoms/Input";
@@ -38,6 +38,22 @@ import AlmostThereDropBox from "../../AlmostThereDropBox";
 //   { name: "Sister", value: "sister" },
 // ];
 
+const allRelationships = [{
+  spouse: [
+    "Husband", "Wife"
+  ],
+  parent: [
+    "Mother", "Father"
+  ],
+  sibling: [
+    "Brother", "Sister"
+  ],
+
+  children: [
+    "Son", "Daughter"
+  ]
+}];
+
 const additionalFields = [
   {
     name: "placeOfDeath",
@@ -74,6 +90,9 @@ const getToastMessage = (arg: unknown, msg: string) => {
 interface Person {
   firstName?: string,
   lastName?: string,
+  phoneNumber?: string,
+  stateOfOrigin?: string,
+  countryOfOrigin?: string,
   dateOfBirth?: Date,
   placeOfBirth?: string,
   homeTown?: string,
@@ -85,7 +104,7 @@ interface Person {
   dateOfDeath?: Date,
   lifeStatus?: string,
   profilePhoto?: File,
-  isUser: boolean
+  isUser?: boolean
 }
 
 interface Props {
@@ -129,6 +148,32 @@ const FirstForm = (props: Props) => {
 
   const { query } = router;
 
+  const [relatio, setRelatio] = useState<string[]>([]);
+
+
+
+  useEffect(() => {
+    switch (query?.relationship?.toString().toLowerCase()) {
+      case "spouse":
+        setRelatio(allRelationships[0].spouse);
+        break;
+      case "siblings":
+        setRelatio(allRelationships[0].sibling);
+        break;
+      case "parent":
+        setRelatio(allRelationships[0].parent);
+        break;
+      case "child":
+        setRelatio(allRelationships[0].children);
+        break;
+      default:
+        setRelatio([]);
+        break;
+    }
+    console.log(query?.relationship?.toString().toLowerCase());
+    console.log(relatio);
+  }, []);
+
   // console.log(query.relationship);
 
   const { inputProps, dayPickerProps } = useInput({
@@ -153,13 +198,15 @@ const FirstForm = (props: Props) => {
         setProfilePhotoUrl(event.target?.result as string);
       };
 
-      console.log(profilePhotoUrl);
+      // console.log(profilePhotoUrl);
     } else {
       toast.error("Please upload a file");
     }
   };
 
   const relative = createPersonData as DbPersonWithOutSuggestion;
+
+  // console.log(relative?.personId);
 
   const suggestedRelative =
     query.isSuggestion === "true"
@@ -207,11 +254,11 @@ const FirstForm = (props: Props) => {
       formDataPayload.append("profilePhoto", file as File);
       formDataPayload.append("facts", facts.join(","));
       // formDataPayload.append("dateOfDeath", formData.dateOfDeath);
-      formDataPayload.append("relationship", relation);
-      // formDataPayload.append(
-      //   "relationship",
-      //   (query.relationship as string) ?? ""
-      // );
+      // formDataPayload.append("relationship", relation);
+      formDataPayload.append(
+        "relationship",
+        (query.relationship as string) ?? ""
+      );
 
 
 
@@ -257,7 +304,9 @@ const FirstForm = (props: Props) => {
           toast.success("User profile updated successfully");
           router.push({
             query: {
-              step: "complete",
+              step: "finally",
+              ref: relative?.personId,
+              relation,
             },
           });
         }
@@ -301,8 +350,13 @@ const FirstForm = (props: Props) => {
                 <SelectValue placeholder="Select Relationship" className=" p-4" />
               </SelectTrigger>
               <SelectContent className="dark:bg-white">
-                <SelectItem className="dark:bg-white text-black" value="mother">Mother</SelectItem>
-                <SelectItem className="dark:bg-white text-black" value="father">Father</SelectItem>
+                {
+                  relatio.map((rel) => (
+                    <SelectItem key={rel} className="dark:bg-white text-black" value={rel}>{rel}</SelectItem>
+                  ))
+                }
+                {/* <SelectItem className="dark:bg-white text-black" value="father">Father</SelectItem> */}
+
               </SelectContent>
             </Select>
           </div>

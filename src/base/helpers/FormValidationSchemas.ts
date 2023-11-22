@@ -13,7 +13,7 @@ export const AuthSchema = Yup.object().shape({
 export const CreateUserSchema = Yup.object().shape({
   firstName: Yup.string().required("Required"),
   lastName: Yup.string().required("Required"),
-  mothersName: Yup.string().required("Required"),
+  // mothersName: Yup.string().required("Required"),
   homeTown: Yup.string().required("Required"),
 });
 

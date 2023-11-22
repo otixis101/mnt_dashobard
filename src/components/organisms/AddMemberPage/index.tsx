@@ -30,10 +30,12 @@ import {
 interface FormUserInfo {
   firstName: string;
   lastName: string;
-  mothersName: string;
+  // mothersName: string;
+  birthPlace: string;
   homeTown: string;
   dateOfBirth: string;
   gender: string;
+  phoneNumber: string;
   // middleName: string;
 }
 
@@ -65,9 +67,9 @@ const fields = [
   },
 
   {
-    label: "Enter mother's maiden name",
-    name: "mothersName",
-    placeholder: "Mother's maiden name ",
+    label: "Enter Birthplace",
+    name: "birthPlace",
+    placeholder: "e.g : State, Country ",
     Component: Input,
   },
 ] as const;
@@ -75,6 +77,9 @@ const fields = [
 interface Person {
   firstName?: string,
   lastName?: string,
+  phoneNumber?: string,
+  stateOfOrigin?: string,
+  countryOfOrigin?: string,
   dateOfBirth?: Date,
   placeOfBirth?: string,
   homeTown?: string,
@@ -122,8 +127,11 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
   const { setPersonData } = useStore();
 
   const handleFormSubmit = async (values: FormUserInfo) => {
+
+    // alert("submitted");
+
     const {
-      firstName, lastName, mothersName, homeTown,
+      firstName, lastName, birthPlace, homeTown,
       //  middleName
     } = values;
     if (!gender) {
@@ -131,14 +139,24 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
       return;
     }
 
+    // Split the string at the comma
+    const locationArray = birthPlace.split(",");
+
+    // Trim any extra whitespace from the resulting strings
+    const stateOf = locationArray[0].trim();
+    const countryOf = locationArray[1].trim();
+
     const personPayload: Person = {
       firstName,
       lastName,
       // middleName,
       dateOfBirth: new Date(inputProps.value as string),
-      mothersMaidenName: mothersName,
+      mothersMaidenName: "mothersName",
       homeTown,
       gender,
+      phoneNumber: "",
+      stateOfOrigin: stateOf,
+      countryOfOrigin: countryOf,
       // phoneNumber,
       // countryOfOrigin: selectedCountry,
       // stateOfOrigin: selectedState,
@@ -147,15 +165,6 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
 
     //  update formData
     onFormUpdate(personPayload);
-
-    // onFormUpdate("gender", gender);
-    // onFormUpdate("mothersMaidenName", mothersName);
-    // onFormUpdate("homeTown", homeTown);
-    // onFormUpdate("lastName", lastName);
-    // onFormUpdate("firstName", firstName);
-    // onFormUpdate("dateOfBirth", new Date(inputProps.value as string));
-
-
 
     try {
       setLoading(true);
@@ -232,11 +241,13 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
       initialValues={{
         firstName: "",
         lastName: "",
-        mothersName: "",
+        // mothersName: "",
+        birthPlace: "",
         homeTown: "",
         // middleName: "",
         dateOfBirth: "",
         gender: "",
+        phoneNumber: "",
       }}
       validationSchema={CreateUserSchema}
       onSubmit={handleFormSubmit}
@@ -308,7 +319,7 @@ const AddMemberPage = ({ onFormUpdate }: Props) => {
               <label htmlFor="gender" className="font-medium text-sm">Gender</label>
               <Select onValueChange={(value: string) => setGender(value)}>
                 <SelectTrigger id="gender" className="dark:bg-white h-fit focus:outline-none border-2 p-4">
-                  <SelectValue placeholder="Select Gender" className=" p-4" />
+                  <SelectValue placeholder="Select Gender" className="p-4" />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-white">
                   <SelectItem className="dark:bg-white text-black" value="m">Male</SelectItem>

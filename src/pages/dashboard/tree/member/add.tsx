@@ -1,18 +1,18 @@
 /* eslint-disable consistent-return */
 /* eslint-disable default-case */
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import AppLayout from "@/components/Layouts/AppLayout";
 import AddMemberPage from "@/components/organisms/AddMemberPage";
 import FinallyPage from "@/components/organisms/FinallyPage";
 import MultiPageHeader from "@/components/molecules/UpdateProfile/MultiPageHeader";
 import FirstForm from "@/components/molecules/AlmostThere/AlmostThereForms/FirstForm";
-// import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
+import SuggestionsPage from "@/components/organisms/UpdateProfile/SuggestionsPage";
 import SuccessModal from "@/components/molecules/SuccessModal";
 import { getSession } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
 
-const Steps = ["bio-data", "relationship", "finally", "complete"] as const;
+const Steps = ["bio-data", "suggestion", "relationship", "finally", "complete"] as const;
 
 type StepsQuery = (typeof Steps)[number];
 
@@ -27,17 +27,20 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
   interface Person {
     firstName?: string,
     lastName?: string,
+    phoneNumber?: string,
+    stateOfOrigin?: string,
+    countryOfOrigin?: string,
     dateOfBirth?: Date,
     placeOfBirth?: string,
     homeTown?: string,
-    maidenName?: string,
+    mothersMaidenName?: string,
     gender?: string,
     facts?: string,
     relationship?: string,
     placeOfDeath?: string,
-    dateOfDeath?: Date,
     lifeStatus?: string,
-    profilePhoto?: File
+    profilePhoto?: File,
+    isUser?: boolean
   }
 
   const [getUserForm, setUserForm] = useState({});
@@ -53,11 +56,6 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
     [step]
   );
 
-  useEffect(() => {
-    console.log("user info");
-    // console.log(getUserForm);
-
-  }, [getUserForm]);
 
   if (notValidStep || !step)
     return (
@@ -83,11 +81,6 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
   };
 
   const handleFormUpdate = (person: Person) => {
-    // const newUserForm = { ...getUserForm } as any;
-    // newUserForm[key] = newValue;
-    // console.log({ ...getUserForm }, key + " - " + newValue);
-    // console.log(details);
-
 
     setUserForm((old) => ({ ...old, person }));
     console.log(getUserForm);
@@ -99,6 +92,10 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
     switch (selected) {
       case "bio-data":
         return <AddMemberPage onFormUpdate={handleFormUpdate} />;
+      case "suggestion":
+        return (
+          <SuggestionsPage nextPath={{ step: "relationship" }} isUser={false} />
+        );
       case "relationship":
         return <FirstForm onFormUpdate={handleFormUpdate} onPrevClick={() => handleNavigation("prev")} />;
       case "finally":
