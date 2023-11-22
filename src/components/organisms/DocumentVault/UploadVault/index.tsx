@@ -9,7 +9,7 @@ import UploadLink from "./UploadLink";
 const UploadVault = () => (
 
 
-  <div className="hidden lg:flex flex-col gap-5 justify-between py-10 items-center bg-[#F3F3F3] col-span-2 rounded-3xl">
+  <div className="lg:flex flex-col gap-5 justify-between py-10 items-center bg-[#F3F3F3] col-span-2 rounded-3xl">
     <div className="flex flex-col gap-8 w-full">
       <div className="flex justify-center">
         <UploadLink />

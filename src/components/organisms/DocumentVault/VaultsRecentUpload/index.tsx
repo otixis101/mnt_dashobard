@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import Axios from "axios";
 
 interface Document {
   id: string;
@@ -9,26 +11,28 @@ interface Document {
 }
 
 const VaultsRecentUpload: React.FC = () => {
-  const [documents, setDocuments] = useState<Document[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [ documents, setDocuments ] = useState<Document[] | null>(null);
+  const [ error, setError ] = useState<string | null>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost/api/document/person/64b5d382dc28b12eca84ab25");
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const result = await response.json();
+        setError("");
+        const response = await Axios.get(`${ process.env.NEXT_PUBLIC_API_BASE_URL }/document/person/${ session?.user.personId }`, {
+          headers: {
+            Authorization: `Bearer ${ session?.user.accessToken }`,
+          },
+        });
+        const result = response.data.data;
         setDocuments(result);
       } catch (error: any) {
-        setError(error.message);
+        setError("Failed to fetch data");
       }
     };
 
     fetchData();
-  }, []);
+  }, [ session, error ]);
 
   return (
     <div className="col-span-6 lg:bg-[#F3F3F3] rounded-3xl lg:py-10 lg:px-7  flex flex-col gap-5 font-">
