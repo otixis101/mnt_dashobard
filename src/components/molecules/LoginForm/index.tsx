@@ -101,8 +101,6 @@ const LoginForm = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-      console.log("::::::::::::::: k log log", process.env.NEXT_PUBLIC_API_BASE_URL);
-
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify-email`,
           {

@@ -17,10 +17,10 @@ interface PhotoFlowAlbumProps {
 }
 
 const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
-  const convertToFraction = (aspectRatio: string) => {
+  const convertToFraction = (aspectRatio: string) => 
     // const [numerator, denominator] = aspectRatio?.split(":")?.map(Number);
-    return `${ 1000 }/${ 100 }`;
-  };
+    `${ 1000 }/${ 100 }`
+  ;
 
   return (
     <div className="my-6">
