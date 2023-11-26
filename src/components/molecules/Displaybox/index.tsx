@@ -6,7 +6,7 @@ const DisplayBox: React.FC = () => {
 
   return (
     <div>
-      <button onClick={() => setShowBox(!showBox)}>Toggle Box</button>
+      <button type="button" onClick={() => setShowBox(!showBox)}>Toggle Box</button>
       {showBox && (
         <div className="overlay">
           <div className="box">This is shh the box content</div>
