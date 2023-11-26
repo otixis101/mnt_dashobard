@@ -16,11 +16,11 @@ const UploadButton = () => {
   const { pathname } = router;
   const { personId } = router.query;
 
-  const [mode, setMode] = useState<boolean>(false);
-  const [galleryImages, setgalleryImages] = useState<ImgJson>([]);
+  const [ mode, setMode ] = useState<boolean>(false);
+  const [ , setgalleryImages ] = useState<ImgJson>([]);
 
 
-  const { data } = useFetchPerson(personId as string);
+  const { data, mutate } = useFetchPerson(personId as string);
   // eslint-disable-next-line no-underscore-dangle
   const newPersonId = data?._id;
   console.log(data);
@@ -32,7 +32,7 @@ const UploadButton = () => {
     } else {
       setMode(false);
     }
-  }, [pathname]);
+  }, [ pathname ]);
   useEffect(() => {
     if (data && data.images.length > 0) {
       const imgs = data.images;
@@ -48,15 +48,15 @@ const UploadButton = () => {
       console.log(imgs);
     }
     console.log(data);
-  }, [data]);
+  }, [ data ]);
 
 
   const onChange = (_?: any) => {
     setMode((prevState) => !prevState);
     if (mode) {
-      router.push(`/user/${newPersonId}`);
+      router.push(`/user/${ newPersonId }`);
     } else {
-      router.push(`/user/${newPersonId}`);
+      router.push(`/user/${ newPersonId }`);
     }
   };
 
