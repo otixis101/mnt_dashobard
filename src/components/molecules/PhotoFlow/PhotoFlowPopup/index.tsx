@@ -70,15 +70,6 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
 
     setIsLoading(true);
 
-    const customRequest = {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${session?.user.accessToken}`,
-      },
-      body: !imgFile ? formData : JSON.stringify(payload),
-      "Content-Type": !imgFile ? "multipart/form-data" : "application/json",
-    };
-
     const apiPath = imgFile ? "google-drive" : "browse-file";
 
     try {

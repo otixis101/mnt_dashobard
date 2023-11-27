@@ -14,8 +14,8 @@ import { toast } from "react-toastify";
 const LoginForm = () => {
   const router = useRouter();
   const { token, email } = router.query;
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ isGoogleLoading, setIsGoogleLoading ] = useState(false);
   const { data: session, status, update } = useSession();
 
   const handleLogin = async (
@@ -51,9 +51,9 @@ const LoginForm = () => {
     setIsGoogleLoading(true);
     try {
       console.log("::::::::::::::: k log log", process.env.NEXT_PUBLIC_API_BASE_URL);
-      
+
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google`,
+        `${ process.env.NEXT_PUBLIC_API_BASE_URL }/auth/google`,
         {
           method: "POST",
           body: JSON.stringify({ token: authToken }),
@@ -74,7 +74,7 @@ const LoginForm = () => {
         toast.success("Login successful");
 
         if (data.personId) {
-          router.push(`/dashboard/tree/${data.personId}`);
+          router.push(`/dashboard/tree/${ data.personId }`);
         } else {
           router.push("/user/profile/update?step=moreinfo");
         }
@@ -96,15 +96,13 @@ const LoginForm = () => {
       const googleAuthToken = session.user.accessToken;
       handleGoogleSignIn(googleAuthToken);
     }
-  }, [status]);
+  }, [ status ]);
 
   useEffect(() => {
     const verifyUser = async () => {
       try {
-      console.log("::::::::::::::: k log log", process.env.NEXT_PUBLIC_API_BASE_URL);
-
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify-email`,
+          `${ process.env.NEXT_PUBLIC_API_BASE_URL }/auth/verify-email`,
           {
             method: "PATCH",
             body: JSON.stringify({ code: token, email }),
@@ -125,7 +123,7 @@ const LoginForm = () => {
     if (token && email) {
       verifyUser();
     }
-  }, [email, token]);
+  }, [ email, token ]);
 
   return (
     <>
