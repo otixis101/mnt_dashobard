@@ -2,7 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @import url("./fonts.css");
+
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  position: relative;
+  background-color: transparent;
+  /* Adjust as needed */
+}
+
+.close-icon {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  cursor: pointer;
+  color: #000;
+  /* Adjust as needed */
+}
 
 html {
   scroll-padding-top: 150px;
@@ -26,6 +56,7 @@ body {
   0% {
     background-image: url("/assets/spiral-1.png");
   }
+
   100% {
     background-image: url("/assets/spiral-2.png");
   }
@@ -71,6 +102,7 @@ body {
 .testimonial .swiper-button-prev {
   left: -0%;
 }
+
 .testimonial .swiper-button-next {
   right: -0%;
 }
@@ -87,6 +119,7 @@ body {
 
 /*add support for outline color https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-contrast */
 @media (prefers-contrast: more) {
+
   .remove-outline,
   .remove-outline:focus-visible {
     outline: auto;
@@ -97,6 +130,7 @@ body {
 .counter-reset-step {
   counter-reset: step;
 }
+
 .counter-reset-step li:after {
   content: "";
   position: absolute;
@@ -114,11 +148,13 @@ body {
     left: -40.5%;
   }
 }
+
 @media only screen and (max-width: 571px) {
   .counter-reset-step li:after {
     left: -33.5%;
   }
 }
+
 .counter-reset-step li:first-child:after {
   content: none;
 }
@@ -127,6 +163,7 @@ body {
   background: #5724eb;
   color: #fff;
 }
+
 .counter-reset-step li.active:after {
   background: #5724eb !important;
 }
@@ -152,6 +189,7 @@ body {
   stroke: #b39cf9 !important;
   stroke-width: 3px;
 }
+
 .rd3t-svg {
   overflow: visible !important;
 }
@@ -163,6 +201,7 @@ body {
   width: 80px;
   height: 80px;
 }
+
 .lds div {
   display: inline-block;
   position: absolute;
@@ -171,14 +210,17 @@ body {
   background: #5724eb;
   animation: lds 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
+
 .lds div:nth-child(1) {
   left: 8px;
   animation-delay: -0.24s;
 }
+
 .lds div:nth-child(2) {
   left: 32px;
   animation-delay: -0.12s;
 }
+
 .lds div:nth-child(3) {
   left: 56px;
   animation-delay: 0;
@@ -189,6 +231,7 @@ body {
     top: 8px;
     height: 64px;
   }
+
   50%,
   100% {
     top: 24px;

@@ -19,6 +19,7 @@ const NavBar = () => {
       <div className="container mx-auto flex h-full items-center justify-between gap-2 py-6 max-md:px-4">
         <div className="text-white sm:hidden">
           <MobileMenu />
+
         </div>
         <Link
           href="/"
