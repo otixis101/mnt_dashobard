@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import Input from "@/components/atoms/Input";
 import ComboBox, { DataProps } from "@/components/atoms/ComboBox";
-import PhoneInput from "@/components/atoms/PhoneInput";
+
 import Button from "@/components/atoms/Button";
 import { countryArrray } from "@/components/constants";
 import {
@@ -21,9 +21,9 @@ import { DayPickerCalendar } from "../../Calendar/CalendarDayPicker";
 interface FormUserInfo {
   firstName: string;
   lastName: string;
-  mothersName: string;
+  // mothersName: string;
   homeTown: string;
-  middleName: string;
+  // middleName: string;
 }
 
 const fields = [
@@ -39,32 +39,32 @@ const fields = [
     placeholder: "Last Name",
     Component: Input,
   },
+  // {
+  //   label: "Enter your Middle name",
+  //   name: "middleName",
+  //   placeholder: "Middle Name",
+  //   className: "sm:col-span-2",
+  //   Component: Input,
+  // },
   {
-    label: "Enter your Middle name",
-    name: "middleName",
-    placeholder: "Middle Name",
-    className: "sm:col-span-2",
-    Component: Input,
-  },
-  {
-    label: "Enter your Home Town",
+    label: "Birthplace (Town or City) ",
     name: "homeTown",
     placeholder: "Enter your Home Town",
     Component: Input,
   },
 
-  {
-    label: "Enter your mother's maiden name",
-    name: "mothersName",
-    placeholder: "Mother's maiden name ",
-    Component: Input,
-  },
+  // {
+  //   label: "Enter your mother's maiden name",
+  //   name: "mothersName",
+  //   placeholder: "Mother's maiden name ",
+  //   Component: Input,
+  // },
 ] as const;
 
 const MoreInfoForm: FC = () => {
   const { data: session, update } = useSession();
   const router = useRouter();
-  const [phoneNumber, setPhoneNumber] = useState<E164Number>();
+
 
   const dateInputRef = React.useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
@@ -87,8 +87,12 @@ const MoreInfoForm: FC = () => {
   const { setPersonData } = useStore();
 
   const handleFormSubmit = async (values: FormUserInfo) => {
-    const { firstName, lastName, mothersName, homeTown, middleName } = values;
-    if (!phoneNumber || !selectedCountry || !selectedState) {
+    const { firstName, lastName,
+      // mothersName, 
+      homeTown
+      // middleName 
+    } = values;
+    if (!selectedCountry || !selectedState) {
       toast.error("Please fill all fields");
       return;
     }
@@ -96,11 +100,11 @@ const MoreInfoForm: FC = () => {
     const personPayload = {
       firstName,
       lastName,
-      middleName,
+      // middleName,
       dateOfBirth: new Date(inputProps.value as string),
-      mothersMaidenName: mothersName,
+      // mothersMaidenName: mothersName,
       homeTown,
-      phoneNumber,
+      // phoneNumber,
       countryOfOrigin: selectedCountry,
       stateOfOrigin: selectedState,
       isUser: true,
@@ -175,9 +179,9 @@ const MoreInfoForm: FC = () => {
       initialValues={{
         firstName: "",
         lastName: "",
-        mothersName: "",
+        // mothersName: "",
         homeTown: "",
-        middleName: "",
+        // middleName: "",
       }}
       validationSchema={CreateUserSchema}
       onSubmit={handleFormSubmit}
@@ -191,6 +195,7 @@ const MoreInfoForm: FC = () => {
         touched,
       }) => (
         <form onSubmit={handleSubmit}>
+
           <div className="grid grid-cols-1 gap-5 bg-white sm:grid-cols-2">
             {fields.map(({ Component, name, label, placeholder, ...rest }) => (
               <fieldset {...rest} key={label}>
@@ -211,7 +216,7 @@ const MoreInfoForm: FC = () => {
 
             <div className="!text-light-slate-9 space-y-2">
               <p className="grid grid-cols-1 gap-2 text-sm text-black">
-                Enter your date of birth
+                Date of birth
               </p>
 
               <Popover
@@ -245,7 +250,7 @@ const MoreInfoForm: FC = () => {
               onSelect={(value) => {
                 setSelctedCountry(value);
               }}
-              label="Select country of origin "
+              label="Location (Country)"
               data={countries}
             />
             <ComboBox
@@ -253,16 +258,11 @@ const MoreInfoForm: FC = () => {
               onSelect={(value) => {
                 setSelectedState(value);
               }}
-              label="Select state of origin "
+              label="Location (State) "
             />
-            <PhoneInput
-              label="Enter your phone number"
-              placeholder="(999) 999-9999"
-              value={phoneNumber}
-              onChange={setPhoneNumber}
-            />
+
           </div>
-          <Button loading={loading} className="mx-auto mt-8" type="submit">
+          <Button loading={loading} className="ml-auto my-8" disabled={loading} type="submit">
             Continue
           </Button>
         </form>

@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import MultiPageHeader from "@/components/molecules/UpdateProfile/MultiPageHeader";
 
 /** position of element in the array matters, would be nice if i had used a map or a hash table, who knows */
-const AllSteps = ["moreinfo", "suggestions", "about"] as const;
+const AllSteps = ["moreinfo", "about", "suggestions"] as const;
 
 type Steps = (typeof AllSteps)[number];
 
@@ -53,22 +53,9 @@ const UserProfile = () => {
       </AppLayout>
     );
 
-  // eslint-disable-next-line consistent-return
-  const renderSelectedSteps = (steps: Steps): React.JSX.Element => {
-    // typescript already enforces a JSX return
-    switch (steps) {
-      case "moreinfo":
-        return <MoreInfoPage />;
-      case "suggestions":
-        return <SuggestionsPage />;
-      case "about":
-        return <AboutPage />;
-    }
-  };
-
   /**
-   * this variable allows me to assert step as Steps, due to a problem with the ts compiler, it would always throw an error, although step has been narrowed down to `Step` already
-   */
+ * this variable allows me to assert step as Steps, due to a problem with the ts compiler, it would always throw an error, although step has been narrowed down to `Step` already
+ */
   const dummyStep = step as Steps;
 
   const currentStep = AllSteps.indexOf(dummyStep);
@@ -83,15 +70,30 @@ const UserProfile = () => {
     }
   };
 
+  // eslint-disable-next-line consistent-return
+  const renderSelectedSteps = (steps: Steps): React.JSX.Element => {
+    // typescript already enforces a JSX return
+    switch (steps) {
+      case "moreinfo":
+        return <MoreInfoPage />;
+      case "suggestions":
+        return <SuggestionsPage />;
+      case "about":
+        return <AboutPage onPrevClick={() => handleNavigation("prev")} />;
+    }
+  };
+
+
+
   return (
     <AppLayout>
       <section className="relative flex items-center justify-center px-4 md:min-h-[calc(100vh-100px)]">
         <div className="w-full space-y-5 !overflow-auto min-h-app max-md:py-10 max-md:pb-20 md:space-y-7 md:pt-20">
           <MultiPageHeader
             text={PageHeader[dummyStep]}
-            steps={AllSteps.length}
+            // steps={AllSteps.length}
             currentStep={currentStep + 1}
-            onPrevClick={() => handleNavigation("prev")}
+          // onPrevClick={() => handleNavigation("prev")}
           />
           {renderSelectedSteps(dummyStep)}
         </div>
