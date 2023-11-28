@@ -108,9 +108,9 @@ interface Person {
 }
 
 interface Props {
-  onPrevClick(): void;
+  onPrevClick?: () => void;
   // onNextClick?(): void;
-  onFormUpdate: (person: Person) => void;
+  onFormUpdate?: (person: Person) => void;
 }
 
 
@@ -289,7 +289,7 @@ const FirstForm = (props: Props) => {
 
       // Update FormData
 
-      onFormUpdate(personPayload);
+      onFormUpdate!(personPayload);
 
       setLoading(true);
       try {
