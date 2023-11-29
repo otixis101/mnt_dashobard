@@ -13,7 +13,7 @@ interface Props {
 }
 
 const MultiPageHeader = (props: Props) => {
-  const { currentStep, text, steps, className } =
+  const { currentStep, text,  className } =
     props;
 
   return (
