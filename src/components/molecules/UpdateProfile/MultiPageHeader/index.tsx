@@ -5,7 +5,7 @@ import { cn } from "@/base/utils";
 
 interface Props {
   text: string;
-  steps?: number;
+  // steps?: number;
   currentStep: number;
   // onPrevClick(): void;
   // onNextClick?(): void;
