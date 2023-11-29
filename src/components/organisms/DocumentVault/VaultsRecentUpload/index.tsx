@@ -3,10 +3,12 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Axios from "axios";
+import Link from "next/link";
 
 interface Document {
   id: string;
   name: string;
+  url: string;
   // Add other properties as needed
 }
 
@@ -43,10 +45,10 @@ const VaultsRecentUpload: React.FC = () => {
       <p className="font-bold">Recent Uploads</p>
       <div className="flex flex-wrap lg:gap-10 gap-4">
         {documents?.map((document) => (
-          <button key={document.id} type="button" className="flex flex-col gap-1 items-center justify-center">
-            <Image src="/assets/docs.svg" alt="docu" width={50} height={50} />
+          <Link href={document.url} key={document.id} type="button" className="flex flex-col gap-1 items-center justify-center">
+            <Image src="/assets/icon/pdf.svg" alt="docu" width={50} height={50} />
             <p className="lg:text-xs text-[11px]">{document.name}</p>
-          </button>
+          </Link>
         ))}
       </div>
       <div>

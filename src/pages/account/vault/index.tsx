@@ -30,7 +30,6 @@ const Index = () => (
         <UploadVault />
         <VaultsRecentUpload />
         <DocPreView />
-
       </main>
 
     </section >
