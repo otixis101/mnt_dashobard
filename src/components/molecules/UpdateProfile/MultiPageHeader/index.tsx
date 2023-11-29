@@ -5,7 +5,7 @@ import { cn } from "@/base/utils";
 
 interface Props {
   text: string;
-  steps?: number;
+  // steps?: number;
   currentStep: number;
   // onPrevClick(): void;
   // onNextClick?(): void;
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const MultiPageHeader = (props: Props) => {
-  const { currentStep, text, steps, className } =
+  const { currentStep, text,  className } =
     props;
 
   return (

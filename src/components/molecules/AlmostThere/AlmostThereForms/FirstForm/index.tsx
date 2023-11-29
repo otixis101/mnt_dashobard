@@ -122,7 +122,7 @@ const FirstForm = (props: Props) => {
   const [status, setStatus] = useState("Living");
   const [relation, setRelation] = useState("");
   const [file, setFile] = useState<File>();
-  const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
+  // const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
   const [facts, setFacts] = useState<string[]>([]);
   const [calenderOpen, setCalenderOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -194,9 +194,9 @@ const FirstForm = (props: Props) => {
       setFile(files[0]);
       const reader = new FileReader();
       reader.readAsDataURL(files[0]);
-      reader.onload = (event) => {
-        setProfilePhotoUrl(event.target?.result as string);
-      };
+      // reader.onload = (event) => {
+      //   setProfilePhotoUrl(event.target?.result as string);
+      // };
 
       // console.log(profilePhotoUrl);
     } else {
