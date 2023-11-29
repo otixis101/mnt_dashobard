@@ -66,6 +66,7 @@ const TreeCard = ({
                 <PopoverTrigger className="absolute -left-14 top-[30%] z-[100] opacity-50">
                   <button
                     type="button"
+                    aria-label="button"
                     // onClick={onPlusClick}
                     className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#898989]"
                   >

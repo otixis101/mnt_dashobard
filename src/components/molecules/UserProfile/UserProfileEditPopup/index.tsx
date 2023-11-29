@@ -247,7 +247,7 @@ const UserProfileEditPopup = ({
                   <span className="m-2 mx-1 inline-block rounded-lg bg-[#CECECE] p-2">
                     {facts.name}
                   </span>
-                  <button onClick={() => onFilter(facts.id)}>
+                  <button aria-label="button" onClick={() => onFilter(facts.id)}>
                     <IoMdClose />
                   </button>
                 </span>

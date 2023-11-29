@@ -116,7 +116,7 @@ const TreePopup = ({ mode, onChange, imgSrc }: Props) => {
                   <span className="m-2 mx-1 inline-block rounded-lg bg-[#877FB6] p-2">
                     {interest.name}
                   </span>
-                  <button onClick={() => onFilter(interest.id)}>
+                  <button aria-label="button" onClick={() => onFilter(interest.id)}>
                     <IoMdClose />
                   </button>
                 </span>
