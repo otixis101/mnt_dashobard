@@ -126,10 +126,10 @@ const UploadLink = () => {
                                 <option value="pdf">PDF</option>
                             </select>
                         </div>
-                        <div className="flex items-center mb-4">
+                        {/* <div className="flex items-center mb-4">
                             <input id="default-radio-1" checked type="radio" value="" name="default-radio" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 " />
                             <label htmlFor="default-radio-1" className="ms-2 text-sm  w-60 font-medium text-black">Anyone with this link is granted access to view the file in it.</label>
-                        </div>
+                        </div> */}
                         <Button onClick={handleSubmit} className="inline">
                             Upload link to file
                         </Button>

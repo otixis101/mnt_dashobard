@@ -73,15 +73,15 @@ const FamilyTree = () => {
   const parentsIds =
     data && data.relationship
       ? data.relationship.links
-          .filter((node) => node.id === personId)
-          .map((person) => person.parents)
+        .filter((node) => node.id === personId)
+        .map((person) => person.parents)
       : [];
 
   const ownerSpouseId =
     data && data.relationship
       ? data.relationship.links
-          .filter((node) => node.spouseId && node.spouseId.includes(personId))
-          .map((person) => person.id)
+        .filter((node) => node.spouseId && node.spouseId.includes(personId))
+        .map((person) => person.id)
       : [];
 
   const getRelativePresets = (id) => {
@@ -296,9 +296,8 @@ const FamilyTree = () => {
                 className={cn(
                   "flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
                 )}
-                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}&relationship=${
-                  itemConfig.id === "empty-spouse" ? "spouse" : "parent"
-                }`}
+                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}&relationship=${itemConfig.id === "empty-spouse" ? "spouse" : "parent"
+                  }`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#212121]">
                   <FaPlus className="text-xl text-[#212121]" />
@@ -364,6 +363,7 @@ const FamilyTree = () => {
           <div className="flex gap-8">
             <div className="flex items-center gap-1">
               <button
+                aria-label="button"
                 title="zoom out 10% "
                 onClick={() => handleClickToZoom("out")}
                 type="button"
@@ -386,6 +386,7 @@ const FamilyTree = () => {
                 title="zoom in 10% "
                 onClick={() => handleClickToZoom("in")}
                 type="button"
+                aria-label="button"
               >
                 <AiFillPlusSquare
                   fill="hsla(255, 83%, 53%, 1)"
@@ -418,28 +419,28 @@ const FamilyTree = () => {
               }}
             >
               <h1>Testing</h1>
-              <FamDiagram cursorItem={null} centerOnCursor  config={config} />
+              <FamDiagram cursorItem={null} centerOnCursor config={config} />
             </div>
           )
-          :(
-            <Dialog defaultOpen>
-              <DialogContent className="sm:max-w-[525px] dark:bg-white dark:text-gray-800">
-                <div className="flex flex-col items-center gap-12 px-8 py-24">
-                  <h1 className="text-3xl font-medium text-center">
-                  Kindly add your profile to access your family tree.
-                  </h1>
-                  <Link href="/user/profile/update?step=moreinfo" className="w-fit px-24 py-4 text-center rounded-lg bg-primary text-white">Add Your Profile</Link>
-                </div>
-              </DialogContent>
-            </Dialog>
-          )
+            : (
+              <Dialog defaultOpen>
+                <DialogContent className="sm:max-w-[525px] dark:bg-white dark:text-gray-800">
+                  <div className="flex flex-col items-center gap-12 px-8 py-24">
+                    <h1 className="text-3xl font-medium text-center">
+                      Kindly add your profile to access your family tree.
+                    </h1>
+                    <Link href="/user/profile/update?step=moreinfo" className="w-fit px-24 py-4 text-center rounded-lg bg-primary text-white">Add Your Profile</Link>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            )
           }
         </div>
       </section>
 
-        <DashboardPhotoAlbum
-          imagesUrls={loggedInUser?.images.map((photo) => photo.url).slice(0, 3)}
-        />
+      <DashboardPhotoAlbum
+        imagesUrls={loggedInUser?.images.map((photo) => photo.url).slice(0, 3)}
+      />
 
       {/* {loggedInUser && (
         <DashboardPhotoAlbum

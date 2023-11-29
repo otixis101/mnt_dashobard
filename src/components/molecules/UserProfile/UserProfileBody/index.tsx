@@ -9,6 +9,7 @@ import { GoShieldCheck } from "react-icons/go";
 import { AiFillStar } from "react-icons/ai";
 
 import TreeIcon from "public/assets/icon/tree-icon.png";
+import Link from "next/link";
 
 import { format } from "date-fns";
 import Button from "@/components/atoms/Button";
@@ -24,8 +25,8 @@ import UserProfileSettingPopup from "../UserProfileSettingPopup";
 type ModeOptions = "edit" | "settings";
 
 const Index = () => {
-  const [mode, setMode] = useState<ModeOptions>();
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [ mode, setMode ] = useState<ModeOptions>();
+  const [ openModal, setOpenModal ] = useState<boolean>(false);
 
   const { data: session } = useSession();
   const { personId } = session?.user ?? {};
@@ -46,7 +47,7 @@ const Index = () => {
 
   const getFullName = () => {
     if (data?.firstName && data?.lastName) {
-      return `${data?.firstName} ${data?.lastName}`;
+      return `${ data?.firstName } ${ data?.lastName }`;
     }
     return data?.firstName ?? data?.lastName ?? "";
   };
@@ -55,7 +56,7 @@ const Index = () => {
     if (data) {
       setUser(data);
     }
-  }, [data]);
+  }, [ data ]);
 
   const onChange = (modelOption?: ModeOptions) => {
     setOpenModal(true);
@@ -95,7 +96,7 @@ const Index = () => {
                     fill
                     style={{ objectFit: "contain" }}
                     alt="user profile photo"
-                    // className="md:h-68 mx-auto md:w-[60rem]"
+                  // className="md:h-68 mx-auto md:w-[60rem]"
                   />
                 ) : (
                   <Avatar name={getFullName()} />
@@ -187,18 +188,16 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="my-2 flex w-full items-center rounded-xl bg-gray-50 p-4 text-right">
-                  <GoShieldCheck className="mr-3 h-[2rem] w-[2rem]" />
-                  <span className="flex flex-col">
-                    <p className="whitespace-nowrap text-sm font-medium md:text-xl">
-                      Document vault
-                    </p>
-                    <span className="flex items-center">
-                      <RxDotFilled className="leading-none text-gray-500" />
-                      coming soon
+                <Link href="account/vault">
+                  <div className="my-2 flex w-full items-center rounded-xl bg-gray-50 p-4 text-right">
+                    <GoShieldCheck className="mr-3 h-[2rem] w-[2rem]" />
+                    <span className="flex flex-col">
+                      <p className="whitespace-nowrap text-sm font-medium md:text-xl">
+                        Document vault
+                      </p>
                     </span>
-                  </span>
-                </div>
+                  </div>
+                </Link>
               </div>
             </div>
 
