@@ -37,8 +37,8 @@ const VaultsRecentUpload: React.FC = () => {
   }, [ session, error ]);
 
   return (
-    <div className="col-span-6 lg:bg-[#F3F3F3] rounded-3xl lg:py-10 lg:px-7  flex flex-col gap-5 font-">
-      <form action="search_results.html" method="GET" className=" hidden lg:flex gap-3 justify-end ">
+    <div className="col-span-10 lg:bg-[#F3F3F3] rounded-3xl lg:py-10 lg:px-7 flex flex-col gap-5 font-">
+      <form action="search_results.html" method="GET" className="hidden lg:flex gap-3 justify-center ">
         <input className="rounded-full w-80 pl-4 bg-gray-400 border-none" type="text" name="search" placeholder="Search..." />
         <button type="button" className="rounded-lg bg-black p-1 px-8 text-white">Search</button>
       </form>
