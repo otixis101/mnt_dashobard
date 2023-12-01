@@ -12,7 +12,7 @@ const UploadLink = () => {
     const [ isModalOpen, setIsModalOpen ] = useState(false);
     const [ fileLink, setFileLink ] = useState("");
     const [ fileName, setFileName ] = useState("");
-    const [ fileType, setFileType ] = useState("pdf");
+    // const [ fileType, setFileType ] = useState("pdf");
     const { data: session } = useSession();
 
     const handleModalClose = () => {
@@ -24,9 +24,9 @@ const UploadLink = () => {
     const handleFileName = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFileName(e.target.value);
     };
-    const handleFileType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFileType(e.target.value);
-    };
+    // const handleFileType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    //     setFileType(e.target.value);
+    // };
 
     const handleSubmit = async () => {
         try {
@@ -36,7 +36,7 @@ const UploadLink = () => {
                     {
                         "name": fileName,
                         "url": fileLink,
-                        "filetype": fileType
+                        "filetype": "PDF"
                     }
                 ]
             }, {
@@ -114,7 +114,7 @@ const UploadLink = () => {
                                 required
                             />
                         </div>
-                        <div className="pt-5">
+                        {/* <div className="pt-5">
                             <label htmlFor="file_link" className="block mb-2 text-sm font-medium text-black">
                                 <p className="text-sm"> File type</p>
                             </label>
@@ -125,7 +125,7 @@ const UploadLink = () => {
                                 value={fileType} onChange={handleFileType} >
                                 <option value="pdf">PDF</option>
                             </select>
-                        </div>
+                        </div> */}
                         {/* <div className="flex items-center mb-4">
                             <input id="default-radio-1" checked type="radio" value="" name="default-radio" className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 " />
                             <label htmlFor="default-radio-1" className="ms-2 text-sm  w-60 font-medium text-black">Anyone with this link is granted access to view the file in it.</label>
