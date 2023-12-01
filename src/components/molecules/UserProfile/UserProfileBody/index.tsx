@@ -189,14 +189,14 @@ const Index = () => {
                 </div>
 
                 <Link href="account/vault">
-                  <div className="my-2 flex w-full items-center rounded-xl bg-gray-50 p-4 text-right">
+                  <Button intent="outline" className="my-2 hover flex w-full items-center rounded-xl bg-gray-50 p-4 text-right">
                     <GoShieldCheck className="mr-3 h-[2rem] w-[2rem]" />
                     <span className="flex flex-col">
                       <p className="whitespace-nowrap text-sm font-medium md:text-xl">
                         Document vault
                       </p>
                     </span>
-                  </div>
+                  </Button>
                 </Link>
               </div>
             </div>
