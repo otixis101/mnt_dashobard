@@ -24,8 +24,6 @@ const TreeMemberBody = () => {
 
   const onChange = (_?: unknown) => setMode((prevState) => !prevState);
 
-  console.log(data);
-
   return (
     <>
       {mode && (

@@ -124,7 +124,7 @@ const AddMember = ({ personId }: AddMemberPageProps) => {
         <div className="w-full space-y-10">
           <MultiPageHeader
             text="Add a member to the family tree"
-            steps={Steps.length}
+            // steps={Steps.length}
             currentStep={currentStep + 1}
             // onNextClick={() => handleNavigation("next")}
             // onPrevClick={() => handleNavigation("prev")}
