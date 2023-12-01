@@ -36,7 +36,7 @@ const UploadLink = () => {
                     {
                         "name": fileName,
                         "url": fileLink,
-                        "filetype": "PDF"
+                        "filetype": "pdf"
                     }
                 ]
             }, {
