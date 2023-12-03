@@ -9,7 +9,7 @@ const BackArrow = () => {
     router.back();
   };
   return (
-    <button onClick={handleBack} type="button">
+    <button aria-label="button" onClick={handleBack} type="button">
       <BiArrowBack className="h-8 w-12 cursor-pointer md:h-12 md:w-14" />
     </button>
   );
