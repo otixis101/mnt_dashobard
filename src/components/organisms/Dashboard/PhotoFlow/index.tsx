@@ -14,7 +14,7 @@ const Main = () => {
 
   const [mode, setMode] = useState<boolean>(false);
   const [galleryImages, setgalleryImages] = useState<ImgJson>([]);
-  const { data, isLoading, mutate, } = useFetchPerson(personId as string);
+  const { data, isLoading, mutate } = useFetchPerson(personId as string);
 
   useEffect(() => {
     if (pathname.includes("add")) {
@@ -23,6 +23,7 @@ const Main = () => {
       setMode(false);
     }
   }, [pathname]);
+  
   useEffect(() => {
     if (data && data.images.length > 0) {
       const imgs = data.images;
@@ -38,7 +39,7 @@ const Main = () => {
       console.log(imgs);
     }
     console.log(data);
-  }, [data]);
+  }, [data, mode, mutate]);
 
   const onChange = (_?: any) => {
     setMode((prevState) => !prevState);

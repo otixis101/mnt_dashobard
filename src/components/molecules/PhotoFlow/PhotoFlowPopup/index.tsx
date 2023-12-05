@@ -123,7 +123,9 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
       filetype: _file.name.split(".").pop(),
     }));
 
-    imageUpload(imgObject);
+    await imageUpload(imgObject);
+    toast.success("Photo uploaded successful");
+    if (refreshCallback) refreshCallback();
   };
 
   const onGoogleSuccess = async (files: GoogleDriveFileObject[]) => {
