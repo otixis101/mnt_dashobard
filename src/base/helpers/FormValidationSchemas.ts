@@ -24,6 +24,16 @@ export const UpdateUserAboutSchema = Yup.object().shape({
   // maritalStatus: Yup.string().required("Marital status cannot be blank"),
 });
 
+export const UpdateUserAboutSchemaValidator = Yup.object().shape({
+  occupation: Yup.string().required("Occupation cannot be blank"),
+  mothersName: Yup.string().required("mothersName cannot be blank"),
+  gender: Yup.string().required("gender cannot be blank"),
+  maritalStatus: Yup.string().required("maritalStatus cannot be blank"),
+  phone_no: Yup.string().required("phone_no cannot be blank"),
+  // gender: Yup.string().required("Gender cannot be blank"),
+  // maritalStatus: Yup.string().required("Marital status cannot be blank"),
+});
+
 export const NumberSchema = Yup.number().typeError(
   "Only numbers are accepted as a valid format"
 );
