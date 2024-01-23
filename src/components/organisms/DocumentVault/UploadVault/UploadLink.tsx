@@ -6,6 +6,7 @@ import Axios from "axios";
 import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 // import { Formik } from "formik";
 
 const UploadLink = () => {
@@ -14,6 +15,8 @@ const UploadLink = () => {
     const [ fileName, setFileName ] = useState("");
     // const [ fileType, setFileType ] = useState("pdf");
     const { data: session } = useSession();
+
+    const router = useRouter();
 
     const handleModalClose = () => {
         setIsModalOpen(false);
@@ -45,6 +48,7 @@ const UploadLink = () => {
                 },
             });
             toast.success("Link uploaded");
+            router.reload();
             setIsModalOpen(false);
         } catch (error: any) {
             toast.error(String(error));
