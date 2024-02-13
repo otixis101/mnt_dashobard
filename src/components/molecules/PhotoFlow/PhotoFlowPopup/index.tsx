@@ -78,6 +78,8 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
 
       if(imgFile){
         headers["Content-Type"] = "application/json";
+      } else {
+        headers["Content-Type"] = "multipart/form-data";
       }
 
       const res = await Axios.post(
