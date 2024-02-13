@@ -1,17 +1,17 @@
 /* eslint-disable react/button-has-type */
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
 import GoogleDrivePicker from "google-drive-picker";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
 import { toast } from "react-toastify";
 
-import googleDrive from "public/assets/icon/googleDrive.png";
 import dropBox from "public/assets/icon/dropbox.png";
+import googleDrive from "public/assets/icon/googleDrive.png";
 
 import Axios from "@/base/axios";
-import Popup from "@/components/atoms/Popup";
 import Button from "@/components/atoms/Button";
+import Popup from "@/components/atoms/Popup";
 import { useRouter } from "next/router";
 import PhotoFlowDropBox from "../PhotoFlowDropBox";
 
@@ -73,14 +73,18 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     const apiPath = imgFile ? "google-drive" : "browse-file";
 
     try {
+
+      const headers: Record<string, string> = {Authorization: `Bearer ${ session?.user.accessToken }`};
+
+      if(imgFile){
+        headers["Content-Type"] = "application/json";
+      }
+
       const res = await Axios.post(
         `/document/${ apiPath }`,
         !imgFile ? formData : payload,
         {
-          headers: {
-            Authorization: `Bearer ${ session?.user.accessToken }`,
-            "Content-Type": "application/json",
-          }
+          headers
         });
 
       if (res && res.status === 200) {
