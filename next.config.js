@@ -7,6 +7,7 @@ const nextConfig = {
       "images.pexels.com",
       "mnt-core-bucket.s3.eu-north-1.amazonaws.com",
       "avatars.githubusercontent.com",
+      "mnt-core-bucket-production.s3.us-east-2.amazonaws.com",
     ],
   },
   async headers() {
