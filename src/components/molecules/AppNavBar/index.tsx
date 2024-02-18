@@ -2,6 +2,7 @@ import { cn, getUserInitials } from "@/base/utils";
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "public/logo-alt.webp";
+import { CaretDownIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import useMenuOnScroll from "@/base/hooks/useMenuOnScroll";
 import LogoWhite from "public/logo.webp";
@@ -18,6 +19,7 @@ import { RxAvatar, RxDashboard } from "react-icons/rx";
 import { IoMdSettings } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import MobileMenu from "../MobileMenu";
+
 
 const navLinks = [
   { name: "FAQ", url: "/faq" },
@@ -135,6 +137,9 @@ const AppNavBar = (props: AppNavBarProps) => {
                   </div>
                   <span className="hidden font-extrabold capitalize md:block">
                     Hi, {data?.firstName}
+                  </span>
+                  <span>
+                    <CaretDownIcon className="w-5 h-5" />
                   </span>
                 </div>
               ) : null}
