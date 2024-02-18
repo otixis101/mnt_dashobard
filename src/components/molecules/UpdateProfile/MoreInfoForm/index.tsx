@@ -61,15 +61,43 @@ const fields = [
   // },
 ] as const;
 
+// type formPayload = {
+//   "firstName": string,
+//   "lastName": string,
+//   "dateOfBirth": string,
+//   "homeTown": string,
+//   "countryOfOrigin": string,
+//   "stateOfOrigin": string,
+// };
+
 const MoreInfoForm: FC = () => {
   const { data: session, update } = useSession();
   const router = useRouter();
 
 
+  const storedData = localStorage.getItem("personPayload");
+  const parsedData = storedData ? JSON.parse(storedData) : null;
+
+  const [formData] = useState(parsedData ?? {
+    firstName: "",
+    lastName: "",
+    homeTown: "",
+    dateOfBirth: "",
+    countryOfOrigin: "",
+    stateOfOrigin: "",
+  });
+
+
+  useEffect(() => {
+    console.log(formData);
+
+  }, [formData]);
+
+
   const dateInputRef = React.useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedCountry, setSelctedCountry] = useState("");
-  const [selectedState, setSelectedState] = useState("");
+  const [selectedCountry, setSelctedCountry] = useState(formData.countryOfOrigin);
+  const [selectedState, setSelectedState] = useState(formData.stateOfOrigin);
   const [states, setStates] = useState<DataProps[]>([]);
   const [calenderOpen, setCalenderOpen] = useState(false);
   const countries = countryArrray.map(({ country }) => ({
@@ -78,7 +106,7 @@ const MoreInfoForm: FC = () => {
   }));
 
   const { inputProps, dayPickerProps } = useInput({
-    defaultSelected: new Date(),
+    defaultSelected: new Date(formData.dateOfBirth),
     fromYear: 1900,
     toYear: new Date().getFullYear(),
     required: true,
@@ -109,6 +137,17 @@ const MoreInfoForm: FC = () => {
       stateOfOrigin: selectedState,
       isUser: true,
     };
+    const formPayload = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "dateOfBirth": new Date(inputProps.value as string),
+      "homeTown": homeTown,
+      "countryOfOrigin": selectedCountry,
+      "stateOfOrigin": selectedState,
+    };
+
+    localStorage.setItem("personPayload", JSON.stringify(formPayload));
+
 
     try {
       setLoading(true);
@@ -177,10 +216,10 @@ const MoreInfoForm: FC = () => {
   return (
     <Formik
       initialValues={{
-        firstName: "",
-        lastName: "",
+        firstName: formData.firstName ?? "",
+        lastName: formData.lastName ?? "",
         // mothersName: "",
-        homeTown: "",
+        homeTown: formData.homeTown ?? "",
         // middleName: "",
       }}
       validationSchema={CreateUserSchema}
@@ -233,6 +272,7 @@ const MoreInfoForm: FC = () => {
                       label=""
                       {...inputProps}
                       parentClass="w-full"
+                      defaultValue={formData.dateOfBirth ?? undefined}
                     />
                   </button>
                 </PopoverTrigger>
@@ -252,6 +292,7 @@ const MoreInfoForm: FC = () => {
               }}
               label="Location (Country)"
               data={countries}
+              defaultValue={selectedCountry}
             />
             <ComboBox
               data={states}
@@ -259,6 +300,7 @@ const MoreInfoForm: FC = () => {
                 setSelectedState(value);
               }}
               label="Location (State) "
+              defaultValue={selectedState}
             />
 
           </div>

@@ -47,7 +47,7 @@ const SpecialInput = {
   placeholder: "Add interesting facts about you",
 };
 
-type FieldsKeys = (typeof fields)[ number ][ "name" ];
+type FieldsKeys = (typeof fields)[number]["name"];
 
 type FormUserInfo = Record<FieldsKeys, string>;
 
@@ -60,10 +60,26 @@ const AboutProfileForm = (props: Props) => {
   const { onPrevClick } =
     props;
   const { data: session, update } = useSession();
+
+
+  const storedData = localStorage.getItem("aboutPayload");
+  const parsedData = storedData ? JSON.parse(storedData) : null;
+
+  const [formData] = useState(parsedData ?? {
+    occupation: "",
+    mothersName: "",
+    gender: "",
+    maritalStatus: "",
+    phone_no: "",
+    facts: [],
+  });
+
   const { createPersonData } = useStore();
   const router = useRouter();
-  const [ facts, setFacts ] = useState<string[]>([]);
-  const [ loading, setLoading ] = useState(false);
+  const [facts, setFacts] = useState<string[]>(formData.facts ?? []);
+  const [loading, setLoading] = useState(false);
+
+
 
   const handleFormSubmit = async (values: FormUserInfo) => {
     const payload = { ...values, facts };
@@ -88,10 +104,12 @@ const AboutProfileForm = (props: Props) => {
       }
 
       setLoading(true);
+
+      localStorage.setItem("aboutPayload", JSON.stringify(payload));
       try {
-        const res = await Axios.patch(`/person/${ userId }`, payload, {
+        const res = await Axios.patch(`/person/${userId}`, payload, {
           headers: {
-            Authorization: `Bearer ${ user.accessToken }`,
+            Authorization: `Bearer ${user.accessToken}`,
           },
         });
 
@@ -106,7 +124,7 @@ const AboutProfileForm = (props: Props) => {
           });
 
           toast.success("User profile updated successfully");
-          router.push(`/dashboard/tree/${ user.personId }`);
+          router.push(`/dashboard/tree/${user.personId}`);
         }
       } catch (error) {
         toast.error(String(error));
@@ -121,12 +139,12 @@ const AboutProfileForm = (props: Props) => {
   return (
     <Formik
       initialValues={{
-        occupation: "",
-        mothersName: "",
-        gender: "",
-        maritalStatus: "",
-        phone_no: "",
-        fact: ""
+        occupation: formData.occupation ?? "",
+        mothersName: formData.mothersName ?? "",
+        gender: formData.gender ?? "",
+        maritalStatus: formData.maritalStatus ?? "",
+        phone_no: formData.phone_no ?? "",
+        fact: facts ?? ""
       }}
       validationSchema={UpdateUserAboutSchemaValidator}
       onSubmit={(e) => {
@@ -149,12 +167,13 @@ const AboutProfileForm = (props: Props) => {
                   name={name}
                   placeholder={placeholder}
                   label={label}
+                  // defaultValue={formData[name]}
                   onChange={handleChange}
                   parentClass="w-full"
-                  value={values[ name ]}
+                  value={values[name]}
                   onBlur={handleBlur}
-                  isError={!!(touched[ name ] && errors[ name ])}
-                  hint={touched[ name ] && errors[ name ] ? errors[ name ] : ""}
+                  isError={!!(touched[name] && errors[name])}
+                // hint={touched[name] && errors[name] ? errors[name] : ""}
                 />
               </fieldset>
             ))}
@@ -176,7 +195,7 @@ const AboutProfileForm = (props: Props) => {
                 <span
                   className="text-danger-1 font-normal pl-0 flex items-start gap-1 text-sm"
                 >
-                  {touched.gender && errors.gender ? errors.gender : ""}
+                  {/* {touched.gender && errors.gender ? errors.gender : ""} */}
                 </span>
               </Select>
             </div>
@@ -197,7 +216,7 @@ const AboutProfileForm = (props: Props) => {
                   <SelectLabel
                     className="text-danger-1 font-normal pl-0 flex items-start gap-1 text-sm"
                   >
-                    {touched.maritalStatus && errors.maritalStatus ? errors.maritalStatus : ""}
+                    {/* {touched.maritalStatus && errors.maritalStatus ? errors.maritalStatus : ""} */}
                   </SelectLabel>
                 </SelectGroup>
 
@@ -205,9 +224,9 @@ const AboutProfileForm = (props: Props) => {
             </div>
 
             <PhoneInput
-              hint={
-                touched.phone_no && errors.phone_no ? errors.phone_no : ""
-              }
+              // hint={
+              //   touched.phone_no && errors.phone_no ? errors.phone_no : ""
+              // }
               isError={!!(touched.phone_no && errors.phone_no)}
               name={values.phone_no}
               value={values.phone_no}
