@@ -47,7 +47,7 @@ const TreeCard = ({
 }: TreeCardProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedRelationship, setRelationship] = useState("");
-
+  console.log({ hasAddButton });
   return (
     <Dialog
       modal={false}

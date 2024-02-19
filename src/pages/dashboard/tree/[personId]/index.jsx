@@ -309,7 +309,7 @@ const FamilyTree = () => {
                 !(
                   itemConfig.isSpouse ||
                   itemConfig.isEmpty ||
-                  (itemConfig.spouseIdm && itemConfig.spouseId.legth === 0)
+                  (itemConfig.spouseIdm && itemConfig.spouseId.length === 0)
                 )
               }
               spouseIds={itemConfig.spouseId ?? []}
