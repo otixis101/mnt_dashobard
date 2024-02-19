@@ -71,7 +71,7 @@ const FamilyTree = () => {
 
   const ownerSpouseId = data?.relationship
     ? data.relationship.links
-        .filter((node) => node?.spouseId.includes(personId))
+        .filter((node) => node?.spouseId?.includes(personId))
         .map((person) => person.id)
     : [];
 

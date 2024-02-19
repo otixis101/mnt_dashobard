@@ -1,22 +1,23 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect, useState } from "react";
 import Button from "@/components/atoms/Button";
+import React, { useEffect, useState } from "react";
 // import Radio from "@/components/atoms/Input/Radio";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { toast } from "react-toastify";
 
+import Axios from "@/base/axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Axios from "@/base/axios";
 // import { cn } from "@/base/utils";
 import useStore from "@/base/store";
 import { getAgeByDate } from "@/base/utils";
 
 // import { format } from "date-fns";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
+import Image from "next/image";
+import { imageBlurData } from "../../../base/constants/imageBlurData";
 
 // import Image from "next/image";
-
 
 // const getToastMessage = (arg: unknown, msg: string) => {
 //   if (!arg) {
@@ -26,7 +27,6 @@ import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 
 //   return false;
 // };
-
 
 // type Person = {
 //   firstName?: string,
@@ -53,8 +53,7 @@ interface Props {
 }
 
 const FinallyPage = (props: Props) => {
-  const { onPrevClick } =
-    props;
+  const { onPrevClick } = props;
 
   const { data: session } = useSession();
 
@@ -104,8 +103,6 @@ const FinallyPage = (props: Props) => {
 
   const [loading, setLoading] = useState(false);
 
-
-
   // const { query } = router;
 
   const relative = createPersonData as DbPersonWithOutSuggestion;
@@ -118,7 +115,6 @@ const FinallyPage = (props: Props) => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-
     if (session) {
       const { user } = session;
 
@@ -128,10 +124,7 @@ const FinallyPage = (props: Props) => {
         formDataPayload.append("reference", query.ref as string);
       }
 
-      formDataPayload.append(
-        "about",
-        bio
-      );
+      formDataPayload.append("about", bio);
       formDataPayload.append(
         "relativeId",
         query.isSuggestion === "true"
@@ -166,34 +159,64 @@ const FinallyPage = (props: Props) => {
   };
 
   return (
-    <section className="flex flex-col lg:flex-row gap-6">
-      <img src={getData?.profilePhotoUrl} alt="pfp" className="w-28 h-28 rounded-xl bg-gray-100" />
-      <section className="grow flex flex-col gap-3">
-        <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4">
-          <h1 className="text-4xl text-primary font-semibold">{getData?.firstName} {getData?.lastName}</h1>
-          <span className="bg-green-300 capitalize text-white p-2 px-16 rounded-lg w-fit">{query.relation}</span>
+    <section className="flex flex-col gap-6 lg:flex-row">
+      <div className="relative h-28 w-28">
+        <Image
+          src={getData?.profilePhotoUrl ?? imageBlurData}
+          alt="pfp"
+          blurDataURL={imageBlurData}
+          className="rounded-xl bg-gray-100"
+          fill
+          placeholder="blur"
+        />
+      </div>
+
+      <section className="flex grow flex-col gap-3">
+        <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
+          <h1 className="text-4xl font-semibold text-primary">
+            {getData?.firstName} {getData?.lastName}
+          </h1>
+          <span className="w-fit rounded-lg bg-green-300 p-2 px-16 capitalize text-white">
+            {query.relation}
+          </span>
         </div>
-        <h1>{getData ? `${getData?.stateOfOrigin}, ${getData.countryOfOrigin}` : ""}</h1>
-        <div className="flex gap-2 items-center">
+        <h1>
+          {getData
+            ? `${getData?.stateOfOrigin}, ${getData.countryOfOrigin}`
+            : ""}
+        </h1>
+        <div className="flex items-center gap-2">
           <h1>{getData?.dateOfBirth}</h1>
-          <span className="w-2 h-2 rounded-full bg-gray-800" />
+          <span className="h-2 w-2 rounded-full bg-gray-800" />
           <p>{getAgeByDate(getData?.dateOfBirth ?? "")} years</p>
         </div>
         <form className="py-6" onSubmit={handleFormSubmit}>
-          <textarea onChange={(e) => setBio(e.target.value)} rows={4} className="outline-primary placeholder:text-primary w-full border rounded-xl border-primary p-2" placeholder="Add bio about Ama" />
+          <textarea
+            onChange={(e) => setBio(e.target.value)}
+            rows={4}
+            className="w-full rounded-xl border border-primary p-2 outline-primary placeholder:text-primary"
+            placeholder="Add bio about Ama"
+          />
 
-          <div className="flex items-center justify-between gap-6 my-8">
-            <Button className="lg:px-0 lg:w-fit border lg:border-none border-primary bg-transparent text-black" onClick={onPrevClick}>
-              <ArrowLeftIcon className="w-4 h-4" /> Back
+          <div className="my-8 flex items-center justify-between gap-6">
+            <Button
+              className="border border-primary bg-transparent text-black lg:w-fit lg:border-none lg:px-0"
+              onClick={onPrevClick}
+            >
+              <ArrowLeftIcon className="h-4 w-4" /> Back
             </Button>
-            <Button loading={loading} className="" disabled={loading} type="submit">
+            <Button
+              loading={loading}
+              className=""
+              disabled={loading}
+              type="submit"
+            >
               Finish
             </Button>
-
           </div>
         </form>
       </section>
-    </section >
+    </section>
   );
 };
 
