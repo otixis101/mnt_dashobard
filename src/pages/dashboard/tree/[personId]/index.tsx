@@ -97,7 +97,7 @@ const FamilyTree = () => {
     const emptySpouse = {
       isEmpty: true,
       id: "empty-spouse",
-      parents: [data.user.personId],
+      parents: [data?.user?.personId],
     };
     if (data?.relationship) {
       const currentPerson = data.relationship.links.find(

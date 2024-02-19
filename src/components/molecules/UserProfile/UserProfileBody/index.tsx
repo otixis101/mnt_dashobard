@@ -1,23 +1,23 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 // icons
-import { RxDotFilled } from "react-icons/rx";
-import { GoShieldCheck } from "react-icons/go";
 import { AiFillStar } from "react-icons/ai";
+import { GoShieldCheck } from "react-icons/go";
+import { RxDotFilled } from "react-icons/rx";
 
-import TreeIcon from "public/assets/icon/tree-icon.png";
 import Link from "next/link";
+import TreeIcon from "public/assets/icon/tree-icon.png";
 
-import { format } from "date-fns";
-import Button from "@/components/atoms/Button";
-import { cn, getAgeByDate, getRandomClass } from "@/base/utils";
-import Avatar from "@/components/atoms/Avatar";
+import useFetchImmediateFamily from "@/base/hooks/api/useFetchImmediateFamily";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import useStore from "@/base/store";
-import useFetchImmediateFamily from "@/base/hooks/api/useFetchImmediateFamily";
+import { cn, getAgeByDate, getRandomClass } from "@/base/utils";
+import Avatar from "@/components/atoms/Avatar";
+import Button from "@/components/atoms/Button";
+import { format } from "date-fns";
 import UserProfileAlbums from "../UserProfileAlbums";
 import UserProfileEditPopup from "../UserProfileEditPopup";
 import UserProfileSettingPopup from "../UserProfileSettingPopup";
@@ -25,8 +25,8 @@ import UserProfileSettingPopup from "../UserProfileSettingPopup";
 type ModeOptions = "edit" | "settings";
 
 const Index = () => {
-  const [ mode, setMode ] = useState<ModeOptions>();
-  const [ openModal, setOpenModal ] = useState<boolean>(false);
+  const [mode, setMode] = useState<ModeOptions>();
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { data: session } = useSession();
   const { personId } = session?.user ?? {};
@@ -47,7 +47,7 @@ const Index = () => {
 
   const getFullName = () => {
     if (data?.firstName && data?.lastName) {
-      return `${ data?.firstName } ${ data?.lastName }`;
+      return `${data?.firstName} ${data?.lastName}`;
     }
     return data?.firstName ?? data?.lastName ?? "";
   };
@@ -56,7 +56,7 @@ const Index = () => {
     if (data) {
       setUser(data);
     }
-  }, [ data ]);
+  }, [data]);
 
   const onChange = (modelOption?: ModeOptions) => {
     setOpenModal(true);
@@ -96,7 +96,7 @@ const Index = () => {
                     fill
                     style={{ objectFit: "contain" }}
                     alt="user profile photo"
-                  // className="md:h-68 mx-auto md:w-[60rem]"
+                    // className="md:h-68 mx-auto md:w-[60rem]"
                   />
                 ) : (
                   <Avatar name={getFullName()} />
@@ -189,7 +189,10 @@ const Index = () => {
                 </div>
 
                 <Link href="account/vault">
-                  <Button intent="outline" className="my-2 hover flex w-full items-center rounded-xl bg-gray-50 p-4 text-right">
+                  <Button
+                    intent="outline"
+                    className="hover my-2 flex w-full items-center rounded-xl bg-gray-50 p-4 text-right"
+                  >
                     <GoShieldCheck className="mr-3 h-[2rem] w-[2rem]" />
                     <span className="flex flex-col">
                       <p className="whitespace-nowrap text-sm font-medium md:text-xl">

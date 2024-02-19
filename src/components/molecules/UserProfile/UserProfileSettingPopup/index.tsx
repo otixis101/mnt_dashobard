@@ -1,16 +1,16 @@
 /* eslint-disable react/button-has-type */
-import React, { useState, useEffect } from "react";
-import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
-import Image from "next/image";
-import { toast } from "react-toastify";
 import GoogleDrivePicker from "google-drive-picker";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import DropboxChooser, { DropboxFile } from "react-dropbox-chooser";
+import { toast } from "react-toastify";
 
-import googleDrive from "public/assets/icon/googleDrive.png";
-import dropBox from "public/assets/icon/dropbox.png";
 import { useSession } from "next-auth/react";
+import dropBox from "public/assets/icon/dropbox.png";
+import googleDrive from "public/assets/icon/googleDrive.png";
 
-import Popup from "@/components/atoms/Popup";
 import Button from "@/components/atoms/Button";
+import Popup from "@/components/atoms/Popup";
 import { useSWRConfig } from "swr";
 import UserProfileDropBox from "../UserProfileDropBox";
 

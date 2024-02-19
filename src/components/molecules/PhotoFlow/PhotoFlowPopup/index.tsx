@@ -34,18 +34,18 @@ interface GoogleDriveFileObject {
 
 const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const { data: session } = useSession();
-  const [ , setFileName ] = useState<DropboxFile[]>([]);
-  const [ uploadStep, setUploadStep ] = useState(false);
-  const [ isDisabled, setIsDisabled ] = useState(true);
-  const [ isLoading, setIsLoading ] = useState(false);
-  const [ file, setFile ] = useState<File | string>();
+  const [, setFileName] = useState<DropboxFile[]>([]);
+  const [uploadStep, setUploadStep] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | string>();
   const router = useRouter();
   const { pathname } = router;
-  const [ openModal, setOpenModal ] = useState<boolean>(
+  const [openModal, setOpenModal] = useState<boolean>(
     !!pathname.includes("add")
   );
-  const [ authTocken, setauthTocken ] = useState("");
-  const [ openPicker, authRes ] = GoogleDrivePicker();
+  const [authTocken, setauthTocken] = useState("");
+  const [openPicker, authRes] = GoogleDrivePicker();
 
   type remoteImgObject = {
     name: string;
@@ -54,9 +54,9 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   }[];
   const imageUpload = async (imgFile?: remoteImgObject) => {
     const formData = new FormData();
-    const personID = session?.user.personId;
+
+    const personID = router.query?.personId;
     let payload = {};
-    console.log(imgFile);
 
     if (!imgFile) {
       formData.append("files", file as File | string);
@@ -73,21 +73,23 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     const apiPath = imgFile ? "google-drive" : "browse-file";
 
     try {
+      const headers: Record<string, string> = {
+        Authorization: `Bearer ${session?.user.accessToken}`,
+      };
 
-      const headers: Record<string, string> = {Authorization: `Bearer ${ session?.user.accessToken }`};
-
-      if(imgFile){
+      if (imgFile) {
         headers["Content-Type"] = "application/json";
       } else {
         headers["Content-Type"] = "multipart/form-data";
       }
 
       const res = await Axios.post(
-        `/document/${ apiPath }`,
+        `/document/${apiPath}`,
         !imgFile ? formData : payload,
         {
-          headers
-        });
+          headers,
+        }
+      );
 
       if (res && res.status === 200) {
         toast.success("Photo Updated successful");
@@ -104,9 +106,9 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     if (authRes) {
       setauthTocken(authRes as unknown as string);
     }
-  }, [ authRes ]);
+  }, [authRes]);
   const onHandleImagePicker = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[ 0 ];
+    const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
       setUploadStep((prevState) => !prevState);
@@ -117,7 +119,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const onSuccess = async (files: DropboxFile[]) => {
     // console.log("chose:", files);
     files.map((_file: DropboxFile) =>
-      setFileName((fileNames) => [ ...fileNames, _file ])
+      setFileName((fileNames) => [...fileNames, _file])
     );
 
     setUploadStep(true);
@@ -148,7 +150,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     if (pathname.includes("add")) {
       setOpenModal(true);
     }
-  }, [ pathname ]);
+  }, [pathname]);
   const imageUploadToApi = async () => imageUpload();
 
   const handleGooglePickerOpen = () => {
@@ -168,7 +170,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
         if (data.action === "cancel") {
           console.log("User clicked cancel/close button");
         } else if (data.docs && data.docs.length > 0) {
-          console.log("User selected file:", data.docs[ 0 ]);
+          console.log("User selected file:", data.docs[0]);
           onGoogleSuccess(data.docs as unknown as GoogleDriveFileObject[]);
         }
       },
