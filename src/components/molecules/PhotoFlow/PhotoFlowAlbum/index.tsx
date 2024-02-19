@@ -3,11 +3,8 @@ import React from "react";
 
 import { AiFillEye, AiOutlineDelete } from "react-icons/ai";
 
-import Popup from "@/components/atoms/Popup";
 
 import { cn } from "@/base/utils";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import PhotoFlowLoader from "../PhotoFlowLoader";
 
 

@@ -1,12 +1,12 @@
-import Axios from "@/base/axios";
-import useStore from "@/base/store";
 import SuggestionCard from "@/components/molecules/Switch/SuggestionCard";
+import useStore from "@/base/store";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { BsArrowLeft } from "react-icons/bs";
+import Axios from "@/base/axios";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { BsArrowLeft } from "react-icons/bs";
-import { toast } from "react-toastify";
 
 interface Props {
   /** next step to redirect to */

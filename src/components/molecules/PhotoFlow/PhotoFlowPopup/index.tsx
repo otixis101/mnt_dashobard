@@ -77,16 +77,16 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
         Authorization: `Bearer ${session?.user.accessToken}`,
       };
 
-      const headers: Record<string, string> = {Authorization: `Bearer ${ session?.user.accessToken }`};
 
-      if(imgFile){
+
+      if (imgFile) {
         headers["Content-Type"] = "application/json";
       } else {
         headers["Content-Type"] = "multipart/form-data";
       }
 
-      const res = await Axios.post(
-        `/document/${ apiPath }`,
+      await Axios.post(
+        `/document/${apiPath}`,
         !imgFile ? formData : payload,
         {
           headers,
@@ -95,8 +95,6 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
 
       toast.success("Photo Updated successful");
       await refreshCallback?.();
-      // if (res && res.status === 200) {
-      // }
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
