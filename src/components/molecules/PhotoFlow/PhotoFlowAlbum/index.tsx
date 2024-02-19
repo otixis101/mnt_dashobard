@@ -44,7 +44,7 @@ const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
     try {
       setIsLoading(true);
 
-      const res = await Axios.post(
+      const res = await Axios.delete(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/${personId}/delete-document/${id}`
       );
       if (res) {
