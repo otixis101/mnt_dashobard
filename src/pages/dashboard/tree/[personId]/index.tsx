@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable indent */
+// @ts-ignore
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 import { cn } from "@/base/utils";
