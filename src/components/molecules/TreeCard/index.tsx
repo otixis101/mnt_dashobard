@@ -30,6 +30,7 @@ interface TreeCardProps {
   hasAddButton?: boolean;
   relationships?: string[];
   spouseIds?: string[];
+  hasParent?: boolean;
 }
 
 const TreeCard = ({
@@ -42,10 +43,11 @@ const TreeCard = ({
   relationships,
   id,
   spouseIds,
+  hasParent,
 }: TreeCardProps) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedRelationship, setRelationship] = useState("");
-
+  console.log({ hasAddButton });
   return (
     <Dialog
       modal={false}
@@ -94,7 +96,8 @@ const TreeCard = ({
                         >
                           {relationship}
                         </button>
-                      ) : (
+                      ) : relationship.toLowerCase() === "sibling" &&
+                        !hasParent ? null : (
                         <Link
                           key={`${id}-${relationship}`}
                           href={`/dashboard/tree/member/add?step=bio-data&ref=${id}&relationship=${relationship.toLowerCase()}`}
@@ -200,7 +203,7 @@ const TreeCard = ({
           </div>
         ) : (
           <>
-            <h3 className="mb-4">Select Childs Mother:</h3>
+            <h3 className="mb-4">Select Spouse:</h3>
             {spouseIds?.map((uniqueId) => (
               <SpouseCard
                 link={`/dashboard/tree/member/add?step=bio-data&ref=${id}&relationship=${selectedRelationship.toLowerCase()}`}

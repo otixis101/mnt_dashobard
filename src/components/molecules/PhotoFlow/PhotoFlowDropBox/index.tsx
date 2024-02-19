@@ -43,13 +43,6 @@ const UserProfileDropBox = ({
             <p className="mx-1 text-xl font-medium capitalize">
               upload complete
             </p>
-            <button
-              type="button"
-              className="m-auto mt-2 w-1/2 rounded-full border-[1px] border-gray-100 bg-[#E8E8E8] px-5 py-1.5 text-xl text-black md:w-1/6"
-              tabIndex={-1}
-            >
-              ok
-            </button>
           </div>
         ) : (
           <>

@@ -54,9 +54,9 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   }[];
   const imageUpload = async (imgFile?: remoteImgObject) => {
     const formData = new FormData();
-    const personID = session?.user.personId;
+
+    const personID = router.query?.personId;
     let payload = {};
-    console.log(imgFile);
 
     if (!imgFile) {
       formData.append("files", file as File | string);
@@ -73,21 +73,25 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     const apiPath = imgFile ? "google-drive" : "browse-file";
 
     try {
+      const headers: Record<string, string> = {
+        Authorization: `Bearer ${session?.user.accessToken}`,
+      };
 
-      const headers: Record<string, string> = { Authorization: `Bearer ${session?.user.accessToken}` };
+      const headers: Record<string, string> = {Authorization: `Bearer ${ session?.user.accessToken }`};
 
-      if (imgFile) {
+      if(imgFile){
         headers["Content-Type"] = "application/json";
       } else {
         headers["Content-Type"] = "multipart/form-data";
       }
 
-      await Axios.post(
-        `/document/${apiPath}`,
+      const res = await Axios.post(
+        `/document/${ apiPath }`,
         !imgFile ? formData : payload,
         {
-          headers
-        });
+          headers,
+        }
+      );
 
       toast.success("Photo Updated successful");
       await refreshCallback?.();

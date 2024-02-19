@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import PhotoFlowHeader from "@/components/molecules/PhotoFlow/PhotoFlowHeader";
+import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import PhotoFlowAlbum, {
   ImgJson,
 } from "@/components/molecules/PhotoFlow/PhotoFlowAlbum";
+import PhotoFlowHeader from "@/components/molecules/PhotoFlow/PhotoFlowHeader";
 import PhotoFlowPopup from "@/components/molecules/PhotoFlow/PhotoFlowPopup";
 import { useRouter } from "next/router";
-import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
+import { useEffect, useState } from "react";
 
 const Main = () => {
   const router = useRouter();
@@ -30,7 +30,7 @@ const Main = () => {
 
       if (imgs.length > 0) {
         setgalleryImages(
-          imgs.map((img) => ({
+          imgs.map((img: Record<string, string>) => ({
             url: img.url,
             aspect_ratio: img.aspectRatio,
             id: img._id,
@@ -45,7 +45,8 @@ const Main = () => {
 
   const onChange = (_?: any) => {
     setMode((prevState) => !prevState);
-    if (mode) {
+
+    if (!mode) {
       router.push(`/user/${personId}/gallery/add`);
     } else {
       router.push(`/user/${personId}/gallery`);
