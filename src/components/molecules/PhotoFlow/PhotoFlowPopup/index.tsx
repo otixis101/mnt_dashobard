@@ -34,18 +34,18 @@ interface GoogleDriveFileObject {
 
 const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const { data: session } = useSession();
-  const [ , setFileName ] = useState<DropboxFile[]>([]);
-  const [ uploadStep, setUploadStep ] = useState(false);
-  const [ isDisabled, setIsDisabled ] = useState(true);
-  const [ isLoading, setIsLoading ] = useState(false);
-  const [ file, setFile ] = useState<File | string>();
+  const [, setFileName] = useState<DropboxFile[]>([]);
+  const [uploadStep, setUploadStep] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState<File | string>();
   const router = useRouter();
   const { pathname } = router;
-  const [ openModal, setOpenModal ] = useState<boolean>(
+  const [openModal, setOpenModal] = useState<boolean>(
     !!pathname.includes("add")
   );
-  const [ authTocken, setauthTocken ] = useState("");
-  const [ openPicker, authRes ] = GoogleDrivePicker();
+  const [authTocken, setauthTocken] = useState("");
+  const [openPicker, authRes] = GoogleDrivePicker();
 
   type remoteImgObject = {
     name: string;
@@ -74,25 +74,25 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
 
     try {
 
-      const headers: Record<string, string> = {Authorization: `Bearer ${ session?.user.accessToken }`};
+      const headers: Record<string, string> = { Authorization: `Bearer ${session?.user.accessToken}` };
 
-      if(imgFile){
+      if (imgFile) {
         headers["Content-Type"] = "application/json";
       } else {
         headers["Content-Type"] = "multipart/form-data";
       }
 
-      const res = await Axios.post(
-        `/document/${ apiPath }`,
+      await Axios.post(
+        `/document/${apiPath}`,
         !imgFile ? formData : payload,
         {
           headers
         });
 
-      if (res && res.status === 200) {
-        toast.success("Photo Updated successful");
-        await refreshCallback?.();
-      }
+      toast.success("Photo Updated successful");
+      await refreshCallback?.();
+      // if (res && res.status === 200) {
+      // }
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
@@ -104,9 +104,9 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     if (authRes) {
       setauthTocken(authRes as unknown as string);
     }
-  }, [ authRes ]);
+  }, [authRes]);
   const onHandleImagePicker = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[ 0 ];
+    const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
       setUploadStep((prevState) => !prevState);
@@ -117,7 +117,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
   const onSuccess = async (files: DropboxFile[]) => {
     // console.log("chose:", files);
     files.map((_file: DropboxFile) =>
-      setFileName((fileNames) => [ ...fileNames, _file ])
+      setFileName((fileNames) => [...fileNames, _file])
     );
 
     setUploadStep(true);
@@ -148,7 +148,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
     if (pathname.includes("add")) {
       setOpenModal(true);
     }
-  }, [ pathname ]);
+  }, [pathname]);
   const imageUploadToApi = async () => imageUpload();
 
   const handleGooglePickerOpen = () => {
@@ -168,7 +168,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
         if (data.action === "cancel") {
           console.log("User clicked cancel/close button");
         } else if (data.docs && data.docs.length > 0) {
-          console.log("User selected file:", data.docs[ 0 ]);
+          console.log("User selected file:", data.docs[0]);
           onGoogleSuccess(data.docs as unknown as GoogleDriveFileObject[]);
         }
       },
@@ -195,6 +195,8 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
             onClick={() => {
               handleGooglePickerOpen();
             }}
+
+            className="hover:bg-gray-100 px-6 py-3 rounded-lg"
           >
             <Image
               width={120}
@@ -209,7 +211,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
             linkType="direct"
             multiselect={false}
           >
-            <button className="mt-2">
+            <button className="hover:bg-gray-100 px-6 py-3 rounded-lg">
               <Image width={100} src={dropBox} alt="dropbox img" className="" />
             </button>
           </DropboxChooser>
@@ -218,7 +220,7 @@ const PhotoFlowPopup = ({ onChange, refreshCallback }: Props) => {
           disabled={isDisabled}
           onClick={imageUploadToApi}
           loading={isLoading}
-          className="mx-auto mt-4"
+          className="mx-auto mt-4 disabled:opacity-50"
         >
           Upload
         </Button>

@@ -24,7 +24,7 @@ const Popup = ({ title, children, open, onChangeState }: Props) => {
   return (
     <Dialog.Root open={open} onOpenChange={onChangeState}>
       <Dialog.Portal>
-        <Dialog.Overlay className=" bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0" />
+        <Dialog.Overlay className=" bg-black/50 data-[state=open]:animate-overlayShow fixed inset-0" />
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed left-[50%] top-[50%] z-50 max-h-[89vh] w-[90vw] max-w-[50rem] translate-x-[-50%] translate-y-[-50%] overflow-y-auto rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           {title && (
             <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">

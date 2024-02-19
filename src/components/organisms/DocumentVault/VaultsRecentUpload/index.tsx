@@ -13,17 +13,20 @@ interface Document {
 }
 
 const VaultsRecentUpload: React.FC = () => {
-  const [ documents, setDocuments ] = useState<Document[] | null>(null);
-  const [ error, setError ] = useState<string | null>(null);
+  const [documents, setDocuments] = useState<Document[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { data: session } = useSession();
+
+
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setError("");
-        const response = await Axios.get(`${ process.env.NEXT_PUBLIC_API_BASE_URL }/document/person/${ session?.user.personId }`, {
+        const response = await Axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/document/person/${session?.user.personId}`, {
           headers: {
-            Authorization: `Bearer ${ session?.user.accessToken }`,
+            Authorization: `Bearer ${session?.user.accessToken}`,
           },
         });
         const result = response.data.data;
@@ -34,14 +37,14 @@ const VaultsRecentUpload: React.FC = () => {
     };
 
     fetchData();
-  }, [ session, error ]);
+  }, [session, error]);
 
   const handleDeleteAction = async (id: string) => {
     try {
       setError("");
-      await Axios.delete(`${ process.env.NEXT_PUBLIC_API_BASE_URL }/document/${ session?.user.personId }/delete-document/${ id }`, {
+      await Axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/document/${session?.user.personId}/delete-document/${id}`, {
         headers: {
-          Authorization: `Bearer ${ session?.user.accessToken }`,
+          Authorization: `Bearer ${session?.user.accessToken}`,
         },
       });
       setDocuments((documents ?? []).filter(document => document.id !== id));
@@ -52,13 +55,13 @@ const VaultsRecentUpload: React.FC = () => {
 
   return (
     <div className="col-span-10 lg:bg-[#F3F3F3] rounded-3xl lg:py-10 lg:px-7 flex flex-col gap-5 font-">
-      <form action="search_results.html" method="GET" className="hidden lg:flex gap-3 justify-center ">
-        <input className="rounded-full w-80 pl-4 bg-gray-400 border-none" type="text" name="search" placeholder="Search..." />
-        <button type="button" className="rounded-lg bg-black p-1 px-8 text-white">Search</button>
+      <form action="search_results.html" method="GET" className="flex gap-3 items-center mt-2">
+        <input value={keyword} onChange={(e) => setKeyword(e.target.value)} className="rounded-lg w-80 p-2 bg-gray-200 border-none" type="text" name="search" placeholder="Search..." />
+        <button type="button" className="rounded-lg bg-black p-2 px-8 text-white">Search</button>
       </form>
       <p className="font-bold">Recent Uploads</p>
       <div className="flex flex-wrap lg:gap-10 gap-4">
-        {documents?.map((document) => (
+        {documents?.filter((value) => value.name.toLowerCase().includes(keyword.toLowerCase())).map((document) => (
           <div key={document.id} className="">
             <Link href={document.url} type="button" className="flex flex-col gap-1 items-center justify-center">
               <Image src="/assets/icon/pdf.svg" alt="document" width={50} height={50} />
