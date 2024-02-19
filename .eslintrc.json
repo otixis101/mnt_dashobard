@@ -14,7 +14,7 @@
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
     "jsx-quotes": "error",
     "semi": "error",
-    "indent": ["error", 2, { "SwitchCase": 1 }],
+    // "indent": ["error", 2, { "SwitchCase": 1 }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
