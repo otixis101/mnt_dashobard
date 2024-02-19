@@ -1,21 +1,21 @@
-import React, { FC, useEffect, useState } from "react";
-import Input from "@/components/atoms/Input";
 import ComboBox, { DataProps } from "@/components/atoms/ComboBox";
+import Input from "@/components/atoms/Input";
+import React, { FC, useEffect, useState } from "react";
 
+import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
+import useStore from "@/base/store/";
 import Button from "@/components/atoms/Button";
-import { countryArrray } from "@/components/constants";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/atoms/Popover";
+import { countryArrray } from "@/components/constants";
 import { Formik } from "formik";
-import { CreateUserSchema } from "@/base/helpers/FormValidationSchemas";
-import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
-import useStore from "@/base/store/";
 import { useRouter } from "next/router";
 import { useInput } from "react-day-picker";
+import { toast } from "react-toastify";
 import { DayPickerCalendar } from "../../Calendar/CalendarDayPicker";
 
 interface FormUserInfo {
@@ -74,29 +74,29 @@ const MoreInfoForm: FC = () => {
   const { data: session, update } = useSession();
   const router = useRouter();
 
-
   const storedData = localStorage.getItem("personPayload");
   const parsedData = storedData ? JSON.parse(storedData) : null;
 
-  const [formData] = useState(parsedData ?? {
-    firstName: "",
-    lastName: "",
-    homeTown: "",
-    dateOfBirth: "",
-    countryOfOrigin: "",
-    stateOfOrigin: "",
-  });
-
+  const [formData] = useState(
+    parsedData ?? {
+      firstName: "",
+      lastName: "",
+      homeTown: "",
+      dateOfBirth: "",
+      countryOfOrigin: "",
+      stateOfOrigin: "",
+    }
+  );
 
   useEffect(() => {
     console.log(formData);
-
   }, [formData]);
-
 
   const dateInputRef = React.useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedCountry, setSelctedCountry] = useState(formData.countryOfOrigin);
+  const [selectedCountry, setSelctedCountry] = useState(
+    formData.countryOfOrigin
+  );
   const [selectedState, setSelectedState] = useState(formData.stateOfOrigin);
   const [states, setStates] = useState<DataProps[]>([]);
   const [calenderOpen, setCalenderOpen] = useState(false);
@@ -106,7 +106,11 @@ const MoreInfoForm: FC = () => {
   }));
 
   const { inputProps, dayPickerProps } = useInput({
-    defaultSelected: new Date(formData.dateOfBirth),
+    defaultSelected: new Date(
+      !formData.dateOfBirth || formData.dateOfBirth === ""
+        ? null
+        : formData.dateOfBirth
+    ),
     fromYear: 1900,
     toYear: new Date().getFullYear(),
     required: true,
@@ -115,10 +119,12 @@ const MoreInfoForm: FC = () => {
   const { setPersonData } = useStore();
 
   const handleFormSubmit = async (values: FormUserInfo) => {
-    const { firstName, lastName,
-      // mothersName, 
-      homeTown
-      // middleName 
+    const {
+      firstName,
+      lastName,
+      // mothersName,
+      homeTown,
+      // middleName
     } = values;
     if (!selectedCountry || !selectedState) {
       toast.error("Please fill all fields");
@@ -138,16 +144,15 @@ const MoreInfoForm: FC = () => {
       isUser: true,
     };
     const formPayload = {
-      "firstName": firstName,
-      "lastName": lastName,
-      "dateOfBirth": new Date(inputProps.value as string),
-      "homeTown": homeTown,
-      "countryOfOrigin": selectedCountry,
-      "stateOfOrigin": selectedState,
+      firstName,
+      lastName,
+      dateOfBirth: new Date(inputProps.value as string),
+      homeTown,
+      countryOfOrigin: selectedCountry,
+      stateOfOrigin: selectedState,
     };
 
     localStorage.setItem("personPayload", JSON.stringify(formPayload));
-
 
     try {
       setLoading(true);
@@ -234,7 +239,6 @@ const MoreInfoForm: FC = () => {
         touched,
       }) => (
         <form onSubmit={handleSubmit}>
-
           <div className="grid grid-cols-1 gap-5 bg-white sm:grid-cols-2">
             {fields.map(({ Component, name, label, placeholder, ...rest }) => (
               <fieldset {...rest} key={label}>
@@ -302,9 +306,13 @@ const MoreInfoForm: FC = () => {
               label="Location (State) "
               defaultValue={selectedState}
             />
-
           </div>
-          <Button loading={loading} className="ml-auto my-8" disabled={loading} type="submit">
+          <Button
+            loading={loading}
+            className="my-8 ml-auto"
+            disabled={loading}
+            type="submit"
+          >
             Continue
           </Button>
         </form>

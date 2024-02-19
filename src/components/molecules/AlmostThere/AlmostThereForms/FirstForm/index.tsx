@@ -1,11 +1,18 @@
 /* eslint-disable no-underscore-dangle */
-import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "@/components/atoms/Button";
+import React, { ChangeEvent, useEffect, useState } from "react";
 // import Radio from "@/components/atoms/Input/Radio";
+import Axios from "@/base/axios";
+import useStore from "@/base/store";
+import { cn } from "@/base/utils";
 import Input from "@/components/atoms/Input";
 import SeparatorInput from "@/components/atoms/Input/SeparatorInput";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import { toast } from "react-toastify";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/atoms/Popover";
+import { DayPickerCalendar } from "@/components/molecules/Calendar/CalendarDayPicker";
 import {
   Select,
   SelectContent,
@@ -13,21 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  PopoverTrigger,
-  Popover,
-  PopoverContent,
-} from "@/components/atoms/Popover";
-import { DayPickerCalendar } from "@/components/molecules/Calendar/CalendarDayPicker";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Axios from "@/base/axios";
-import { cn } from "@/base/utils";
-import useStore from "@/base/store";
 import { useInput } from "react-day-picker";
+import { toast } from "react-toastify";
 import AlmostThereDropBox from "../../AlmostThereDropBox";
-
-
 
 // const relationships = [
 //   { name: "Mother", value: "mother" },
@@ -38,21 +36,15 @@ import AlmostThereDropBox from "../../AlmostThereDropBox";
 //   { name: "Sister", value: "sister" },
 // ];
 
-const allRelationships = [{
-  spouse: [
-    "Husband", "Wife"
-  ],
-  parent: [
-    "Mother", "Father"
-  ],
-  sibling: [
-    "Brother", "Sister"
-  ],
+const allRelationships = [
+  {
+    spouse: ["Husband", "Wife"],
+    parent: ["Mother", "Father"],
+    sibling: ["Brother", "Sister"],
 
-  children: [
-    "Son", "Daughter"
-  ]
-}];
+    children: ["Son", "Daughter"],
+  },
+];
 
 const additionalFields = [
   {
@@ -60,7 +52,6 @@ const additionalFields = [
     placeholder: "Place of death (State, Country)",
     label: "Place of death",
   },
-
 ] as const;
 
 // const checkboxFields = [
@@ -88,23 +79,23 @@ const getToastMessage = (arg: unknown, msg: string) => {
 };
 
 interface Person {
-  firstName?: string,
-  lastName?: string,
-  phoneNumber?: string,
-  stateOfOrigin?: string,
-  countryOfOrigin?: string,
-  dateOfBirth?: Date,
-  placeOfBirth?: string,
-  homeTown?: string,
-  mothersMaidenName?: string,
-  gender?: string,
-  facts?: string,
-  relationship?: string,
-  placeOfDeath?: string,
-  dateOfDeath?: Date,
-  lifeStatus?: string,
-  profilePhoto?: File,
-  isUser?: boolean
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  stateOfOrigin?: string;
+  countryOfOrigin?: string;
+  dateOfBirth?: Date;
+  placeOfBirth?: string;
+  homeTown?: string;
+  mothersMaidenName?: string;
+  gender?: string;
+  facts?: string;
+  relationship?: string;
+  placeOfDeath?: string;
+  dateOfDeath?: Date;
+  lifeStatus?: string;
+  profilePhoto?: File;
+  isUser?: boolean;
 }
 
 interface Props {
@@ -113,11 +104,8 @@ interface Props {
   onFormUpdate?: (person: Person) => void;
 }
 
-
-
 const FirstForm = (props: Props) => {
-  const { onPrevClick, onFormUpdate } =
-    props;
+  const { onPrevClick, onFormUpdate } = props;
 
   const [status, setStatus] = useState("Living");
   const [relation, setRelation] = useState("");
@@ -150,14 +138,12 @@ const FirstForm = (props: Props) => {
 
   const [relatio, setRelatio] = useState<string[]>([]);
 
-
-
   useEffect(() => {
     switch (query?.relationship?.toString().toLowerCase()) {
       case "spouse":
         setRelatio(allRelationships[0].spouse);
         break;
-      case "siblings":
+      case "sibling":
         setRelatio(allRelationships[0].sibling);
         break;
       case "parent":
@@ -170,11 +156,7 @@ const FirstForm = (props: Props) => {
         setRelatio([]);
         break;
     }
-    console.log(query?.relationship?.toString().toLowerCase());
-    console.log(relatio);
-  }, []);
-
-  // console.log(query.relationship);
+  }, [query?.relationship]);
 
   const { inputProps, dayPickerProps } = useInput({
     defaultSelected: new Date(),
@@ -260,8 +242,6 @@ const FirstForm = (props: Props) => {
         (query.relationship as string) ?? ""
       );
 
-
-
       if (query.reference2) {
         formDataPayload.append("reference2", query.reference2 as string);
       }
@@ -284,7 +264,6 @@ const FirstForm = (props: Props) => {
 
         personPayload.placeOfDeath = formData.placeOfDeath;
         personPayload.dateOfDeath = new Date(inputProps.value as string);
-
       }
 
       // Update FormData
@@ -320,6 +299,7 @@ const FirstForm = (props: Props) => {
     }
   };
 
+  console.log({ relatio });
   return (
     <form className="pb-10" onSubmit={handleFormSubmit}>
       <div className="flex flex-col">
@@ -332,31 +312,57 @@ const FirstForm = (props: Props) => {
             className="capitalize"
           /> */}
           <div className="space-y-1">
-            <label htmlFor="gender" className="font-medium text-sm">Life Status</label>
+            <label htmlFor="gender" className="text-sm font-medium">
+              Life Status
+            </label>
             <Select onValueChange={(value: string) => setStatus(value)}>
-              <SelectTrigger id="gender" className="dark:bg-white h-fit focus:outline-none border-2 p-4">
-                <SelectValue placeholder="Select Life Status" className=" p-4" />
+              <SelectTrigger
+                id="gender"
+                className="h-fit border-2 p-4 focus:outline-none dark:bg-white"
+              >
+                <SelectValue
+                  placeholder="Select Life Status"
+                  className=" p-4"
+                />
               </SelectTrigger>
               <SelectContent className="dark:bg-white">
-                <SelectItem className="dark:bg-white text-black" value="Living">Living</SelectItem>
-                <SelectItem className="dark:bg-white text-black" value="Deceased">Deceased</SelectItem>
+                <SelectItem className="text-black dark:bg-white" value="Living">
+                  Living
+                </SelectItem>
+                <SelectItem
+                  className="text-black dark:bg-white"
+                  value="Deceased"
+                >
+                  Deceased
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-1">
-            <label htmlFor="gender" className="font-medium text-sm">Relationship</label>
+            <label htmlFor="gender" className="text-sm font-medium">
+              Relationship
+            </label>
             <Select onValueChange={(value: string) => setRelation(value)}>
-              <SelectTrigger id="gender" className="dark:bg-white h-fit focus:outline-none border-2 p-4">
-                <SelectValue placeholder="Select Relationship" className=" p-4" />
+              <SelectTrigger
+                id="gender"
+                className="h-fit border-2 p-4 focus:outline-none dark:bg-white"
+              >
+                <SelectValue
+                  placeholder="Select Relationship"
+                  className=" p-4"
+                />
               </SelectTrigger>
               <SelectContent className="dark:bg-white">
-                {
-                  relatio.map((rel) => (
-                    <SelectItem key={rel} className="dark:bg-white text-black" value={rel}>{rel}</SelectItem>
-                  ))
-                }
+                {relatio.map((rel) => (
+                  <SelectItem
+                    key={rel}
+                    className="text-black dark:bg-white"
+                    value={rel}
+                  >
+                    {rel}
+                  </SelectItem>
+                ))}
                 {/* <SelectItem className="dark:bg-white text-black" value="father">Father</SelectItem> */}
-
               </SelectContent>
             </Select>
           </div>
@@ -428,14 +434,16 @@ const FirstForm = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-between gap-6 my-8">
-        <Button className="lg:px-0 lg:w-fit border lg:border-none border-primary bg-transparent text-black" onClick={onPrevClick}>
-          <ArrowLeftIcon className="w-4 h-4" /> Back
+      <div className="my-8 flex items-center justify-between gap-6">
+        <Button
+          className="border border-primary bg-transparent text-black lg:w-fit lg:border-none lg:px-0"
+          onClick={onPrevClick}
+        >
+          <ArrowLeftIcon className="h-4 w-4" /> Back
         </Button>
         <Button loading={loading} className="" disabled={loading} type="submit">
           Continue
         </Button>
-
       </div>
     </form>
   );

@@ -200,7 +200,7 @@ const TreeCard = ({
           </div>
         ) : (
           <>
-            <h3 className="mb-4">Select Childs Mother:</h3>
+            <h3 className="mb-4">Select Spouse:</h3>
             {spouseIds?.map((uniqueId) => (
               <SpouseCard
                 link={`/dashboard/tree/member/add?step=bio-data&ref=${id}&relationship=${selectedRelationship.toLowerCase()}`}
