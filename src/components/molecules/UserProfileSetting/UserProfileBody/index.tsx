@@ -1,17 +1,17 @@
-import React, { Fragment, useEffect, useState } from "react";
+import Axios from "@/base/axios";
+import useFetchPersonSetting from "@/base/hooks/api/useFetchPersonSetting";
+import useFetchUserSubscription from "@/base/hooks/api/useFetchUserSubscription";
+import { cn } from "@/base/utils";
+import Avatar from "@/components/atoms/Avatar";
+import Button from "@/components/atoms/Button";
+import CardDetails from "@/components/atoms/CardDetails";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { Fragment, useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { FiLogOut } from "react-icons/fi";
-import Link from "next/link";
-import { cn } from "@/base/utils";
-import { useSession, signOut } from "next-auth/react";
-import useFetchPersonSetting from "@/base/hooks/api/useFetchPersonSetting";
-import Avatar from "@/components/atoms/Avatar";
-import CardDetails from "@/components/atoms/CardDetails";
-import Button from "@/components/atoms/Button";
-import Axios from "@/base/axios";
 import { toast } from "react-toastify";
-import useFetchUserSubscription from "@/base/hooks/api/useFetchUserSubscription";
 import PhotoFlowLoader from "../../PhotoFlow/PhotoFlowLoader";
 import { SwitchThumb, SwitchWrapper } from "../../Switch";
 
@@ -183,7 +183,7 @@ const UserProfileBody = () => {
           <PhotoFlowLoader />
         </div>
       )}
-      <div className="my-10">
+      <div className="my-10 block space-x-4 lg:flex">
         <div className="mb-8 space-y-4">
           <div className="relative h-56 w-56 overflow-hidden rounded-lg max-md:mx-auto">
             {person?.profilePhotoUrl ? (
