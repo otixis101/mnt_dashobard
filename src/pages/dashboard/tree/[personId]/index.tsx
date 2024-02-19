@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable indent */
-// @ts-ignore
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
 import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
 import { cn } from "@/base/utils";
@@ -60,22 +59,22 @@ const FamilyTree = () => {
   const router = useRouter();
   const { personId } = router.query;
 
-  const { data, isLoading } = useFetchPersonFamilyTree(personId);
-  const { data: loggedInUser } = useFetchPerson(personId);
+  const { data, isLoading } = useFetchPersonFamilyTree(personId as string);
+  const { data: loggedInUser } = useFetchPerson(personId as string);
 
   const parentsIds = data?.relationship
     ? data.relationship.links
-        .filter((node) => node.id === personId)
-        .map((person) => person.parents)
+        .filter((node: any) => node.id === personId)
+        .map((person: any) => person.parents)
     : [];
 
   const ownerSpouseId = data?.relationship
     ? data.relationship.links
-        .filter((node) => node?.spouseId?.includes(personId))
-        .map((person) => person.id)
+        .filter((node: any) => node?.spouseId?.includes(personId))
+        .map((person: any) => person.id)
     : [];
 
-  const getRelativePresets = (id) => {
+  const getRelativePresets = (id: any) => {
     if (id === personId) {
       return ["Parent", "Child", "Sibling", "Spouse"];
     }
@@ -102,21 +101,23 @@ const FamilyTree = () => {
     };
     if (data?.relationship) {
       const currentPerson = data.relationship.links.find(
-        (item) => item.id === data.user.personId
+        (item: any) => item.id === data.user.personId
       );
 
       let nodes = data.relationship.links;
 
       const dataWithoutOwner = data.relationship.links.filter(
-        (node) => node.id !== data.user.personId
+        (node: any) => node.id !== data.user.personId
       );
 
       const dataWithoutOwnerAndSpouse = dataWithoutOwner.filter(
-        (node) => node.spouseId && !node.spouseId.includes(data.user.personId)
+        (node: any) =>
+          node.spouseId && !node.spouseId.includes(data.user.personId)
       );
 
       const ownerSpouse = data.relationship.links.filter(
-        (node) => node.spouseId && node.spouseId.includes(data.user.personId)
+        (node: any) =>
+          node.spouseId && node.spouseId.includes(data.user.personId)
       );
 
       const emptyParent = emptyTreePresetData[0];
@@ -204,7 +205,7 @@ const FamilyTree = () => {
     return [...emptyTreePresetData, ownerObject, emptySpouse];
   };
 
-  const handleClickToZoom = (type) => {
+  const handleClickToZoom = (type: any) => {
     if (type === "in") {
       setCrop((prev) => ({
         ...prev,
@@ -235,7 +236,7 @@ const FamilyTree = () => {
   console.log(treeData);
 
   // Get the identity of the node temporarily until the backend implements it
-  const getIdentity = (itemConfig) => {
+  const getIdentity = (itemConfig: any) => {
     if (itemConfig.id === personId) {
       return "you";
     }
@@ -279,7 +280,7 @@ const FamilyTree = () => {
         itemBorderWidth: 0,
         minimizedItemBorderWidth: 0,
         // eslint-disable-next-line react/no-unstable-nested-components
-        onItemRender: ({ context: itemConfig }) => {
+        onItemRender: ({ context: itemConfig }: any) => {
           if (itemConfig.isEmpty) {
             return (
               // eslint-disable-next-line react/jsx-filename-extension
@@ -326,6 +327,7 @@ const FamilyTree = () => {
                   : itemConfig.image
               }
               personName={itemConfig.title}
+              hasParent={itemConfig.parents[0]?.length > 1}
             />
           );
         },
@@ -334,10 +336,8 @@ const FamilyTree = () => {
     items: treeData,
   };
 
-  // console.log(data);
-
   return (
-    <AppLayout hideSpirals showUser image="" name="Jane Doe">
+    <AppLayout hideSpirals showUser>
       <section className="container min-h-screen">
         <div className="z-50 mx-auto mt-5 w-full md:w-2/4">
           <SearchBar
@@ -433,7 +433,9 @@ const FamilyTree = () => {
       </section>
 
       <DashboardPhotoAlbum
-        imagesUrls={loggedInUser?.images.map((photo) => photo.url).slice(0, 3)}
+        imagesUrls={loggedInUser?.images
+          .map((photo: Record<string, string>) => photo.url)
+          .slice(0, 3)}
       />
 
       {/* {loggedInUser && (
