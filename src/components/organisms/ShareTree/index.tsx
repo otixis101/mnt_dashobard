@@ -1,12 +1,12 @@
 /* eslint-disable react/button-has-type */
-import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-import Input from "@/components/atoms/Input";
 import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
 
 // icons
 import { BiLink } from "react-icons/bi";
@@ -149,7 +149,13 @@ const Index = () => {
               <Button className="my-3" type="submit" loading={isLoading}>
                 Continue
               </Button>
-              <Button intent="outline" type="submit">
+              <Button
+                intent="outline"
+                onClick={() => {
+                  router.push("/");
+                }}
+                type="button"
+              >
                 Cancel
               </Button>
             </form>

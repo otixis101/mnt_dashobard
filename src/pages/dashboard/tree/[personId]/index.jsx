@@ -1,33 +1,26 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable indent */
 // @ts-ignore
-import { useGesture } from "@use-gesture/react";
-import { FamDiagram } from "basicprimitivesreact";
-import { useRef, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { PageFitMode, Enabled, NavigationMode } from "basicprimitives";
-import SearchBar from "@/components/molecules/SearchBar";
-import AppLayout from "@/components/Layouts/AppLayout";
-import TreeCard from "@/components/molecules/TreeCard";
-import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
-import Button from "@/components/atoms/Button";
-import { FaPlus } from "react-icons/fa";
-import { emptyTreePresetData } from "@/components/constants";
-import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
-import Link from "next/link";
-import PhotoFlowLoader from "@/components/molecules/PhotoFlow/PhotoFlowLoader";
-import DashboardPhotoAlbum from "@/components/molecules/TreeMember/DashboardTreeAlbum";
-import { cn } from "@/base/utils";
 import useFetchPerson from "@/base/hooks/api/useFetchPersonData";
+import useFetchPersonFamilyTree from "@/base/hooks/api/useFetchPersonFamilyTree";
+import { cn } from "@/base/utils";
+import AppLayout from "@/components/Layouts/AppLayout";
+import Button from "@/components/atoms/Button";
+import { emptyTreePresetData } from "@/components/constants";
+import PhotoFlowLoader from "@/components/molecules/PhotoFlow/PhotoFlowLoader";
+import SearchBar from "@/components/molecules/SearchBar";
+import TreeCard from "@/components/molecules/TreeCard";
+import DashboardPhotoAlbum from "@/components/molecules/TreeMember/DashboardTreeAlbum";
+import { useGesture } from "@use-gesture/react";
+import { Enabled, NavigationMode, PageFitMode } from "basicprimitives";
+import { FamDiagram } from "basicprimitivesreact";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa";
 
-
-import {
-  Dialog,
-  DialogContent
-} from "@/components/ui/dialog";
-
-
-
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const FamilyTree = () => {
   const [searchTerms, setSearchTerms] = useState("");
@@ -70,19 +63,17 @@ const FamilyTree = () => {
   const { data, isLoading } = useFetchPersonFamilyTree(personId);
   const { data: loggedInUser } = useFetchPerson(personId);
 
-  const parentsIds =
-    data && data.relationship
-      ? data.relationship.links
+  const parentsIds = data?.relationship
+    ? data.relationship.links
         .filter((node) => node.id === personId)
         .map((person) => person.parents)
-      : [];
+    : [];
 
-  const ownerSpouseId =
-    data && data.relationship
-      ? data.relationship.links
-        .filter((node) => node.spouseId && node.spouseId.includes(personId))
+  const ownerSpouseId = data?.relationship
+    ? data.relationship.links
+        .filter((node) => node?.spouseId.includes(personId))
         .map((person) => person.id)
-      : [];
+    : [];
 
   const getRelativePresets = (id) => {
     if (id === personId) {
@@ -109,7 +100,7 @@ const FamilyTree = () => {
       id: "empty-spouse",
       parents: [data.user.personId],
     };
-    if (data && data.relationship) {
+    if (data?.relationship) {
       const currentPerson = data.relationship.links.find(
         (item) => item.id === data.user.personId
       );
@@ -296,8 +287,9 @@ const FamilyTree = () => {
                 className={cn(
                   "flex h-full w-full flex-col items-center justify-center gap-1 rounded-md bg-[#c4c4c4]"
                 )}
-                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}&relationship=${itemConfig.id === "empty-spouse" ? "spouse" : "parent"
-                  }`}
+                href={`/dashboard/tree/member/add?step=bio-data&ref=${personId}&relationship=${
+                  itemConfig.id === "empty-spouse" ? "spouse" : "parent"
+                }`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#212121]">
                   <FaPlus className="text-xl text-[#212121]" />
@@ -418,23 +410,25 @@ const FamilyTree = () => {
                 touchAction: "none",
               }}
             >
-              <h1>Testing</h1>
               <FamDiagram cursorItem={null} centerOnCursor config={config} />
             </div>
-          )
-            : (
-              <Dialog defaultOpen>
-                <DialogContent className="sm:max-w-[525px] dark:bg-white dark:text-gray-800">
-                  <div className="flex flex-col items-center gap-12 px-8 py-24">
-                    <h1 className="text-3xl font-medium text-center">
-                      Kindly add your profile to access your family tree.
-                    </h1>
-                    <Link href="/user/profile/update?step=moreinfo" className="w-fit px-24 py-4 text-center rounded-lg bg-primary text-white">Add Your Profile</Link>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            )
-          }
+          ) : (
+            <Dialog defaultOpen>
+              <DialogContent className="dark:bg-white dark:text-gray-800 sm:max-w-[525px]">
+                <div className="flex flex-col items-center gap-12 px-8 py-24">
+                  <h1 className="text-center text-3xl font-medium">
+                    Kindly add your profile to access your family tree.
+                  </h1>
+                  <Link
+                    href="/user/profile/update?step=moreinfo"
+                    className="w-fit rounded-lg bg-primary px-24 py-4 text-center text-white"
+                  >
+                    Add Your Profile
+                  </Link>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </section>
 
