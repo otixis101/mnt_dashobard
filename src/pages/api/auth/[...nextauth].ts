@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
         const { email, password } = credentials;
 
         const res = await fetch(
-          `https://my-native-tree.onrender.com/api/auth/login`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`,
           {
             method: "POST",
             body: JSON.stringify({ email, password }),

@@ -11,6 +11,7 @@ import { RxDotFilled } from "react-icons/rx";
 import Input from "@/components/atoms/Input";
 import { useSession } from "next-auth/react";
 import Avatar from "@/components/atoms/Avatar";
+import { useRouter } from "next/router";
 
 interface Props {
   mode: boolean;
@@ -39,6 +40,8 @@ const UserProfileEditPopup = ({
       name: int,
     }))
   );
+
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [interest, setInterest] = useState("");
@@ -135,6 +138,7 @@ const UserProfileEditPopup = ({
         const data = await res.json();
         console.log(data);
         toast.success("Profile Updated successful");
+        router.reload();
       }
     } catch (err) {
       toast.error("Something went wrong");

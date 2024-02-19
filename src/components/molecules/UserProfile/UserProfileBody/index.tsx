@@ -175,9 +175,9 @@ const Index = () => {
                       <RxDotFilled className="text-green-500" />
                       {data.isTreePrivate ? "Private" : "Public"} family tree
                     </span>
-                    <span className="my-1 text-xl font-medium capitalize text-primary">
+                    {/* <span className="my-1 text-xl font-medium capitalize text-primary">
                       julian family tree
-                    </span>
+                    </span> */}
                     <span>people: {peopleCount}</span>
                     <span>media: {mediaCount}</span>
                   </div>

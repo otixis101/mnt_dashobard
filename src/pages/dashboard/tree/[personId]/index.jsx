@@ -406,7 +406,7 @@ const FamilyTree = () => {
 
         <div className="flex h-[calc(100vh-20px)] items-start justify-center !overflow-x-visible py-8">
           {isLoading && <PhotoFlowLoader />}
-          {data ? (
+          {data || isLoading ? (
             <div
               {...bind()}
               className="relative cursor-pointer"
