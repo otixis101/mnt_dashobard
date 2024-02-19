@@ -45,7 +45,7 @@ const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
       setIsLoading(true);
 
       const res = await Axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/:${personId}/delete-document/:${id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/${personId}/delete-document/${id}`
       );
       if (res) {
         toast.success("Photo was deleted successfully");
