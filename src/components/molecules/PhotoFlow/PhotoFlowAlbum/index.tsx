@@ -1,9 +1,10 @@
 /* eslint-disable react/no-array-index-key */
-import React from "react";
 
 import { AiFillEye, AiOutlineDelete } from "react-icons/ai";
 
 import { cn } from "@/base/utils";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import PhotoFlowLoader from "../PhotoFlowLoader";
 
 export type ImgJson = {
@@ -17,12 +18,18 @@ interface PhotoFlowAlbumProps {
 }
 
 const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
-  const convertToFraction = () => `${ 1000 }/${ 100 }`;
+  const convertToFraction = () => `${1000}/${100}`;
+  const { data: session } = useSession();
+  const { query } = useRouter();
+  console.log({ session });
+  // const {} =
 
   return (
     <div className="my-6">
-      <h3 className="text-2xl font-medium capitalize text-black">
-        Your Photos
+      <h3 className="py-2 text-2xl font-medium capitalize text-black">
+        {session?.user.personId === query?.personId
+          ? "Your Photos"
+          : "Relative Photos"}
       </h3>
       {loading && <PhotoFlowLoader />}
       {images && images.length > 0 && (
@@ -45,7 +52,7 @@ const PhotoFlowAlbum = ({ images, loading }: PhotoFlowAlbumProps) => {
               >
                 <img
                   src={url}
-                  alt={`gallery-${ i + 1 }`}
+                  alt={`gallery-${i + 1}`}
                   className={cn("gallery_img", "flex  rounded-xl")}
                 />
                 <figcaption
