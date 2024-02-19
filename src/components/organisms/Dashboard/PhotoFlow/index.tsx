@@ -23,7 +23,7 @@ const Main = () => {
       setMode(false);
     }
   }, [pathname]);
-  
+
   useEffect(() => {
     if (data && data.images.length > 0) {
       const imgs = data.images;
@@ -33,6 +33,8 @@ const Main = () => {
           imgs.map((img) => ({
             url: img.url,
             aspect_ratio: img.aspectRatio,
+            id: img._id,
+            _personId: img.personId
           }))
         );
       }
